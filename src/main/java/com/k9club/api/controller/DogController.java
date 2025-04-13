@@ -14,8 +14,12 @@ import java.util.Optional;
 @CrossOrigin
 public class DogController {
 
-  @Autowired
   protected DogDao dogDao;
+
+  @Autowired
+  public DogController(DogDao dogDao) {
+    this.dogDao = dogDao;
+  }
 
   @GetMapping("/dogs")
   public ResponseEntity<List<Dog>> dogsList() {
