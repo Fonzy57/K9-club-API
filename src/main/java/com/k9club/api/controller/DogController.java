@@ -27,7 +27,7 @@ public class DogController {
 
   @PutMapping("/dog/{id}")
   public String modifyDog(@PathVariable int id) {
-    return "Modify Dog";
+    return "Modify Dog with ID : " + id;
   }
 
 
