@@ -4,6 +4,7 @@ import com.k9club.api.security.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -14,6 +15,7 @@ import org.hibernate.validator.constraints.Length;
 public class User {
 
   @Id
+  @NotNull
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;
 
