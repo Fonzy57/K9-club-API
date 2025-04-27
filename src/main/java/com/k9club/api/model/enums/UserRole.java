@@ -1,4 +1,4 @@
-package com.k9club.api.security;
+package com.k9club.api.model.enums;
 
 public enum UserRole {
   ADMIN,

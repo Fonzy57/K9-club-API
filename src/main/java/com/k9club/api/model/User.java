@@ -1,6 +1,6 @@
 package com.k9club.api.model;
 
-import com.k9club.api.security.UserRole;
+import com.k9club.api.model.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
