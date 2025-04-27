@@ -93,7 +93,7 @@ public class UserController {
    */
   @IsSuperAdmin
   @JsonView(ViewUserSuperAdmin.class)
-  @GetMapping("/super-admin/user/{id}")
+  @GetMapping("/super-admin/user/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
   public ResponseEntity<User> getUserForSuperAdmin(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
 

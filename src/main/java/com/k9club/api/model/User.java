@@ -50,7 +50,7 @@ public class User {
   protected String password;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'USER')")
+  @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
   @JsonView(ViewUserSuperAdmin.class)
   protected UserRole userRole;
 

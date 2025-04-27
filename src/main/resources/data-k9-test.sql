@@ -13,6 +13,6 @@ VALUES ('Steph', 'Super Admin', 'super-admin@k9club.fr', '$2a$10$UT44bkoGz/wOFFX
         NOW(), NOW()),
        ('Victor', 'Coach', 'coach@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO', 'COACH',
         NOW(), NOW()),
-       ('Tetiana', 'User', 'user@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO', 'USER',
+       ('Tetiana', 'User', 'user@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO', 'OWNER',
         NOW(), NOW());
 

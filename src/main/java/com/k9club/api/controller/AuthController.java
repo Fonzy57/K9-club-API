@@ -55,7 +55,7 @@ public class AuthController {
   /**
    * Registers a new user into the system.
    * <p>
-   * The user's role is automatically set to USER by default.
+   * The user's role is automatically set to OWNER by default.
    * The password is securely encoded before saving the user into the database.
    * <p>
    * After saving, the password is set to null to avoid exposing it in the response.
@@ -65,7 +65,7 @@ public class AuthController {
    */
   @PostMapping("/registration")
   public ResponseEntity<User> inscription(@RequestBody @Valid User user) {
-    user.setUserRole(UserRole.USER);
+    user.setUserRole(UserRole.OWNER);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     // Saving the user in the database
