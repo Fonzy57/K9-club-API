@@ -15,7 +15,6 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NotBlank
   protected Long id;
 
   @NotBlank
