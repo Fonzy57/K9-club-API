@@ -1,6 +1,7 @@
 package com.k9club.api.controller;
 
 import com.k9club.api.dao.UserDao;
+import com.k9club.api.dto.LoginRequestDTO;
 import com.k9club.api.model.User;
 import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.ISecurityUtils;
@@ -80,23 +81,24 @@ public class AuthController {
   // SEUL UN ADMIN PEUT APPELER CETTE ROUTE
 
   /**
-   * Authenticates a user and generates a JWT token upon successful login.
+   * Authenticates a user based on provided credentials and generates a JWT token if authentication succeeds.
    * <p>
-   * Attempts to authenticate the user using the provided email and password.
+   * Receives login credentials (email and password) through a LoginRequestDTO object.
+   * Attempts to authenticate the user using the authentication provider.
    * If authentication is successful, a JWT token is generated and returned.
-   * If authentication fails, an HTTP 401 Unauthorized status is returned.
+   * If authentication fails, an HTTP 401 Unauthorized status is returned without a token.
    *
-   * @param user the user object containing the login credentials (email and password)
+   * @param loginRequest the DTO containing the user's login credentials (email and password)
    * @return a ResponseEntity containing the JWT token with HTTP 200 OK status if successful,
    * or HTTP 401 Unauthorized if authentication fails
    */
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody @Valid User user) {
+  public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO loginRequest) {
     try {
       AppUserDetails userDetails = (AppUserDetails) authenticationProvider.authenticate(
               new UsernamePasswordAuthenticationToken(
-                  user.getEmail(),
-                  user.getPassword()
+                  loginRequest.getEmail(),
+                  loginRequest.getPassword()
               ))
           .getPrincipal();
 
