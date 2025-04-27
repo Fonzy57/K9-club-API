@@ -5,7 +5,7 @@ import com.k9club.api.dto.LoginRequestDTO;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.AppUserDetails;
-import com.k9club.api.security.ISecurityUtils;
+import com.k9club.api.security.interfaces.ISecurityUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

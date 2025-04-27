@@ -1,5 +1,6 @@
 package com.k9club.api.security;
 
+import com.k9club.api.security.interfaces.ISecurityUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,6 @@
-package com.k9club.api.security;
+package com.k9club.api.security.interfaces;
+
+import com.k9club.api.security.AppUserDetails;
 
 public interface ISecurityUtils {
 

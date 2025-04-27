@@ -1,5 +1,6 @@
 package com.k9club.api.security;
 
+import com.k9club.api.security.interfaces.ISecurityUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
