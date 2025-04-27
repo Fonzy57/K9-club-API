@@ -1,34 +1,80 @@
 package com.k9club.api.controller;
 
+import com.k9club.api.dao.DogDao;
+import com.k9club.api.model.Dog;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
+@CrossOrigin
 public class DogController {
 
+  protected DogDao dogDao;
+
+  @Autowired
+  public DogController(DogDao dogDao) {
+    this.dogDao = dogDao;
+  }
+
   @GetMapping("/dogs")
-  public String dogsList() {
-    return "Dogs List";
+  public ResponseEntity<List<Dog>> dogsList() {
+    return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
   }
 
   @GetMapping("/dog/{id}")
-  public String dog(@PathVariable int id) {
-    return "Dog with ID : " + id;
+  public ResponseEntity<Dog> dog(@PathVariable int id) {
+    Optional<Dog> optionalDog = dogDao.findById(id);
+
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
   }
 
   @DeleteMapping("/dog/{id}")
-  public String deleteDog(@PathVariable int id) {
-    return "DELETE Dog with ID : " + id;
+  public ResponseEntity<Dog> deleteDog(@PathVariable int id) {
+    Optional<Dog> optionalDog = dogDao.findById(id);
+
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    dogDao.deleteById(id);
+
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PostMapping("/dog")
-  public String addDog() {
-    return "Add Dog";
+  public ResponseEntity<Dog> addDog(@RequestBody Dog dog) {
+    dog.setId(null);
+
+    dogDao.save(dog);
+
+    return new ResponseEntity<>(dog, HttpStatus.CREATED);
   }
 
   @PutMapping("/dog/{id}")
-  public String modifyDog(@PathVariable int id) {
-    return "Modify Dog";
-  }
+  public ResponseEntity<Dog> updateDog(@PathVariable int id, @RequestBody Dog dog) {
+    Optional<Dog> optionalDog = dogDao.findById(id);
 
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    dog.setId(id);
+
+    // User cannot change creation date
+    dog.setCreatedAt(optionalDog.get().getCreatedAt());
+
+    dogDao.save(dog);
+
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 
 }
