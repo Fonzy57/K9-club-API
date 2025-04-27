@@ -65,6 +65,7 @@ public class SecurityUtils implements ISecurityUtils {
         .addClaims(userInfosToClaim)
         .signWith(SignatureAlgorithm.HS256, this.jwtSecret)
         // TODO VOIR PAGE 486 POUR L'EXPIRATION DU TOKEN
+        // PAGE 520
         .compact();
   }
 
