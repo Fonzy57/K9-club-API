@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional> <!-- Lombok est optionnel, utilisé uniquement en phase de compilation -->
+            <optional>true</optional> <!-- Utilisé uniquement à la compilation, pas nécessaire à l'exécution -->
         </dependency>
 
         <!-- Dépendance pour écrire des tests unitaires et d'intégration (JUnit, Mockito, etc.) -->
@@ -69,17 +69,31 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Dépendance pour valider les données (ex: annotations @Valid, @NotNull) -->
+        <!-- Dépendance pour valider les données (ex : annotations @Valid, @NotNull) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Dépendance pour écrire des tests spécifiques à la sécurité (ex: test d'authentification, autorisation) -->
+        <!-- Dépendance pour écrire des tests spécifiques à la sécurité (ex : test d'authentification, autorisation) -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope> <!-- Activée uniquement pour la phase de test -->
+        </dependency>
+
+        <!-- Dépendance pour utiliser la bibliothèque JJWT (Java JSON Web Token) afin de générer et valider des JWT pour l'authentification -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <!-- Dépendance pour utiliser JAXB (Java Architecture for XML Binding), nécessaire pour certaines opérations de sérialisation/désérialisation XML -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
         </dependency>
     </dependencies>
 
