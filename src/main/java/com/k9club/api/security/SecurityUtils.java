@@ -2,6 +2,7 @@ package com.k9club.api.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -9,7 +10,8 @@ import java.util.Map;
 @Service
 public class SecurityUtils implements ISecurityUtils {
 
-  // TODO AJOUTER SECRET DANS ENV
+  @Value("${JWT_SECRET}")
+  private String jwtSecret;
 
   @Override
   public String getRole(AppUserDetails userDetails) {
@@ -25,14 +27,15 @@ public class SecurityUtils implements ISecurityUtils {
     return Jwts.builder()
         .setSubject(userDetails.getUsername())
         .addClaims(Map.of("role", getRole(userDetails)))
-        .signWith(SignatureAlgorithm.HS256, "azerty") // TODO CHANGER AVEC LE SECRET DU ENV
+        .signWith(SignatureAlgorithm.HS256, this.jwtSecret)
+        // TODO VOIR PAGE 486 POUR L'EXPIRATION DU TOKEN
         .compact();
   }
 
   @Override
   public String getSubjectFromJwt(String jwt) {
     return Jwts.parser()
-        .setSigningKey("azerty") // TODO CHANGER AVEC LE SECRET DU ENV
+        .setSigningKey(this.jwtSecret)
         .parseClaimsJws(jwt)
         .getBody()
         .getSubject();
