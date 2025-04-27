@@ -1,6 +1,6 @@
 package com.k9club.api.security;
 
-public enum Role {
+public enum UserRole {
   ADMIN,
   COACH,
   USER

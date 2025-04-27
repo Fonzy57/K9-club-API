@@ -5,7 +5,7 @@ import com.k9club.api.dto.LoginRequestDTO;
 import com.k9club.api.model.User;
 import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.ISecurityUtils;
-import com.k9club.api.security.Role;
+import com.k9club.api.security.UserRole;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +65,7 @@ public class AuthController {
    */
   @PostMapping("/registration")
   public ResponseEntity<User> inscription(@RequestBody @Valid User user) {
-    user.setRole(Role.USER);
+    user.setUserRole(UserRole.USER);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     // Saving the user in the database

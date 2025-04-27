@@ -1,6 +1,6 @@
 package com.k9club.api.model;
 
-import com.k9club.api.security.Role;
+import com.k9club.api.security.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,5 +38,5 @@ public class User {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('ADMIN','COACH', 'USER')")
-  protected Role role;
+  protected UserRole userRole;
 }
