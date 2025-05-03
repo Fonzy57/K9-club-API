@@ -56,10 +56,10 @@ public class User {
 
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView(ViewUserSuperAdmin.class)
+  @JsonView(ViewUserAdmin.class)
   private LocalDateTime createdAt;
 
   @LastModifiedDate
-  @JsonView(ViewUserSuperAdmin.class)
+  @JsonView(ViewUserAdmin.class)
   private LocalDateTime updatedAt;
 }
