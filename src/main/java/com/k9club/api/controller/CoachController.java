@@ -2,10 +2,12 @@ package com.k9club.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
+import com.k9club.api.dto.CoachUpdateDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.views.ViewUserAdmin;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,17 +91,19 @@ public class CoachController {
   }
 
   /**
-   * Updates an existing coach user by ID.
-   * Only users with the COACH role can be updated through this endpoint.
-   * Role and creation date cannot be modified.
+   * Updates an existing coach identified by its ID.
+   * Only the firstname, lastname and email fields can be modified via the DTO.
+   * All other properties (role, creation date, password, etc.) remain unchanged.
    *
-   * @param id   the ID of the coach to update
-   * @param user the updated data for the coach
-   * @return a ResponseEntity with HTTP 204 No Content if successful,
-   * 403 Forbidden if the user is not a coach, or 404 Not Found if the user does not exist
+   * @param id             the ID of the coach to update
+   * @param coachUpdateDto the DTO containing new values for firstname, lastname and email
+   * @return ResponseEntity<Void>
+   * – 204 No Content if the update succeeds,
+   * – 403 Forbidden if the user is not a coach,
+   * – 404 Not Found if no user with the given ID exists
    */
   @PutMapping("/coach/{id}")
-  public ResponseEntity<Void> updateCoach(@PathVariable Long id, @RequestBody User user) {
+  public ResponseEntity<Void> updateCoach(@PathVariable Long id, @RequestBody @Valid CoachUpdateDto coachUpdateDto) {
     Optional<User> userOptional = userDao.findById(id);
 
     if (userOptional.isEmpty()) {
@@ -112,22 +116,13 @@ public class CoachController {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    coach.setId(id);
-    coach.setFirstname(user.getFirstname());
-    coach.setLastname(user.getLastname());
-    coach.setEmail(user.getEmail());
-    coach.setPassword(user.getPassword());
-
-    // User cannot change creation date
-    // Preserve the original creation date
-    coach.setCreatedAt(userOptional.get().getCreatedAt());
-    // User cannot change role
-    coach.setUserRole(userOptional.get().getUserRole());
-
+    coach.setFirstname(coachUpdateDto.getFirstname());
+    coach.setLastname(coachUpdateDto.getLastname());
+    coach.setEmail(coachUpdateDto.getEmail());
 
     userDao.save(coach);
 
-    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   /**
