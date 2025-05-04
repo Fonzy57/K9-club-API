@@ -49,6 +49,8 @@ public class User {
   @Column(nullable = false)
   protected String password;
 
+//  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
   @JsonView(ViewUserSuperAdmin.class)
