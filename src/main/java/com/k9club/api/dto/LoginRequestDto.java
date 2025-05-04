@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class LoginRequestDTO {
+public class LoginRequestDto {
 
   /**
    * The user's email address.
