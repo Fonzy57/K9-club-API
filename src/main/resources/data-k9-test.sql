@@ -14,7 +14,7 @@ VALUES
     ('Victor', 'Monteragioni', 'admin@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
      'ADMIN',
      NOW() - INTERVAL 9 DAY, NOW() - INTERVAL 6 DAY),
-    ('Tetiana', 'Lombardi', 'tetiana@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
+    ('Tetiana', 'Lombardi', 'user@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
      'OWNER',
      NOW() - INTERVAL 8 DAY, NOW() - INTERVAL 5 DAY),
     ('Hubert', 'Bonisseur de la Bath', 'coach@k9club.fr',
