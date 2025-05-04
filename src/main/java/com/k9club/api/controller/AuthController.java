@@ -1,7 +1,7 @@
 package com.k9club.api.controller;
 
 import com.k9club.api.dao.UserDao;
-import com.k9club.api.dto.LoginRequestDTO;
+import com.k9club.api.dto.LoginRequestDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.AppUserDetails;
@@ -93,7 +93,7 @@ public class AuthController {
    * or HTTP 401 Unauthorized if authentication fails
    */
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO loginRequest) {
+  public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequest) {
     try {
       AppUserDetails userDetails = (AppUserDetails) authenticationProvider.authenticate(
               new UsernamePasswordAuthenticationToken(
