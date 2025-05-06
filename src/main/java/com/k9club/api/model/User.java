@@ -14,7 +14,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -59,9 +59,9 @@ public class User {
   @CreatedDate
   @Column(updatable = false, nullable = false)
   @JsonView(ViewUserAdmin.class)
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
   @LastModifiedDate
   @JsonView(ViewUserAdmin.class)
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 }

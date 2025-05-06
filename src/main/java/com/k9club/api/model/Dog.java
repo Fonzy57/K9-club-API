@@ -7,8 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 
 @Getter
@@ -34,10 +34,10 @@ public class Dog {
 
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  private LocalDateTime createdAt;
-  
+  private Instant createdAt;
+
   @LastModifiedDate
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 
   // TODO ICI A NE PAS RENTRER DANS LA BDD
   // CAR CALCULER A PARTIR DE LA DATE DE NAISSANCE
