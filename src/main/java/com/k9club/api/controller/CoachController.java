@@ -11,17 +11,18 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller responsible for managing users with the COACH role.
+ * Controller for managing users with the COACH role.
  * <p>
  * Provides endpoints to retrieve, create, update, and delete coach accounts.
- * All endpoints are restricted to ADMIN users through the @IsAdmin annotation.
- * Uses @JsonView to filter the data returned to clients.
+ * All operations are restricted to ADMIN users via the @IsAdmin annotation.
+ * Uses @JsonView to control which properties are serialized in responses.
  */
 @RestController
 @CrossOrigin
@@ -29,15 +30,18 @@ import java.util.Optional;
 public class CoachController {
 
   protected UserDao userDao;
+  protected PasswordEncoder passwordEncoder;
 
   /**
-   * Constructor injecting the UserDao dependency.
+   * Constructs a new CoachController with required dependencies.
    *
-   * @param userDao the DAO used to interact with the User entity in the database
+   * @param userDao         the data access object for {@link User} entities
+   * @param passwordEncoder the password encoder used to hash passwords
    */
   @Autowired
-  public CoachController(UserDao userDao) {
+  public CoachController(UserDao userDao, PasswordEncoder passwordEncoder) {
     this.userDao = userDao;
+    this.passwordEncoder = passwordEncoder;
   }
 
   /**
@@ -53,9 +57,10 @@ public class CoachController {
 
   /**
    * Retrieves a coach user by ID.
+   * Returns 404 if no user is found with the given ID.
    *
    * @param id the ID of the coach to retrieve
-   * @return a ResponseEntity containing the coach user if found, or HTTP 404 if not found
+   * @return a ResponseEntity containing the coach user and HTTP 200 OK, or HTTP 404 Not Found
    */
   @JsonView(ViewUserAdmin.class)
   @GetMapping("/coach/{id}")
@@ -70,17 +75,18 @@ public class CoachController {
 
   /**
    * Creates a new coach user.
-   * The role is forcibly set to COACH to ensure data consistency.
+   * The role is forcibly set to COACH to ensure data consistency and the password is encoded for security.
    * The password is removed from the returned object for security reasons.
    *
    * @param user the user object containing coach information
-   * @return a ResponseEntity with the created coach and HTTP 201 Created
+   * @return a ResponseEntity with the created coach (without password) and HTTP 201 Created
    */
   @JsonView(ViewUserAdmin.class)
   @PostMapping("/coach")
   public ResponseEntity<User> addCoach(@RequestBody User user) {
     user.setId(null);
     user.setUserRole(UserRole.COACH);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     userDao.save(user);
 
