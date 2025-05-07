@@ -1,4 +1,4 @@
-package com.k9club.api.controller;
+package com.k9club.api.controller.users;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @IsAdmin
-public class UserController {
+public class OwnerController {
 
   protected UserDao userDao;
 
@@ -36,7 +36,7 @@ public class UserController {
    * @param userDao the DAO used to interact with the User entity in the database
    */
   @Autowired
-  public UserController(UserDao userDao) {
+  public OwnerController(UserDao userDao) {
     this.userDao = userDao;
   }
 
@@ -46,7 +46,7 @@ public class UserController {
    * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
    */
   @JsonView(ViewUserAdmin.class)
-  @GetMapping("/users")
+  @GetMapping("/owners")
   public ResponseEntity<List<User>> getUsers() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
   }
@@ -59,7 +59,7 @@ public class UserController {
    * or HTTP 404 Not Found if the user does not exist
    */
   @JsonView(ViewUserAdmin.class)
-  @GetMapping("/user/{id}")
+  @GetMapping("/owner/{id}")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
 
@@ -79,7 +79,7 @@ public class UserController {
    */
   @IsSuperAdmin
   @JsonView(ViewUserSuperAdmin.class)
-  @GetMapping("/super-admin/users")
+  @GetMapping("/super-admin/owners")
   public ResponseEntity<List<User>> getUsersForSuperAdmin() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
   }
@@ -93,7 +93,7 @@ public class UserController {
    */
   @IsSuperAdmin
   @JsonView(ViewUserSuperAdmin.class)
-  @GetMapping("/super-admin/user/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
+  @GetMapping("/super-admin/owner/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
   public ResponseEntity<User> getUserForSuperAdmin(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
 
@@ -114,12 +114,18 @@ public class UserController {
    * or HTTP 404 Not Found if the user does not exist
    */
   @IsSuperAdmin
-  @DeleteMapping("/user/{id}")
+  @DeleteMapping("/owner/{id}")
   public ResponseEntity<String> deleteUser(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
     if (user.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    //
+
+    // TODO VOIR POUR ANONYMISATION DES DONNEES
+
+    //
 
     userDao.deleteById(id);
 
@@ -135,7 +141,7 @@ public class UserController {
    * @return a ResponseEntity with HTTP 201 Created status
    */
   @IsSuperAdmin
-  @PostMapping("/user")
+  @PostMapping("/owner")
   public ResponseEntity<String> addUser(@RequestBody User user) {
     user.setId(null);
     userDao.save(user);
@@ -155,7 +161,7 @@ public class UserController {
    * or HTTP 404 Not Found if the user does not exist
    */
   @IsSuperAdmin
-  @PutMapping("/user/{id}")
+  @PutMapping("/owner/{id}")
   public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
     Optional<User> userOptional = userDao.findById(id);
 

@@ -1,4 +1,4 @@
-package com.k9club.api.controller;
+package com.k9club.api.controller.users;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
@@ -152,7 +152,7 @@ public class CoachController {
 
 
     //
-    
+
     userDao.deleteById(id);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
