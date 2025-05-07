@@ -145,7 +145,14 @@ public class CoachController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //
+
+
     // TODO A LA PLACE DE DELETE VOIR POUR ANONYMISER LES DONNEES
+
+
+    //
+    
     userDao.deleteById(id);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
