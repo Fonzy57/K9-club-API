@@ -27,7 +27,7 @@ public class DogController {
   }
 
   @GetMapping("/dog/{id}")
-  public ResponseEntity<Dog> dog(@PathVariable int id) {
+  public ResponseEntity<Dog> dog(@PathVariable Long id) {
     Optional<Dog> optionalDog = dogDao.findById(id);
 
     if (optionalDog.isEmpty()) {
@@ -38,7 +38,7 @@ public class DogController {
   }
 
   @DeleteMapping("/dog/{id}")
-  public ResponseEntity<Dog> deleteDog(@PathVariable int id) {
+  public ResponseEntity<Dog> deleteDog(@PathVariable Long id) {
     Optional<Dog> optionalDog = dogDao.findById(id);
 
     if (optionalDog.isEmpty()) {
@@ -60,7 +60,7 @@ public class DogController {
   }
 
   @PutMapping("/dog/{id}")
-  public ResponseEntity<Dog> updateDog(@PathVariable int id, @RequestBody Dog dog) {
+  public ResponseEntity<Dog> updateDog(@PathVariable Long id, @RequestBody Dog dog) {
     Optional<Dog> optionalDog = dogDao.findById(id);
 
     if (optionalDog.isEmpty()) {
