@@ -5,14 +5,12 @@ import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.AdminUpdateDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
-import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.views.ViewUserAdmin;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -97,30 +95,4 @@ public class AdminController {
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-
-  /**
-   * Retrieves the currently authenticated admin’s own user details.
-   * Returns 404 if the user record cannot be found.
-   *
-   * @param userDetails the authentication principal containing the current user
-   * @return a ResponseEntity containing the current admin user and HTTP 200 OK,
-   * or HTTP 404 Not Found if the user does not exist
-   */
-  // TODO VOIR POUR REFACTORISER CA DANS LE USER CONTROLLER CAR SPRING SECURITE GERE TOUT
-  @JsonView(ViewUserAdmin.class)
-  @GetMapping("/admin/me")
-  public ResponseEntity<User> getAdminById(@AuthenticationPrincipal AppUserDetails userDetails) {
-    Long id = userDetails.getUser().getId();
-
-    Optional<User> optionaluser = userDao.findById(id);
-    if (optionaluser.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    User user = optionaluser.get();
-
-    return new ResponseEntity<>(user, HttpStatus.OK);
-  }
-
-
 }
