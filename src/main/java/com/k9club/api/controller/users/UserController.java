@@ -5,8 +5,8 @@ import com.k9club.api.dao.UserDao;
 import com.k9club.api.model.User;
 import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
+import com.k9club.api.security.annotations.IsOwner;
 import com.k9club.api.security.annotations.IsSuperAdmin;
-import com.k9club.api.security.annotations.IsUser;
 import com.k9club.api.views.ViewUserAdmin;
 import com.k9club.api.views.ViewUserSuperAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class UserController {
    * @return a ResponseEntity containing the User data and HTTP 200 OK,
    * or HTTP 404 Not Found if the user does not exist
    */
-  @IsUser
+  @IsOwner
   @GetMapping("/user/me")
   public ResponseEntity<User> getUserInformation(@AuthenticationPrincipal AppUserDetails userDetails) {
     Long id = userDetails.getUser().getId();
