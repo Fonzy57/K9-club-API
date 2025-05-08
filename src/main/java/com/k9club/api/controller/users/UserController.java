@@ -3,13 +3,16 @@ package com.k9club.api.controller.users;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.model.User;
+import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsSuperAdmin;
+import com.k9club.api.security.annotations.IsUser;
 import com.k9club.api.views.ViewUserAdmin;
 import com.k9club.api.views.ViewUserSuperAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +40,29 @@ public class UserController {
   @Autowired
   public UserController(UserDao userDao) {
     this.userDao = userDao;
+  }
+
+  /**
+   * Retrieves the currently authenticated user’s own profile information.
+   * Returns HTTP 404 if no user record exists for the authenticated user.
+   *
+   * @param userDetails the authentication principal representing the current user
+   * @return a ResponseEntity containing the User data and HTTP 200 OK,
+   * or HTTP 404 Not Found if the user does not exist
+   */
+  @IsUser
+  @GetMapping("/user/me")
+  public ResponseEntity<User> getUserInformation(@AuthenticationPrincipal AppUserDetails userDetails) {
+    Long id = userDetails.getUser().getId();
+
+    Optional<User> optionaluser = userDao.findById(id);
+    if (optionaluser.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    User user = optionaluser.get();
+
+    return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   /**
