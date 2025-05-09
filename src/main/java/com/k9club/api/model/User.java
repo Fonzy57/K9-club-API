@@ -1,10 +1,9 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.model.enums.UserRole;
-import com.k9club.api.views.ViewOwner;
-import com.k9club.api.views.ViewUserAdmin;
-import com.k9club.api.views.ViewUserSuperAdmin;
+import com.k9club.api.views.ViewUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -36,7 +35,7 @@ public class User {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   protected Long id;
 
   /**
@@ -45,7 +44,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   protected String firstname;
 
   /**
@@ -54,7 +53,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   protected String lastname;
 
   /**
@@ -63,7 +62,7 @@ public class User {
   @NotBlank
   @Email
   @Column(unique = true, nullable = false)
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   protected String email;
 
   /**
@@ -83,7 +82,7 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
-  @JsonView(ViewUserSuperAdmin.class)
+  @JsonView(ViewUser.SuperAdmin.class)
   protected UserRole userRole;
 
   /**
@@ -93,7 +92,7 @@ public class User {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   private Instant createdAt;
 
   /**
@@ -102,9 +101,9 @@ public class User {
    * Automatically updated on each save.
    */
   @LastModifiedDate
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Owner.class)
   private Instant updatedAt;
-  
+
 
   // ASSOCIATION WITH DOG
   /**
@@ -113,7 +112,8 @@ public class User {
    * Only returned in the OWNER view; orphans are removed automatically.
    */
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
-  @JsonView(ViewOwner.class)
+  @JsonManagedReference("user-dogs")
+  @JsonView(ViewUser.Owner.class)
   private List<Dog> dogs = new ArrayList<>();
 
   //  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE
