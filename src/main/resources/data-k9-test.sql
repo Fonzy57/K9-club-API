@@ -169,10 +169,10 @@ VALUES
     -- Pour Tetiana Lombardi (2 chiens)
     ('Rex', '2019-06-01', 'Male', UTC_TIMESTAMP(),
      (SELECT id FROM user WHERE email = 'user@k9club.fr'),
-     (SELECT id FROM breed WHERE name = 'Labrador Retriever')),
+     (SELECT id FROM breed WHERE name = 'Berger Allemand')),
     ('Mia', '2021-02-14', 'Female', UTC_TIMESTAMP(),
      (SELECT id FROM user WHERE email = 'user@k9club.fr'),
-     (SELECT id FROM breed WHERE name = 'Bouledogue Français')),
+     (SELECT id FROM breed WHERE name = 'Golden Retriever')),
 
     -- Pour Alice Martin
     ('Charlie', '2020-11-20', 'Male', UTC_TIMESTAMP(),
@@ -180,7 +180,7 @@ VALUES
      (SELECT id FROM breed WHERE name = 'Beagle')),
     ('Daisy', '2022-05-05', 'Female', UTC_TIMESTAMP(),
      (SELECT id FROM user WHERE email = 'martin@k9club.fr'),
-     (SELECT id FROM breed WHERE name = 'Golden Retriever')),
+     (SELECT id FROM breed WHERE name = 'Labrador Retriever')),
 
     -- Pour Jean-Pierre Leblanc
     ('Max', '2018-03-10', 'Male', UTC_TIMESTAMP(),
