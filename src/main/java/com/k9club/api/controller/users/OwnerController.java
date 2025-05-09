@@ -5,8 +5,7 @@ import com.k9club.api.dao.UserDao;
 import com.k9club.api.model.User;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsSuperAdmin;
-import com.k9club.api.views.ViewUserAdmin;
-import com.k9club.api.views.ViewUserSuperAdmin;
+import com.k9club.api.views.ViewUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +44,7 @@ public class OwnerController {
    *
    * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
    */
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Admin.class)
   @GetMapping("/owners")
   public ResponseEntity<List<User>> getUsers() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
@@ -58,7 +57,7 @@ public class OwnerController {
    * @return a ResponseEntity containing the user if found with HTTP 200 OK,
    * or HTTP 404 Not Found if the user does not exist
    */
-  @JsonView(ViewUserAdmin.class)
+  @JsonView(ViewUser.Admin.class)
   @GetMapping("/owner/{id}")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
@@ -78,7 +77,7 @@ public class OwnerController {
    * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
    */
   @IsSuperAdmin
-  @JsonView(ViewUserSuperAdmin.class)
+  @JsonView(ViewUser.SuperAdmin.class)
   @GetMapping("/super-admin/owners")
   public ResponseEntity<List<User>> getUsersForSuperAdmin() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
@@ -92,7 +91,7 @@ public class OwnerController {
    * or HTTP 404 Not Found if the user does not exist
    */
   @IsSuperAdmin
-  @JsonView(ViewUserSuperAdmin.class)
+  @JsonView(ViewUser.SuperAdmin.class)
   @GetMapping("/super-admin/owner/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
   public ResponseEntity<User> getUserForSuperAdmin(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
