@@ -1,5 +1,9 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.views.ViewUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -28,6 +32,7 @@ public class Dog {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(ViewUser.Owner.class)
   protected Long id;
 
   /**
@@ -35,6 +40,7 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false, length = 100)
+  @JsonView(ViewUser.Owner.class)
   protected String name;
 
   /**
@@ -42,6 +48,7 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false)
+  @JsonView(ViewUser.Owner.class)
   protected LocalDate birthday;
 
   /**
@@ -49,6 +56,7 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false)
+  @JsonView(ViewUser.Owner.class)
   protected String gender;
 
   /**
@@ -58,6 +66,7 @@ public class Dog {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
+  @JsonView(ViewUser.Owner.class)
   private Instant createdAt;
 
   /**
@@ -66,6 +75,7 @@ public class Dog {
    * Automatically updated on each save.
    */
   @LastModifiedDate
+  @JsonView(ViewUser.Owner.class)
   private Instant updatedAt;
 
   //  relation with User (possessed)
@@ -76,7 +86,8 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
-  private User owner;
+  @JsonBackReference("user-dogs") // ← n’essaie pas de sérialiser owner à nouveau
+  private User owner; // TODO VOIR SI JE GARDE JsonBackReference OU SI JE CHANGE POUR UN JSONVIEW
 
   // relation with Breed (belongs_to)
   /**
@@ -86,5 +97,7 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
+  @JsonIgnoreProperties("dogs")
+  @JsonView(ViewUser.Owner.class)
   private Breed breed;
 }
