@@ -1,5 +1,7 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.views.ViewUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,12 +26,14 @@ public class Breed {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(ViewUser.Owner.class)
   protected Long id;
 
   /**
    * Name of the breed; must not be null and up to 100 characters.
    */
   @Column(nullable = false, length = 100)
+  @JsonView(ViewUser.Owner.class)
   protected String name;
 
   /**
@@ -39,5 +43,6 @@ public class Breed {
    * deleting a breed will remove its associated dogs.
    */
   @OneToMany(mappedBy = "breed", orphanRemoval = true)
+  @JsonView(ViewUser.Owner.class)
   protected List<Dog> dogs = new ArrayList<>();
 }
