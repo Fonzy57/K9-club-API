@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RegistrationDao extends JpaRepository<Registration, Long> {
+public interface CourseRegistrationDao extends JpaRepository<Registration, Long> {
 }

@@ -1,6 +1,6 @@
 package com.k9club.api.controller;
 
-import com.k9club.api.dao.RegistrationDao;
+import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.model.Registration;
 import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller responsible for managing registrations.
+ * Controller responsible for managing course registrations.
  * <p>
  * Provides endpoints to list, retrieve, create, update, and delete course registrations.
  * Access is restricted to owner users via the {@code @IsOwner} annotation.
@@ -21,41 +21,42 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @IsOwner
-public class RegistrationController {
+public class CourseRegistrationController {
 
-  protected RegistrationDao registrationDao;
+
+  protected CourseRegistrationDao courseRegistrationDao;
 
   /**
-   * Constructor injecting the RegistrationDao dependency.
+   * Constructor injecting the CourseRegistrationDao dependency.
    *
-   * @param registrationDao the DAO used to perform CRUD operations on Registration entities
+   * @param courseRegistrationDao the DAO used to perform CRUD operations on Registration entities
    */
   @Autowired
-  public RegistrationController(RegistrationDao registrationDao) {
-    this.registrationDao = registrationDao;
+  public CourseRegistrationController(CourseRegistrationDao courseRegistrationDao) {
+    this.courseRegistrationDao = courseRegistrationDao;
   }
 
   /**
-   * Retrieves a list of all registrations.
+   * Retrieves a list of all course registrations.
    *
    * @return a ResponseEntity containing the list of registrations and HTTP 200 OK
    */
-  @GetMapping("/registrations")
-  public ResponseEntity<List<Registration>> getAllRegistrations() {
-    return new ResponseEntity<>(registrationDao.findAll(), HttpStatus.OK);
+  @GetMapping("/course-registrations")
+  public ResponseEntity<List<Registration>> getAllCourseRegistrations() {
+    return new ResponseEntity<>(courseRegistrationDao.findAll(), HttpStatus.OK);
   }
 
   /**
-   * Retrieves a specific registration by its ID.
+   * Retrieves a specific course registration by its ID.
    * Returns HTTP 404 if no registration exists with the given ID.
    *
    * @param id the ID of the registration to retrieve
    * @return a ResponseEntity containing the registration and HTTP 200 OK,
    * or HTTP 404 Not Found if not found
    */
-  @GetMapping("/registration/{id}")
-  public ResponseEntity<Registration> getRegistrationById(@PathVariable Long id) {
-    Optional<Registration> optionalRegistration = registrationDao.findById(id);
+  @GetMapping("/course-registration/{id}")
+  public ResponseEntity<Registration> getCourseRegistrationById(@PathVariable Long id) {
+    Optional<Registration> optionalRegistration = courseRegistrationDao.findById(id);
     if (optionalRegistration.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -64,21 +65,21 @@ public class RegistrationController {
   }
 
   /**
-   * Creates a new registration.
+   * Creates a new course registration.
    *
    * @param registration the Registration object to create
    * @return a ResponseEntity containing the created registration and HTTP 201 Created
    */
-  @PostMapping("/registration")
-  public ResponseEntity<Registration> addRegistration(@RequestBody @Valid Registration registration) {
+  @PostMapping("/course-registration")
+  public ResponseEntity<Registration> addCourseRegistration(@RequestBody @Valid Registration registration) {
     registration.setId(null);
-    registrationDao.save(registration);
+    courseRegistrationDao.save(registration);
 
     return new ResponseEntity<>(registration, HttpStatus.CREATED);
   }
 
   /**
-   * Updates an existing registration by ID.
+   * Updates an existing course registration by ID.
    * Returns HTTP 404 if no registration exists with the given ID.
    *
    * @param id           the ID of the registration to update
@@ -86,9 +87,10 @@ public class RegistrationController {
    * @return a ResponseEntity with HTTP 204 No Content on success,
    * or HTTP 404 Not Found if the registration does not exist
    */
-  @PutMapping("/registration/{id}")
-  public ResponseEntity<Void> updateRegistration(@PathVariable Long id, @RequestBody @Valid Registration registration) {
-    Optional<Registration> optionalRegistration = registrationDao.findById(id);
+  @PutMapping("/course-registration/{id}")
+  public ResponseEntity<Void> updateCourseRegistration(@PathVariable Long id,
+      @RequestBody @Valid Registration registration) {
+    Optional<Registration> optionalRegistration = courseRegistrationDao.findById(id);
     if (optionalRegistration.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -100,13 +102,13 @@ public class RegistrationController {
     existingRegistration.setCourse(registration.getCourse());
     existingRegistration.setDog(registration.getDog());
 
-    registrationDao.save(existingRegistration);
+    courseRegistrationDao.save(existingRegistration);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   /**
-   * Deletes a registration by its ID.
+   * Deletes a course registration by its ID.
    * Returns HTTP 404 if no registration exists with the given ID.
    * <p>
    * Consider anonymizing related data instead of performing a hard delete.
@@ -115,9 +117,9 @@ public class RegistrationController {
    * @return a ResponseEntity with HTTP 204 No Content on success,
    * or HTTP 404 Not Found if the registration does not exist
    */
-  @DeleteMapping("/registration/{id}")
-  public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
-    Optional<Registration> optionalRegistration = registrationDao.findById(id);
+  @DeleteMapping("/course-registration/{id}")
+  public ResponseEntity<Void> deleteCourseRegistration(@PathVariable Long id) {
+    Optional<Registration> optionalRegistration = courseRegistrationDao.findById(id);
     if (optionalRegistration.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -130,7 +132,7 @@ public class RegistrationController {
 
     //
 
-    registrationDao.deleteById(id);
+    courseRegistrationDao.deleteById(id);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
