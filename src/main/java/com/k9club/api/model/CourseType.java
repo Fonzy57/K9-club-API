@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.views.ViewUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -18,7 +20,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Type {
+public class CourseType {
 
   /**
    * Primary key identifier for the course type.
@@ -33,22 +35,29 @@ public class Type {
    */
   @NotBlank
   @Column(unique = true, nullable = false)
+  @Length(min = 5, max = 25)
   @JsonView(ViewUser.Owner.class)
   protected String name;
 
   /**
-   * CSS color value used for rendering text when displaying this course type.
+   * Hexadecimal color code in #RRGGBB format used for rendering the text color of this course type.
+   * Must be exactly 7 characters long and match the pattern #RRGGBB.
    */
   @NotBlank
   @Column(unique = true, nullable = false)
+  @Length(min = 7, max = 7)
+  @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "Doit être au format #RRGGBB")
   @JsonView(ViewUser.Owner.class)
   protected String textColor;
 
   /**
-   * CSS color value used for rendering the background when displaying this course type.
+   * Hexadecimal color code in #RRGGBB format used for rendering the background color of this course type.
+   * Must be exactly 7 characters long and match the pattern #RRGGBB.
    */
   @NotBlank
   @Column(unique = true, nullable = false)
+  @Length(min = 7, max = 7)
+  @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "Doit être au format #RRGGBB")
   @JsonView(ViewUser.Owner.class)
   protected String backgroundColor;
 
