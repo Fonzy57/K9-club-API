@@ -186,3 +186,13 @@ VALUES
     ('Max', '2018-03-10', 'Male', UTC_TIMESTAMP(),
      (SELECT id FROM user WHERE email = 'leblanc@k9club.fr'),
      (SELECT id FROM breed WHERE name = 'Border Collie'));
+
+-- 4. Créations des différents types pour les cours
+INSERT INTO course_type (name, text_color, background_color)
+VALUES ('artistique', '#831F00', '#FAD7CC'),
+       ('agilité', '#724300', '#FAE7CC'),
+       ('base', '#635900', '#FEF8C5'),
+       ('ring', '#006E11', '#CCF2D2'),
+       ('canicross', '#005671', '#CCEFFA'),
+       ('détection', '#420075', '#E6CCFA'),
+       ('chiot', '#000000', '#F4F4F4');
