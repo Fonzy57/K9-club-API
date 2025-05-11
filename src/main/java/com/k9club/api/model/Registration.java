@@ -87,6 +87,6 @@ public class Registration {
    */
   // @JsonIgnoreProperties("registrations")
   @ManyToOne(optional = false)
-  @JoinColumn(name = "dog_id", nullable = false)
+  @JoinColumn(name = "course_id", nullable = false)
   protected Course course;
 }
