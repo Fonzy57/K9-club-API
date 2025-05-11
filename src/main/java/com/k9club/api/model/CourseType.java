@@ -35,7 +35,7 @@ public class CourseType {
    */
   @NotBlank
   @Column(unique = true, nullable = false)
-  @Length(min = 5, max = 25)
+  @Length(min = 3, max = 25)
   @JsonView(ViewUser.Owner.class)
   protected String name;
 
