@@ -14,6 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JPA entity representing a dog in the K9 Club application.
@@ -67,7 +69,7 @@ public class Dog {
   @CreatedDate
   @Column(updatable = false, nullable = false)
   @JsonView(ViewUser.Owner.class)
-  private Instant createdAt;
+  protected Instant createdAt;
 
   /**
    * Timestamp marking the last time the dog record was modified.
@@ -76,7 +78,7 @@ public class Dog {
    */
   @LastModifiedDate
   @JsonView(ViewUser.Owner.class)
-  private Instant updatedAt;
+  protected Instant updatedAt;
 
   //  relation with User (possessed)
   /**
@@ -87,7 +89,7 @@ public class Dog {
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
   @JsonBackReference("user-dogs") // ← n’essaie pas de sérialiser owner à nouveau
-  private User owner; // TODO VOIR SI JE GARDE JsonBackReference OU SI JE CHANGE POUR UN JSONVIEW
+  protected User owner; // TODO VOIR SI JE GARDE JsonBackReference OU SI JE CHANGE POUR UN JSONVIEW
 
   // relation with Breed (belongs_to)
   /**
@@ -99,5 +101,12 @@ public class Dog {
   @JoinColumn(name = "breed_id", nullable = false)
   @JsonIgnoreProperties("dogs")
   @JsonView(ViewUser.Owner.class)
-  private Breed breed;
+  protected Breed breed;
+
+
+  // relation avec registration
+  // TODO revoir le mappedBy
+  // @JsonIgnoreProperties("dog")
+  @OneToMany(mappedBy = "dog", orphanRemoval = true)
+  protected List<Registration> registrations = new ArrayList<>();
 }
