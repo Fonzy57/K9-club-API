@@ -33,7 +33,7 @@ public class Course {
    * Primary key identifier for the course.
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;
 
   /**
