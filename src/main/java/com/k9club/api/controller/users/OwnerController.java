@@ -1,11 +1,12 @@
 package com.k9club.api.controller.users;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
+import com.k9club.api.dto.OwnerUpdateDto;
 import com.k9club.api.model.User;
+import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
-import com.k9club.api.security.annotations.IsSuperAdmin;
-import com.k9club.api.views.ViewUser;
+import com.k9club.api.security.annotations.IsOwner;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +16,24 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller responsible for managing user-related operations.
+ * Controller responsible for managing users with the OWNER role.
  * <p>
- * Provides endpoints to retrieve, create, update, and delete users,
- * with access restricted based on user roles (ADMIN and SUPER_ADMIN).
- * <p>
- * Uses @JsonView to control the JSON response according to the user's role.
+ * Provides endpoints to list, retrieve, update, and delete owner accounts.
+ * Access is restricted via {@code @IsOwner} on the class and {@code @IsAdmin}
+ * on methods where appropriate.
  */
 @RestController
 @CrossOrigin
-@IsAdmin
+@IsOwner
 public class OwnerController {
+  // TODO AJOUTER UN VIEW SPECIFIQUE
 
   protected UserDao userDao;
 
   /**
    * Constructor injecting the UserDao dependency.
    *
-   * @param userDao the DAO used to interact with the User entity in the database
+   * @param userDao the DAO used to interact with User entities in the database
    */
   @Autowired
   public OwnerController(UserDao userDao) {
@@ -40,143 +41,94 @@ public class OwnerController {
   }
 
   /**
-   * Retrieves a list of all users with a view adapted for ADMIN users.
+   * Retrieves a list of all users with the OWNER role.
+   * Only accessible by ADMIN users.
    *
-   * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
+   * @return a ResponseEntity containing the list of owner users and HTTP 200 OK
    */
-  @JsonView(ViewUser.Admin.class)
+  @IsAdmin
   @GetMapping("/owners")
-  public ResponseEntity<List<User>> getUsers() {
-    return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
+  public ResponseEntity<List<User>> getOwners() {
+    return new ResponseEntity<>(userDao.findByUserRole(UserRole.OWNER), HttpStatus.OK);
   }
 
   /**
-   * Retrieves a specific user by ID with a view adapted for ADMIN users.
+   * Retrieves a specific owner user by ID.
+   * Returns HTTP 404 if no user exists with the given ID.
    *
-   * @param id the ID of the user to retrieve
-   * @return a ResponseEntity containing the user if found with HTTP 200 OK,
-   * or HTTP 404 Not Found if the user does not exist
+   * @param id the ID of the owner to retrieve
+   * @return a ResponseEntity containing the owner and HTTP 200 OK,
+   * or HTTP 404 Not Found if not found
    */
-  @JsonView(ViewUser.Admin.class)
   @GetMapping("/owner/{id}")
-  public ResponseEntity<User> getUser(@PathVariable Long id) {
-    Optional<User> user = userDao.findById(id);
+  public ResponseEntity<User> getOwnerById(@PathVariable Long id) {
+    Optional<User> optionalUser = userDao.findById(id);
 
-    if (user.isEmpty()) {
+    if (optionalUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(user.get(), HttpStatus.OK);
+    return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
   }
 
   /**
-   * Retrieves a list of all users with a view adapted for SUPER_ADMIN users.
-   * <p>
-   * Provides more detailed information than the ADMIN view.
+   * Updates firstname, lastname, and email of an existing owner user.
+   * Returns HTTP 404 if the user is not found, or HTTP 403 if the user exists
+   * but does not have the OWNER role.
    *
-   * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
+   * @param id             the ID of the owner to update
+   * @param ownerUpdateDto the DTO containing new firstname, lastname, and email
+   * @return a ResponseEntity with HTTP 204 No Content on success,
+   * HTTP 404 Not Found or HTTP 403 Forbidden on failure
    */
-  @IsSuperAdmin
-  @JsonView(ViewUser.SuperAdmin.class)
-  @GetMapping("/super-admin/owners")
-  public ResponseEntity<List<User>> getUsersForSuperAdmin() {
-    return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
-  }
+  @PutMapping("/owner/{id}")
+  public ResponseEntity<Void> updateOwner(@PathVariable Long id, @RequestBody @Valid OwnerUpdateDto ownerUpdateDto) {
+    Optional<User> optionalUser = userDao.findById(id);
 
-  /**
-   * Retrieves a specific user by ID with a view adapted for SUPER_ADMIN users.
-   *
-   * @param id the ID of the user to retrieve
-   * @return a ResponseEntity containing the user if found with HTTP 200 OK,
-   * or HTTP 404 Not Found if the user does not exist
-   */
-  @IsSuperAdmin
-  @JsonView(ViewUser.SuperAdmin.class)
-  @GetMapping("/super-admin/owner/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
-  public ResponseEntity<User> getUserForSuperAdmin(@PathVariable Long id) {
-    Optional<User> user = userDao.findById(id);
-
-    if (user.isEmpty()) {
+    if (optionalUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    return new ResponseEntity<>(user.get(), HttpStatus.OK);
+    User owner = optionalUser.get();
+
+    if (owner.getUserRole() != UserRole.OWNER) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    owner.setFirstname(ownerUpdateDto.getFirstname());
+    owner.setLastname(ownerUpdateDto.getLastname());
+    owner.setEmail(ownerUpdateDto.getEmail());
+
+    userDao.save(owner);
+
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   /**
-   * Deletes a user by ID.
-   * <p>
-   * Only accessible by SUPER_ADMIN users.
+   * Deletes an owner user by ID.
+   * Performs a hard delete; consider anonymizing data instead of permanent removal.
+   * Returns HTTP 404 if the user does not exist.
    *
-   * @param id the ID of the user to delete
-   * @return a ResponseEntity with HTTP 204 No Content if successful,
+   * @param id the ID of the owner to delete
+   * @return a ResponseEntity with HTTP 204 No Content if deleted,
    * or HTTP 404 Not Found if the user does not exist
    */
-  @IsSuperAdmin
+  @IsAdmin
   @DeleteMapping("/owner/{id}")
-  public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-    Optional<User> user = userDao.findById(id);
-    if (user.isEmpty()) {
+  public ResponseEntity<Void> deleteOwnerById(@PathVariable Long id) {
+    //
+
+    //  TODO A LA PLACE DE DELETE VOIR POUR ANONYMISER LES DONNEES
+
+    //
+
+    Optional<User> optionalUser = userDao.findById(id);
+    if (optionalUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    //
-
-    // TODO VOIR POUR ANONYMISATION DES DONNEES
-
-    //
 
     userDao.deleteById(id);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-
-  /**
-   * Creates a new user.
-   * <p>
-   * Only accessible by SUPER_ADMIN users.
-   *
-   * @param user the user object to be created
-   * @return a ResponseEntity with HTTP 201 Created status
-   */
-  @IsSuperAdmin
-  @PostMapping("/owner")
-  public ResponseEntity<String> addUser(@RequestBody User user) {
-    user.setId(null);
-    userDao.save(user);
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
-  }
-
-  /**
-   * Updates an existing user by ID.
-   * <p>
-   * Only accessible by SUPER_ADMIN users.
-   * The creation date (createdAt) cannot be modified.
-   *
-   * @param id   the ID of the user to update
-   * @param user the updated user information
-   * @return a ResponseEntity with HTTP 204 No Content if successful,
-   * or HTTP 404 Not Found if the user does not exist
-   */
-  @IsSuperAdmin
-  @PutMapping("/owner/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-    Optional<User> userOptional = userDao.findById(id);
-
-    if (userOptional.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    user.setId(id);
-
-    // User cannot change creation date
-    // Preserve the original creation date
-    user.setCreatedAt(userOptional.get().getCreatedAt());
-
-    userDao.save(user);
-
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  }
-
 }
