@@ -4,6 +4,7 @@ import com.k9club.api.dao.CourseTypeDao;
 import com.k9club.api.model.CourseType;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsOwner;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class CourseTypeController {
    */
   @IsAdmin
   @PostMapping("/type")
-  public ResponseEntity<CourseType> addCourseType(@RequestBody CourseType courseType) {
+  public ResponseEntity<CourseType> addCourseType(@RequestBody @Valid CourseType courseType) {
     courseType.setId(null);
     courseTypeDao.save(courseType);
     return new ResponseEntity<>(courseType, HttpStatus.OK);
@@ -93,7 +94,7 @@ public class CourseTypeController {
    */
   @IsAdmin
   @PutMapping("/type/{id}")
-  public ResponseEntity<CourseType> updateCourseType(@PathVariable Long id, @RequestBody CourseType courseType) {
+  public ResponseEntity<CourseType> updateCourseType(@PathVariable Long id, @RequestBody @Valid CourseType courseType) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
     if (optionalCourseType.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -105,7 +106,7 @@ public class CourseTypeController {
     course.setTextColor(courseType.getTextColor());
     course.setBackgroundColor(courseType.getBackgroundColor());
 
-    courseTypeDao.save(courseType);
+    courseTypeDao.save(course);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
