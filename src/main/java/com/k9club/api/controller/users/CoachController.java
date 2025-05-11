@@ -64,7 +64,7 @@ public class CoachController {
    */
   @JsonView(ViewUser.Admin.class)
   @GetMapping("/coach/{id}")
-  public ResponseEntity<User> getCoach(@PathVariable Long id) {
+  public ResponseEntity<User> getCoachById(@PathVariable Long id) {
     Optional<User> optionalUser = userDao.findById(id);
     if (optionalUser.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
