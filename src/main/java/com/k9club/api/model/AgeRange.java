@@ -23,7 +23,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class AgeRange {
 
-  // TODO AJOUTER LES JSON VIEW
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
    * Primary key identifier for the age range.
@@ -69,6 +69,8 @@ public class AgeRange {
   @LastModifiedDate
   protected Instant updatedAt;
 
+
+  // TODO REVOIR CE COMMENTAIRE JAVA DOC ET VOIR CELUI DANS COURSETYPE POUR LA LISTE DES COURS
   /**
    * List of courses that fall within this age range.
    * <p>

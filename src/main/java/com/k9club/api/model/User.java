@@ -30,6 +30,8 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
+
   /**
    * Primary key identifier for the user.
    */

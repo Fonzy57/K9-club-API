@@ -24,7 +24,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Breed {
 
-  // TODO FAIRE LES JSON VIEWS
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
    * Primary key identifier for the breed.

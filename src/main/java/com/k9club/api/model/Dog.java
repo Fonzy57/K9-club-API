@@ -2,8 +2,6 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.k9club.api.views.ViewUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -31,13 +29,13 @@ public class Dog {
 
   // TODO FAIRE LE DOG CONTROLLER
   // TODO VOIR AUSSI POUR LES VIEWS
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
    * Primary key identifier for the dog.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView(ViewUser.Owner.class)
   protected Long id;
 
   /**
@@ -45,7 +43,6 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false, length = 100)
-  @JsonView(ViewUser.Owner.class)
   protected String name;
 
   /**
@@ -53,7 +50,6 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false)
-  @JsonView(ViewUser.Owner.class)
   protected LocalDate birthday;
 
   /**
@@ -61,7 +57,6 @@ public class Dog {
    */
   @NotBlank
   @Column(nullable = false)
-  @JsonView(ViewUser.Owner.class)
   protected String gender;
 
   /**
@@ -71,7 +66,6 @@ public class Dog {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView(ViewUser.Owner.class)
   protected Instant createdAt;
 
   /**
@@ -80,7 +74,6 @@ public class Dog {
    * Automatically updated on each save.
    */
   @LastModifiedDate
-  @JsonView(ViewUser.Owner.class)
   protected Instant updatedAt;
 
   //  relation with User (possessed)
@@ -103,7 +96,6 @@ public class Dog {
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
   @JsonIgnoreProperties("dogs")
-  @JsonView(ViewUser.Owner.class)
   protected Breed breed;
 
 

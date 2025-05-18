@@ -27,7 +27,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Course {
 
-  // TODO AJOUTER LES JSON VIEW
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
    * Primary key identifier for the course.

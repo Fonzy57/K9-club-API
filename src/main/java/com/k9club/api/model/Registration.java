@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Registration {
 
-  // TODO AJOUTER LES JSON VIEW
+  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
    * Primary key identifier for the registration.
