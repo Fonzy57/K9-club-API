@@ -44,7 +44,7 @@ public class CourseTypeController {
    *
    * @return a ResponseEntity containing the list of all CourseType entities and HTTP 200 OK
    */
-  @GetMapping("/types")
+  @GetMapping("/course-types")
   public ResponseEntity<List<CourseType>> getAllTypes() {
     return new ResponseEntity<>(courseTypeDao.findAll(), HttpStatus.OK);
   }
@@ -57,7 +57,7 @@ public class CourseTypeController {
    * @return a ResponseEntity containing the CourseType and HTTP 200 OK,
    * or HTTP 404 Not Found if not found
    */
-  @GetMapping("/type/{id}")
+  @GetMapping("/course-type/{id}")
   public ResponseEntity<CourseType> getTypeById(@PathVariable Long id) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
     if (optionalCourseType.isEmpty()) {
@@ -75,7 +75,7 @@ public class CourseTypeController {
    * @return a ResponseEntity containing the created CourseType and HTTP 200 OK
    */
   @IsAdmin
-  @PostMapping("/type")
+  @PostMapping("/course-type")
   public ResponseEntity<CourseType> addCourseType(@RequestBody @Valid CourseType courseType) {
     courseType.setId(null);
     courseTypeDao.save(courseType);
@@ -93,7 +93,7 @@ public class CourseTypeController {
    * or HTTP 404 Not Found if the CourseType does not exist
    */
   @IsAdmin
-  @PutMapping("/type/{id}")
+  @PutMapping("/course-type/{id}")
   public ResponseEntity<CourseType> updateCourseType(@PathVariable Long id, @RequestBody @Valid CourseType courseType) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
     if (optionalCourseType.isEmpty()) {
@@ -123,7 +123,7 @@ public class CourseTypeController {
    * or HTTP 404 Not Found if the CourseType does not exist
    */
   @IsAdmin
-  @DeleteMapping("/type/{id}")
+  @DeleteMapping("/course-type/{id}")
   public ResponseEntity<CourseType> deleteCourseType(@PathVariable Long id) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
 
