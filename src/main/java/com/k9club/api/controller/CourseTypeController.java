@@ -27,7 +27,7 @@ public class CourseTypeController {
 
   // TODO AJOUTER LES JSON VIEWS
 
-  protected CourseTypeDao courseTypeDao;
+  private final CourseTypeDao courseTypeDao;
 
   /**
    * Constructs a new CourseTypeController with the given DAO.
@@ -79,7 +79,7 @@ public class CourseTypeController {
   public ResponseEntity<CourseType> addCourseType(@RequestBody @Valid CourseType courseType) {
     courseType.setId(null);
     courseTypeDao.save(courseType);
-    return new ResponseEntity<>(courseType, HttpStatus.OK);
+    return new ResponseEntity<>(courseType, HttpStatus.CREATED);
   }
 
   /**
