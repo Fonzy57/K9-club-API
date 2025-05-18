@@ -5,8 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,4 +54,21 @@ public class Breed {
    */
   @OneToMany(mappedBy = "breed")
   protected List<Dog> dogs = new ArrayList<>();
+
+  /**
+   * Timestamp marking when the breed record was created.
+   * <p>
+   * Automatically populated on insert and not updatable thereafter.
+   */
+  @CreatedDate
+  @Column(updatable = false, nullable = false)
+  protected Instant createdAt;
+
+  /**
+   * Timestamp marking the last time the breed record was modified.
+   * <p>
+   * Automatically updated on each save.
+   */
+  @LastModifiedDate
+  protected Instant updatedAt;
 }
