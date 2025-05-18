@@ -29,7 +29,7 @@ public class BreedController {
 
   // TODO FAIRE LES JSON VIEWS
 
-  private BreedDao breedDao;
+  private final BreedDao breedDao;
 
   /**
    * Constructs a new BreedController with the given DAO.
