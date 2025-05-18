@@ -1,4 +1,4 @@
-package com.k9club.api.exceptionInterceptor;
+package com.k9club.api.exceptionHandler;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
