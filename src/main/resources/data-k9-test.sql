@@ -196,3 +196,102 @@ VALUES ('artistique', '#831F00', '#FAD7CC'),
        ('canicross', '#005671', '#CCEFFA'),
        ('détection', '#420075', '#E6CCFA'),
        ('chiot', '#000000', '#F4F4F4');
+
+
+-- 5. Insertion des tranches d'âge avec timestamps
+INSERT INTO age_range (min_age, max_age, created_at, updated_at)
+VALUES (0, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       (3, 5, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       (6, 15, UTC_TIMESTAMP(), UTC_TIMESTAMP());
+
+
+-- 6. Création de cours avec coach, type et tranche d'âge
+INSERT INTO course (name,
+                    description,
+                    max_participants,
+                    start_date,
+                    end_date,
+                    created_at,
+                    updated_at,
+                    user_id,
+                    course_type_id,
+                    age_range_id)
+VALUES ('Pouponnière Canine',
+        'Initiation aux ordres de base pour chiens de 0 à 2 ans.',
+        8,
+        '2025-05-20 10:00:00',
+        '2025-05-20 11:30:00',
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+           -- Coach Hubert
+        (SELECT id FROM user WHERE email = 'coach@k9club.fr'),
+           -- Type chiot
+        (SELECT id FROM course_type WHERE name = 'chiot'),
+           -- Tranche 0–2 ans
+        (SELECT id FROM age_range WHERE min_age = 0 AND max_age = 2)),
+       ('Agilité Débutant',
+        'Découverte de l’agilité pour chiens de 3 à 5 ans.',
+        10,
+        '2025-05-22 14:00:00',
+        '2025-05-22 15:30:00',
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+           -- Coach Larmina
+        (SELECT id FROM user WHERE email = 'larmina@k9club.fr'),
+           -- Type agilité
+        (SELECT id FROM course_type WHERE name = 'agilité'),
+           -- Tranche 3–5 ans
+        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+       ('Détection Avancée',
+        'Perfectionnement à la détection pour chiens de 6 ans et plus.',
+        6,
+        '2025-05-25 09:00:00',
+        '2025-05-25 11:00:00',
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+           -- Coach Jack
+        (SELECT id FROM user WHERE email = 'jack@k9club.fr'),
+           -- Type détection
+        (SELECT id FROM course_type WHERE name = 'détection'),
+           -- Tranche 6–15 ans
+        (SELECT id FROM age_range WHERE min_age = 6 AND max_age = 15)),
+       ('Canicross Découverte',
+        'Premiers pas en canicross pour chiens de 3 à 5 ans.',
+        12,
+        '2025-05-27 08:00:00',
+        '2025-05-27 09:30:00',
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+           -- Coach Princess
+        (SELECT id FROM user WHERE email = 'princess@k9club.fr'),
+           -- Type canicross
+        (SELECT id FROM course_type WHERE name = 'canicross'),
+           -- Tranche 3–5 ans
+        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5));
+
+-- 7. Inscriptions des chiens aux cours
+INSERT INTO registration (registration_date,
+                          status,
+                          created_at,
+                          updated_at,
+                          dog_id,
+                          course_id)
+VALUES (UTC_TIMESTAMP(),
+        'CONFIRMED',
+        UTC_TIMESTAMP(),
+        UTC_TIMESTAMP(),
+           -- Rex (5 ans) en Agilité Débutant
+        (SELECT id FROM dog WHERE name = 'Rex'),
+        (SELECT id FROM course WHERE name = 'Agilité Débutant')),
+       (UTC_TIMESTAMP(),
+        'CONFIRMED',
+        UTC_TIMESTAMP(),
+        UTC_TIMESTAMP(),
+           -- Mia (4 ans) en Agilité Débutant
+        (SELECT id FROM dog WHERE name = 'Mia'),
+        (SELECT id FROM course WHERE name = 'Agilité Débutant')),
+       (UTC_TIMESTAMP(),
+        'PENDING',
+        UTC_TIMESTAMP(),
+        UTC_TIMESTAMP(),
+           -- Max (7 ans) en Détection Avancée
+        (SELECT id FROM dog WHERE name = 'Max'),
+        (SELECT id FROM course WHERE name = 'Détection Avancée'));
+
+-- Note : Charlie et Daisy ne sont pas inscrits pour l'instant.

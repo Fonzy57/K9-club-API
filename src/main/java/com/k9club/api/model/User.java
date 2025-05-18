@@ -93,7 +93,7 @@ public class User {
   @CreatedDate
   @Column(updatable = false, nullable = false)
   @JsonView(ViewUser.Owner.class)
-  private Instant createdAt;
+  protected Instant createdAt;
 
   /**
    * Timestamp marking the last time the user record was modified.
@@ -102,7 +102,7 @@ public class User {
    */
   @LastModifiedDate
   @JsonView(ViewUser.Owner.class)
-  private Instant updatedAt;
+  protected Instant updatedAt;
 
 
   // ASSOCIATION WITH DOG
@@ -114,7 +114,7 @@ public class User {
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
   @JsonManagedReference("user-dogs")
   @JsonView(ViewUser.Owner.class)
-  private List<Dog> dogs = new ArrayList<>();
+  protected List<Dog> dogs = new ArrayList<>();
 
   //  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE
 

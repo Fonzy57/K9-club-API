@@ -64,7 +64,7 @@ public class AuthController {
    * @return a ResponseEntity containing the created user (without password) and HTTP 201 status
    */
   @PostMapping("/registration")
-  public ResponseEntity<User> inscription(@RequestBody @Valid User user) {
+  public ResponseEntity<Void> inscription(@RequestBody @Valid User user) {
     user.setUserRole(UserRole.OWNER);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -74,11 +74,8 @@ public class AuthController {
     // Hiding the password before sending the response
     user.setPassword(null);
 
-    return new ResponseEntity<>(user, HttpStatus.CREATED);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
-
-  // TODO AJOUTER UNE ROUTE POUR L'AJOUT D'UN COACH AVEC UN ROLE PARTICULIER
-  // SEUL UN ADMIN PEUT APPELER CETTE ROUTE
 
   /**
    * Authenticates a user based on provided credentials and generates a JWT token if authentication succeeds.
