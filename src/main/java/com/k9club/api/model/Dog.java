@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,7 +21,7 @@ import java.util.List;
  * JPA entity representing a dog in the K9 Club application.
  * <p>
  * Stores basic dog information (name, birthday, gender), auditing timestamps,
- * and relationships to its owner and breed.
+ * and relationships to its owner, breed, and registrations.
  */
 @Getter
 @Setter
@@ -27,8 +29,6 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Dog {
 
-  // TODO FAIRE LE DOG CONTROLLER
-  // TODO VOIR AUSSI POUR LES VIEWS
   // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   /**
@@ -39,23 +39,33 @@ public class Dog {
   protected Long id;
 
   /**
-   * Name of the dog; must be between 1 and 100 characters.
+   * Name of the dog.
+   * <p>
+   * Must not be blank and length between 2 and 100 characters.
+   * Validation message: "Le nom du chien est obligatoire" or
+   * "Le nom du chien doit être compris entre 2 et 100 caractères".
    */
-  @NotBlank
-  @Column(nullable = false, length = 100)
+  @NotBlank(message = "Le nom du chien est obligatoire")
+  @Length(min = 2, max = 100, message = "Le nom du chien doit être compris entre 2 et 100 caractères")
+  @Column(nullable = false)
   protected String name;
 
   /**
    * Date of birth of the dog.
+   * <p>
+   * Must not be null.
    */
-  @NotBlank
+  @NotNull(message = "La date de naissance du chien est obligatoire")
   @Column(nullable = false)
   protected LocalDate birthday;
 
+  // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
   /**
    * Gender of the dog (e.g., "Male" or "Female").
+   * <p>
+   * Must not be blank.
    */
-  @NotBlank
+  @NotBlank(message = "Le genre du chien est obligatoire")
   @Column(nullable = false)
   protected String gender;
 
@@ -81,6 +91,7 @@ public class Dog {
    * Owner of the dog.
    * <p>
    * Many-to-one relationship to the {@link User} entity; cannot be null.
+   * Uses {@code @JsonBackReference} to prevent circular serialization.
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
@@ -92,6 +103,7 @@ public class Dog {
    * Breed of the dog.
    * <p>
    * Many-to-one relationship to the {@link Breed} entity; cannot be null.
+   * Uses {@code @JsonIgnoreProperties} to avoid serializing the breed’s dog list.
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
@@ -102,6 +114,11 @@ public class Dog {
   // relation avec registration
   // TODO revoir le mappedBy
   // @JsonIgnoreProperties("dog")
+  /**
+   * Registrations associated with this dog.
+   * <p>
+   * One-to-many relationship to {@link Registration}; orphan removal enabled.
+   */
   @OneToMany(mappedBy = "dog", orphanRemoval = true)
   protected List<Registration> registrations = new ArrayList<>();
 }
