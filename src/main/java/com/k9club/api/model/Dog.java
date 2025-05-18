@@ -29,6 +29,9 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Dog {
 
+  // TODO FAIRE LE DOG CONTROLLER
+  // TODO VOIR AUSSI POUR LES VIEWS
+
   /**
    * Primary key identifier for the dog.
    */

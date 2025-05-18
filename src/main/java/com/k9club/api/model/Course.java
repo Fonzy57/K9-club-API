@@ -29,6 +29,8 @@ public class Course {
 
   // TODO AJOUTER LES JSON VIEW
 
+  // TODO
+
   /**
    * Primary key identifier for the course.
    */

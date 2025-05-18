@@ -23,6 +23,9 @@ import java.util.Optional;
 @IsOwner
 public class CourseRegistrationController {
 
+  // TODO AJOUTER LES JSON VIEWS
+
+  // TODO AJOUTER DES ROUTES POUR RECUPERER LES COURS D'UN UTILISATEUR ET DE SES OU SON CHIEN ASSOCIES
 
   protected CourseRegistrationDao courseRegistrationDao;
 
