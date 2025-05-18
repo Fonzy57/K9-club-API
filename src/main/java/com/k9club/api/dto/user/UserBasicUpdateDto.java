@@ -1,4 +1,4 @@
-package com.k9club.api.dto;
+package com.k9club.api.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

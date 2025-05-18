@@ -1,7 +1,7 @@
 package com.k9club.api.controller.users;
 
 import com.k9club.api.dao.UserDao;
-import com.k9club.api.dto.OwnerUpdateDto;
+import com.k9club.api.dto.user.OwnerUpdateDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
