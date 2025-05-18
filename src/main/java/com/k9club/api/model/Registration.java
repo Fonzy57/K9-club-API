@@ -24,7 +24,12 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Registration {
 
+  // -----------------------------------------------------
+  // J'EN SUIS LA
+
+  // TODO VERIFIER LES INFOS ICI ET FAIRE LE CONTROLLER
   // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
+  // -----------------------------------------------------
 
   /**
    * Primary key identifier for the registration.
