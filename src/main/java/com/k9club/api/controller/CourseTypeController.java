@@ -94,19 +94,20 @@ public class CourseTypeController {
    */
   @IsAdmin
   @PutMapping("/course-type/{id}")
-  public ResponseEntity<CourseType> updateCourseType(@PathVariable Long id, @RequestBody @Valid CourseType courseType) {
+  public ResponseEntity<Void> updateCourseType(@PathVariable Long id, @RequestBody @Valid CourseType courseType) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
+
     if (optionalCourseType.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    CourseType course = optionalCourseType.get();
+    CourseType existingCourseType = optionalCourseType.get();
 
-    course.setName(courseType.getName());
-    course.setTextColor(courseType.getTextColor());
-    course.setBackgroundColor(courseType.getBackgroundColor());
+    existingCourseType.setName(courseType.getName());
+    existingCourseType.setTextColor(courseType.getTextColor());
+    existingCourseType.setBackgroundColor(courseType.getBackgroundColor());
 
-    courseTypeDao.save(course);
+    courseTypeDao.save(existingCourseType);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
