@@ -32,6 +32,10 @@ public class AgeRange {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;
 
+  //
+  // TODO FAIRE UN VALIDATEUR POUR QUE maxAge SOIT SUPERIEUR A minAge
+  //
+
   /**
    * Minimum age (inclusive) for this range.
    * Must not be null.
