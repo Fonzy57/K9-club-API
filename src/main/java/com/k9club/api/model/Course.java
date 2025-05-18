@@ -29,8 +29,6 @@ public class Course {
 
   // TODO AJOUTER LES JSON VIEW
 
-  // TODO
-
   /**
    * Primary key identifier for the course.
    */
@@ -39,37 +37,52 @@ public class Course {
   protected Long id;
 
   /**
-   * Title of the course; must not be blank.
+   * Title of the course.
+   * <p>
+   * Must not be blank. Validation message: "Le nom est obligatoire".
    */
-  @NotBlank
+  @NotBlank(message = "Le nom est obligatoire")
   @Column(nullable = false)
   protected String name;
 
   /**
-   * Detailed description of the course; stored as TEXT.
+   * Detailed description of the course.
+   * <p>
+   * Stored as TEXT. Must not be blank. Validation message: "La description est obligatoire".
    */
-  @NotBlank
+  @NotBlank(message = "La description est obligatoire")
   @Column(nullable = false, columnDefinition = "TEXT")
   protected String description;
 
   /**
    * Maximum number of participants allowed in the course.
+   * <p>
+   * Must not be null. Validation message: "Le nombre de participants maximum est obligatoire".
    */
-  @NotNull
+  @NotNull(message = "Le nombre de participants maximum est obligatoire")
   @Column(nullable = false)
   protected Integer maxParticipants;
 
+  //
+  // TODO FAIRE UN VALIDATEUR POUR QUE END DATE SOIT SUPERIEUR A START DATE
+  //
+
+
   /**
    * Start date and time of the course session.
+   * <p>
+   * Must not be null. Validation message: "La date de début est obligatoire".
    */
-  @NotNull
+  @NotNull(message = "La date de début est obligatoire")
   @Column(nullable = false)
   protected LocalDateTime startDate;
 
   /**
    * End date and time of the course session.
+   * <p>
+   * Must not be null. Validation message: "La date de fin est obligatoire".
    */
-  @NotNull
+  @NotNull(message = "La date de fin est obligatoire")
   @Column(nullable = false)
   protected LocalDateTime endDate;
 
@@ -94,19 +107,24 @@ public class Course {
   /**
    * Coach assigned to this course.
    * <p>
-   * Many-to-one relationship to the User entity; may be null if unassigned.
+   * Many-to-one relationship to the User entity; must not be null.
+   * Validation message: "Le coach est obligatoire".
    */
+
   // @JsonIgnoreProperties("courses")
+  @NotNull(message = "Le coach est obligatoire")
   @ManyToOne()
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   protected User coach;
 
   // LIAISON AVEC L'ENTITE COURSETYPE
   /**
    * Type of the course (e.g., Agility, Obedience).
    * <p>
-   * Many-to-one relationship to the CourseType entity; required.
+   * Many-to-one relationship to the CourseType entity; must not be null.
+   * Validation message: "Le type de cours est obligatoire".
    */
+  @NotNull(message = "Le type de cours est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_type_id", nullable = false)
   protected CourseType courseType;
@@ -115,8 +133,10 @@ public class Course {
   /**
    * Age range applicable for this course.
    * <p>
-   * Many-to-one relationship to the AgeRange entity; required.
+   * Many-to-one relationship to the AgeRange entity; must not be null.
+   * Validation message: "La tranche d'âge est obligatoire".
    */
+  @NotNull(message = "La tranche d'âge est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "age_range_id", nullable = false)
   protected AgeRange ageRange;
@@ -124,7 +144,8 @@ public class Course {
   /**
    * Registrations made for this course.
    * <p>
-   * One-to-many relationship to Registration; orphan removals cascade.
+   * One-to-many relationship to Registration; orphan removal is enabled to delete
+   * registrations when a course is removed.
    */
   @OneToMany(
       mappedBy = "course",
