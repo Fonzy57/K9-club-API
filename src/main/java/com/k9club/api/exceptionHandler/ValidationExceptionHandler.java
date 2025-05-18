@@ -1,6 +1,5 @@
 package com.k9club.api.exceptionHandler;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -50,29 +49,5 @@ public class ValidationExceptionHandler {
     responseBody.put("errors", fieldErrors);
 
     return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
-  }
-
-  // TODO REVOIR POUR FAIRE PEUT ÊTRE UNE CONDITION POUR CHECKER SI 409 OU AUTRE ERREUR
-
-  /**
-   * Handles database integrity violations, such as unique constraint failures.
-   * <p>
-   * Returns a conflict status and a descriptive error message.
-   *
-   * @param exception the {@link DataIntegrityViolationException} thrown when
-   *                  a data integrity constraint is violated
-   * @return a {@link ResponseEntity} with status 409 and a body containing:
-   * <ul>
-   *   <li><strong>status</strong>: the HTTP status code (409)</li>
-   *   <li><strong>error</strong>: a descriptive error message</li>
-   * </ul>
-   */
-  @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException exception) {
-    Map<String, Object> responseBody = new HashMap<>();
-    responseBody.put("status", HttpStatus.CONFLICT.value());
-    responseBody.put("error", "Donnée déjà existante : une contrainte d'unicité a été violée.");
-
-    return new ResponseEntity<>(responseBody, HttpStatus.CONFLICT);
   }
 }
