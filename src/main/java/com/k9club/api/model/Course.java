@@ -97,7 +97,7 @@ public class Course {
    * Many-to-one relationship to the User entity; may be null if unassigned.
    */
   // @JsonIgnoreProperties("courses")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne()
   @JoinColumn(name = "user_id")
   protected User coach;
 
