@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * JPA entity representing a dog in the K9 Club application.
  * <p>
- * Stores basic dog information (name, birthday, gender), auditing timestamps,
+ * Stores basic dog information (name, birthdate, gender), auditing timestamps,
  * and relationships to its owner, breed, and registrations.
  */
 @Getter
@@ -57,7 +57,7 @@ public class Dog {
    */
   @NotNull(message = "La date de naissance du chien est obligatoire")
   @Column(nullable = false)
-  protected LocalDate birthday;
+  protected LocalDate birthdate;
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
   /**
@@ -112,7 +112,7 @@ public class Dog {
 
 
   // relation avec registration
-  // TODO revoir le mappedBy
+  // TODO revoir le mappedBy et le orphanRemoval
   // @JsonIgnoreProperties("dog")
   /**
    * Registrations associated with this dog.

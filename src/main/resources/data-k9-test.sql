@@ -163,7 +163,7 @@ VALUES ('Alice', 'Martin', 'martin@k9club.fr',
         'OWNER', UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
 -- 3. Création de chiens pour tous les OWNER
-INSERT INTO dog (name, birthday, gender, created_at, user_id, breed_id)
+INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
 VALUES
     -- Pour Tetiana Lombardi (2 chiens)
     ('Rex', '2019-06-01', 'Male', UTC_TIMESTAMP(),
