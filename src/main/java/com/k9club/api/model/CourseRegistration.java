@@ -22,13 +22,14 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Registration {
+public class CourseRegistration {
 
   // -----------------------------------------------------
-  // J'EN SUIS LA
 
   // TODO VERIFIER LES INFOS ICI ET FAIRE LE CONTROLLER
+
   // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
+
   // -----------------------------------------------------
 
   /**
