@@ -9,15 +9,15 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public abstract class UserBasicUpdateDto {
-  @NotBlank
+  @NotBlank(message = "Le prénom est obligatoire")
   @Length(min = 3, max = 100)
   protected String firstname;
 
-  @NotBlank
+  @NotBlank(message = "Le nom est obligatoire")
   @Length(min = 3, max = 100)
   protected String lastname;
 
-  @NotBlank
-  @Email
+  @NotBlank(message = "L'adresse email est obligatoire")
+  @Email(message = "L'adresse email est invalide")
   protected String email;
 }
