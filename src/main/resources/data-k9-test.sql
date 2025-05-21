@@ -262,35 +262,96 @@ VALUES ('Pouponnière Canine',
            -- Type canicross
         (SELECT id FROM course_type WHERE name = 'canicross'),
            -- Tranche 3–5 ans
-        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5));
+        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+       -- Cours passés (avant aujourd'hui)
+       ('Obéissance Basique',
+        'Apprentissage des commandes de base pour chiens de tous âges.',
+        8,
+        DATE_SUB(CURDATE(), INTERVAL 10 DAY),
+        DATE_SUB(CURDATE(), INTERVAL 10 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE,
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'coach@k9club.fr'),
+        (SELECT id FROM course_type WHERE name = 'base'),
+        (SELECT id FROM age_range WHERE min_age = 0 AND max_age = 2)),
+       ('Jeux d''Agilité',
+        'Parcours d''obstacles ludiques pour chiens de 3 à 5 ans.',
+        10,
+        DATE_SUB(CURDATE(), INTERVAL 5 DAY),
+        DATE_SUB(CURDATE(), INTERVAL 5 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE,
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'larmina@k9club.fr'),
+        (SELECT id FROM course_type WHERE name = 'agilité'),
+        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+       -- Cours à venir (après aujourd'hui mais avant 2025)
+       ('Initiation Ring',
+        'Découverte des exercices de ring pour chiens de 3 à 5 ans.',
+        8,
+        DATE_ADD(CURDATE(), INTERVAL 7 DAY),
+        DATE_ADD(CURDATE(), INTERVAL 7 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE,
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'jack@k9club.fr'),
+        (SELECT id FROM course_type WHERE name = 'ring'),
+        (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+       ('Danse Canine',
+        'Initiation à la danse avec son chien pour tous âges.',
+        6,
+        DATE_ADD(CURDATE(), INTERVAL 14 DAY),
+        DATE_ADD(CURDATE(), INTERVAL 14 DAY) + INTERVAL 1 HOUR,
+        UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'princess@k9club.fr'),
+        (SELECT id FROM course_type WHERE name = 'artistique'),
+        (SELECT id FROM age_range WHERE min_age = 0 AND max_age = 2));
 
 -- 7. Inscriptions des chiens aux cours
-INSERT INTO registration (registration_date,
-                          status,
-                          created_at,
-                          updated_at,
-                          dog_id,
-                          course_id)
-VALUES (UTC_TIMESTAMP(),
-        'CONFIRMED',
-        UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(),
-           -- Rex (5 ans) en Agilité Débutant
-        (SELECT id FROM dog WHERE name = 'Rex'),
-        (SELECT id FROM course WHERE name = 'Agilité Débutant')),
-       (UTC_TIMESTAMP(),
-        'CONFIRMED',
-        UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(),
-           -- Mia (4 ans) en Agilité Débutant
-        (SELECT id FROM dog WHERE name = 'Mia'),
-        (SELECT id FROM course WHERE name = 'Agilité Débutant')),
-       (UTC_TIMESTAMP(),
-        'PENDING',
-        UTC_TIMESTAMP(),
-        UTC_TIMESTAMP(),
-           -- Max (7 ans) en Détection Avancée
-        (SELECT id FROM dog WHERE name = 'Max'),
-        (SELECT id FROM course WHERE name = 'Détection Avancée'));
+-- Inscriptions cohérentes avec les cours/chiens existants
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES
+    -- Rex
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     1,
+     1),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     1,
+     2),
+    ('CANCELLED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     1,
+     3),
 
--- Note : Charlie et Daisy ne sont pas inscrits pour l'instant.
+    -- Mia
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     2,
+     1),
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     2,
+     4),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     2,
+     5),
+
+    -- Charlie
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     3,
+     6),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     3,
+     7),
+
+    -- Daisy
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     4,
+     7),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     4,
+     8),
+
+    -- Max
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     5,
+     4),
+    ('CANCELLED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     5,
+     5),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     5,
+     6);
+
