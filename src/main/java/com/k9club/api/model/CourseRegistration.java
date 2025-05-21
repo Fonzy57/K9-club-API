@@ -1,6 +1,6 @@
 package com.k9club.api.model;
 
-import com.k9club.api.model.enums.RegistrationStatus;
+import com.k9club.api.model.enums.CourseRegistrationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * JPA entity representing the registration of a dog for a course.
@@ -26,8 +25,6 @@ public class CourseRegistration {
 
   // -----------------------------------------------------
 
-  // TODO VERIFIER LES INFOS ICI ET FAIRE LE CONTROLLER
-
   // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
 
   // -----------------------------------------------------
@@ -39,23 +36,15 @@ public class CourseRegistration {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long id;
 
-  // TODO PAS SÛR D'AVOIR BESOIN DE CETTE DATE
-  /**
-   * Date and time of the registration.
-   */
-  @NotNull
-  @Column(nullable = false)
-  protected LocalDateTime registrationDate;
-
   /**
    * Current status of the registration.
    * <p>
    * Must be one of CONFIRMED, CANCELLED, or PENDING.
    */
-  @NotNull
+  @NotNull(message = "Le status de la réservation est obligatoire")
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED','CANCELLED', 'PENDING')")
-  protected RegistrationStatus status;
+  protected CourseRegistrationStatus status;
 
   /**
    * Timestamp marking when the registration record was created.
@@ -81,6 +70,7 @@ public class CourseRegistration {
    * Many-to-one relationship to the Dog entity; required.
    */
   // @JsonIgnoreProperties("registrations")
+  @NotNull(message = "Le chien doit être renseigné.")
   @ManyToOne(optional = false)
   @JoinColumn(name = "dog_id", nullable = false)
   protected Dog dog;
@@ -92,6 +82,7 @@ public class CourseRegistration {
    * Many-to-one relationship to the Course entity; required.
    */
   // @JsonIgnoreProperties("registrations")
+  @NotNull(message = "Un cours doit être choisi.")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_id", nullable = false)
   protected Course course;
