@@ -117,8 +117,8 @@ public class Dog {
   /**
    * Registrations associated with this dog.
    * <p>
-   * One-to-many relationship to {@link Registration}; orphan removal enabled.
+   * One-to-many relationship to {@link CourseRegistration}; orphan removal enabled.
    */
   @OneToMany(mappedBy = "dog", orphanRemoval = true)
-  protected List<Registration> registrations = new ArrayList<>();
+  protected List<CourseRegistration> registrations = new ArrayList<>();
 }

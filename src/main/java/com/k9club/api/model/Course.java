@@ -154,5 +154,5 @@ public class Course {
   )
 //  @JsonIgnoreProperties("course")
 //  @JsonView(ViewUser.Owner.class)
-  protected List<Registration> registrations = new ArrayList<>();
+  protected List<CourseRegistration> registrations = new ArrayList<>();
 }
