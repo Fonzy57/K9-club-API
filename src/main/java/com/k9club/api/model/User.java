@@ -74,6 +74,8 @@ public class User {
    */
   @NotBlank
   @Column(nullable = false)
+  // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  // TODO VOIR CETTE ANNOTATION JsonProperty doc : https://fasterxml.github.io/jackson-annotations/javadoc/2.6/com/fasterxml/jackson/annotation/JsonProperty.Access.html
   protected String password;
 
 

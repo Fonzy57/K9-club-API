@@ -26,6 +26,7 @@ import java.util.Optional;
 @CrossOrigin
 @IsOwner
 public class OwnerController {
+  
   // TODO AJOUTER UN VIEW SPECIFIQUE
 
   protected UserDao userDao;
@@ -70,6 +71,15 @@ public class OwnerController {
 
     return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
   }
+
+  //------------------------------------------------------------------------------------------------
+  // TODO AJOUTER LA ROUTE /owner/{id}/dogs pour récupérer la liste des chiens d'un utilisateur
+  //------------------------------------------------------------------------------------------------
+
+  //------------------------------------------------------------------------------------------------
+  // TODO AJOUTER LA ROUTE /owner/{id}/dog/{id} pour récupérer un chien d'un utilisateur
+  //------------------------------------------------------------------------------------------------
+
 
   /**
    * Updates firstname, lastname, and email of an existing owner user.

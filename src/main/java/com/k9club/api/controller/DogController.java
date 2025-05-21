@@ -39,6 +39,11 @@ public class DogController {
 
   // TODO AJOUTER LES JSON VIEWS
 
+  // TODO FAIRE LES ROUTES POUR RÉCUPÉRER LES REGISTRATIONS D'UN CHIEN AVEC SON ID
+
+  // TODO PAR EXEMPLE ROUTE : /dog/{id}/course-registrations
+  // TODO PAR EXEMPLE ROUTE : /dog/{id}/course-registration/{id} POUR UN COURS PRECIS
+
   private final DogDao dogDao;
   private final UserDao userDao;
   private final BreedDao breedDao;
