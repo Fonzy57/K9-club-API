@@ -2,7 +2,7 @@ package com.k9club.api.controller.users;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
-import com.k9club.api.dto.AdminUpdateDto;
+import com.k9club.api.dto.user.AdminUpdateDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 // -------------------------------------------------------------------------------- //
 
-// FAIRE UN CONTROLLER POUR LES OWNERS ET TESTER LES ANCIENNES API, SUROUT /user/me //
+// TODO FAIRE UN CONTROLLER POUR LES OWNERS ET TESTER LES ANCIENNES API, SURTOUT /user/me //
 
 // -------------------------------------------------------------------------------- //
 
