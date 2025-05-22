@@ -1,51 +1,62 @@
 package com.k9club.api.controller.users;
 
+import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.user.OwnerUpdateDto;
+import com.k9club.api.model.Dog;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
+import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Controller responsible for managing users with the OWNER role.
+ * REST controller for managing users with the OWNER role.
  * <p>
- * Provides endpoints to list, retrieve, update, and delete owner accounts.
- * Access is restricted via {@code @IsOwner} on the class and {@code @IsAdmin}
- * on methods where appropriate.
+ * - Owners can view and update their own profile and their dogs.
+ * - Admins can list and delete any owner accounts.
+ * <p>
+ * Security annotations:
+ * {@code @IsOwner} applies to owner-specific endpoints,
+ * {@code @IsAdmin} grants administrative access where required.
  */
 @RestController
 @CrossOrigin
 @IsOwner
 public class OwnerController {
-  
+
   // TODO AJOUTER UN VIEW SPECIFIQUE
 
   protected UserDao userDao;
+  private final DogDao dogDao;
 
   /**
-   * Constructor injecting the UserDao dependency.
+   * Constructs a new OwnerController with the required DAOs.
    *
-   * @param userDao the DAO used to interact with User entities in the database
+   * @param userDao DAO for performing CRUD operations on User entities
+   * @param dogDao  DAO for performing CRUD operations on Dog entities
    */
   @Autowired
-  public OwnerController(UserDao userDao) {
+  public OwnerController(UserDao userDao, DogDao dogDao) {
     this.userDao = userDao;
+    this.dogDao = dogDao;
   }
 
   /**
-   * Retrieves a list of all users with the OWNER role.
-   * Only accessible by ADMIN users.
+   * Retrieves all users with the OWNER role.
+   * <p>
+   * Access restricted to Admin users.
    *
-   * @return a ResponseEntity containing the list of owner users and HTTP 200 OK
+   * @return a {@link ResponseEntity} containing the list of owners and HTTP 200 OK
    */
   @IsAdmin
   @GetMapping("/owners")
@@ -54,11 +65,12 @@ public class OwnerController {
   }
 
   /**
-   * Retrieves a specific owner user by ID.
-   * Returns HTTP 404 if no user exists with the given ID.
+   * Retrieves a specific owner by their ID.
+   * <p>
+   * Returns HTTP 404 if no owner exists with the given ID.
    *
    * @param id the ID of the owner to retrieve
-   * @return a ResponseEntity containing the owner and HTTP 200 OK,
+   * @return a {@link ResponseEntity} containing the owner and HTTP 200 OK,
    * or HTTP 404 Not Found if not found
    */
   @GetMapping("/owner/{id}")
@@ -72,24 +84,73 @@ public class OwnerController {
     return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
   }
 
-  //------------------------------------------------------------------------------------------------
-  // TODO AJOUTER LA ROUTE /owner/{id}/dogs pour récupérer la liste des chiens d'un utilisateur
-  //------------------------------------------------------------------------------------------------
+  /**
+   * Retrieves all dogs belonging to the authenticated owner.
+   * <p>
+   * The current user is obtained via {@code @AuthenticationPrincipal}.
+   * Returns HTTP 404 if the user record cannot be found.
+   *
+   * @param appUserDetails the security principal containing the authenticated user
+   * @return a {@link ResponseEntity} containing the list of dogs and HTTP 200 OK,
+   * or HTTP 404 Not Found if the user record does not exist
+   */
+  @GetMapping("/owner/dogs")
+  public ResponseEntity<List<Dog>> getOwnerDogs(@AuthenticationPrincipal AppUserDetails appUserDetails) {
+    Long ownerId = appUserDetails.getUser().getId();
 
-  //------------------------------------------------------------------------------------------------
-  // TODO AJOUTER LA ROUTE /owner/{id}/dog/{id} pour récupérer un chien d'un utilisateur
-  //------------------------------------------------------------------------------------------------
+    List<Dog> dogs = dogDao.findByOwnerId(ownerId);
+    System.out.println("DOGS : " + dogs);
+    return new ResponseEntity<>(dogs, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieves a specific dog by its ID for the authenticated owner.
+   * <p>
+   * Returns:
+   * <ul>
+   *   <li>404 Not Found if no dog exists with the given ID</li>
+   *   <li>403 Forbidden if the dog exists but is not owned by the authenticated user</li>
+   *   <li>200 OK with the {@link Dog} entity if the dog is found and owned by the user</li>
+   * </ul>
+   *
+   * @param appUserDetails the security principal containing the authenticated user
+   * @param dogId          the ID of the dog to retrieve
+   * @return a {@link ResponseEntity} with the dog and appropriate HTTP status
+   */
+  @GetMapping("/owner/dog/{dogId}")
+  public ResponseEntity<Dog> getOwnerDogById(@AuthenticationPrincipal AppUserDetails appUserDetails,
+      @PathVariable Long dogId) {
+    Long ownerId = appUserDetails.getUser().getId();
+
+    Optional<Dog> optionalDog = dogDao.findById(dogId);
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    Dog existingDog = optionalDog.get();
+
+    if (!existingDog.getOwner().getId().equals(ownerId)) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    return new ResponseEntity<>(existingDog, HttpStatus.OK);
+  }
 
 
   /**
-   * Updates firstname, lastname, and email of an existing owner user.
-   * Returns HTTP 404 if the user is not found, or HTTP 403 if the user exists
-   * but does not have the OWNER role.
+   * Updates an existing owner's profile information.
+   * <p>
+   * Only the firstname, lastname, and email fields are modified.
+   * Returns:
+   * <ul>
+   *   <li>404 Not Found if the user does not exist</li>
+   *   <li>403 Forbidden if the user exists but is not an OWNER</li>
+   *   <li>204 No Content on successful update</li>
+   * </ul>
    *
    * @param id             the ID of the owner to update
    * @param ownerUpdateDto the DTO containing new firstname, lastname, and email
-   * @return a ResponseEntity with HTTP 204 No Content on success,
-   * HTTP 404 Not Found or HTTP 403 Forbidden on failure
+   * @return a {@link ResponseEntity} with the appropriate HTTP status
    */
   @PutMapping("/owner/{id}")
   public ResponseEntity<Void> updateOwner(@PathVariable Long id, @RequestBody @Valid OwnerUpdateDto ownerUpdateDto) {
@@ -115,13 +176,19 @@ public class OwnerController {
   }
 
   /**
-   * Deletes an owner user by ID.
-   * Performs a hard delete; consider anonymizing data instead of permanent removal.
-   * Returns HTTP 404 if the user does not exist.
+   * Deletes an owner user by their ID.
+   * <p>
+   * Access restricted to Admin users.
+   * Returns:
+   * <ul>
+   *   <li>404 Not Found if the user does not exist</li>
+   *   <li>204 No Content on successful deletion</li>
+   * </ul>
+   * <p>
+   * Consider anonymizing data rather than performing a hard delete.
    *
    * @param id the ID of the owner to delete
-   * @return a ResponseEntity with HTTP 204 No Content if deleted,
-   * or HTTP 404 Not Found if the user does not exist
+   * @return a {@link ResponseEntity} with the appropriate HTTP status
    */
   @IsAdmin
   @DeleteMapping("/owner/{id}")
