@@ -152,7 +152,5 @@ public class Course {
       //cascade = CascadeType.ALL,
       orphanRemoval = true
   )
-//  @JsonIgnoreProperties("course")
-//  @JsonView(ViewUser.Owner.class)
   protected List<CourseRegistration> registrations = new ArrayList<>();
 }

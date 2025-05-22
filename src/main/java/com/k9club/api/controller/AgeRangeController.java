@@ -48,7 +48,6 @@ public class AgeRangeController {
    */
   @IsCoach
   @GetMapping("/age-ranges")
-  // @JsonView(ViewUser.Owner.class)
   public ResponseEntity<List<AgeRange>> getAllAgeRanges() {
     List<AgeRange> list = ageRangeDao.findAll();
     return new ResponseEntity<>(list, HttpStatus.OK);
