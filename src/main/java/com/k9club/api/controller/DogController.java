@@ -1,14 +1,17 @@
 package com.k9club.api.controller;
 
 import com.k9club.api.dao.BreedDao;
+import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.dog.DogCreateDto;
 import com.k9club.api.dto.dog.DogUpdateDto;
 import com.k9club.api.model.Breed;
+import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
+import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,27 +43,25 @@ public class DogController {
 
   // TODO AJOUTER LES JSON VIEWS
 
-  // TODO FAIRE LES ROUTES POUR RÉCUPÉRER LES REGISTRATIONS D'UN CHIEN AVEC SON ID
-
-  // TODO PAR EXEMPLE ROUTE : /dog/{id}/course-registrations
-  // TODO PAR EXEMPLE ROUTE : /dog/{id}/course-registration/{id} POUR UN COURS PRECIS
-
   private final DogDao dogDao;
   private final UserDao userDao;
   private final BreedDao breedDao;
+  private final CourseRegistrationDao courseRegistrationDao;
 
   /**
    * Constructs a new {@code DogController} with the required DAOs.
    *
-   * @param dogDao   DAO for performing CRUD operations on Dog entities
-   * @param userDao  DAO for looking up User entities (owners)
-   * @param breedDao DAO for looking up Breed entities
+   * @param dogDao                DAO for performing CRUD operations on Dog entities
+   * @param userDao               DAO for looking up User entities (owners)
+   * @param breedDao              DAO for looking up Breed entities
+   * @param courseRegistrationDao DAO for accessing course registrations associated with dogs
    */
   @Autowired
-  public DogController(DogDao dogDao, UserDao userDao, BreedDao breedDao) {
+  public DogController(DogDao dogDao, UserDao userDao, BreedDao breedDao, CourseRegistrationDao courseRegistrationDao) {
     this.dogDao = dogDao;
     this.userDao = userDao;
     this.breedDao = breedDao;
+    this.courseRegistrationDao = courseRegistrationDao;
   }
 
   /**
@@ -221,4 +223,88 @@ public class DogController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
+
+  /**
+   * Retrieves all course registrations for a specific dog owned by the authenticated user.
+   * <p>
+   * Validates that the dog exists and belongs to the current owner. Returns:
+   * <ul>
+   *   <li>404 Not Found if the dog does not exist</li>
+   *   <li>403 Forbidden if the dog exists but is not owned by the authenticated user</li>
+   *   <li>200 OK with the list of {@link CourseRegistration} entities otherwise</li>
+   * </ul>
+   *
+   * @param appUserDetails the security principal containing the authenticated user
+   * @param id             the ID of the dog whose registrations are requested
+   * @return a {@link ResponseEntity} with the list of registrations and HTTP 200 OK,
+   * or the appropriate HTTP error status
+   */
+  @GetMapping("/dog/{id}/course-registrations")
+  public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrationsForOneDog(
+      @AuthenticationPrincipal AppUserDetails appUserDetails,
+      @PathVariable Long id
+  ) {
+    Optional<Dog> optionalDog = dogDao.findById(id);
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    Dog existingDog = optionalDog.get();
+
+    if (!existingDog.getOwner().getId().equals(appUserDetails.getUser().getId())) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    List<CourseRegistration> courseRegistrations = existingDog.getRegistrations();
+
+    return new ResponseEntity<>(courseRegistrations, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieves a specific course registration for a given dog owned by the authenticated user.
+   * <p>
+   * Validates that the dog exists, belongs to the current owner, and that the registration
+   * exists for that dog. Returns:
+   * <ul>
+   *   <li>404 Not Found if the dog or the registration does not exist</li>
+   *   <li>403 Forbidden if the dog exists but is not owned by the authenticated user</li>
+   *   <li>200 OK with the {@link CourseRegistration} entity otherwise</li>
+   * </ul>
+   *
+   * @param appUserDetails the security principal containing the authenticated user
+   * @param dogId          the ID of the dog
+   * @param registrationId the ID of the course registration to retrieve
+   * @return a {@link ResponseEntity} with the registration and HTTP 200 OK,
+   * or the appropriate HTTP error status
+   */
+  @GetMapping("/dog/{dogId}/course-registration/{registrationId}")
+  public ResponseEntity<CourseRegistration> getDogCourseRegistration(
+      @AuthenticationPrincipal AppUserDetails appUserDetails,
+      @PathVariable Long dogId,
+      @PathVariable Long registrationId
+  ) {
+
+    Optional<Dog> optionalDog = dogDao.findById(dogId);
+    if (optionalDog.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    Dog dog = optionalDog.get();
+
+    // Vérifier que c’est bien le chien de l'utilisateur connecté
+    if (!dog.getOwner().getId().equals(appUserDetails.getUser().getId())) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    // Récupération de la registration (id + dogId)
+    Optional<CourseRegistration> optionalRegistration =
+        courseRegistrationDao.findByIdAndDogId(registrationId, dogId);
+
+    if (optionalRegistration.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    CourseRegistration registration = optionalRegistration.get();
+
+    return new ResponseEntity<>(registration, HttpStatus.OK);
+  }
 }
