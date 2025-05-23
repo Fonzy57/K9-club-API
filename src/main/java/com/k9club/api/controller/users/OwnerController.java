@@ -1,8 +1,11 @@
 package com.k9club.api.controller.users;
 
+import com.k9club.api.dao.CourseDao;
+import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.user.OwnerUpdateDto;
+import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
@@ -20,19 +23,22 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing users with the OWNER role.
+ * REST controller for operations available to users with the OWNER role.
  * <p>
- * - Owners can view and update their own profile and their dogs.
- * - Admins can list and delete any owner accounts.
+ * - Owners can view and update their own profile, list and retrieve their dogs,
+ * and fetch all course registrations associated with their dogs.
+ * - Admin users may list and delete any owner accounts.
  * <p>
- * Security annotations:
- * {@code @IsOwner} applies to owner-specific endpoints,
- * {@code @IsAdmin} grants administrative access where required.
+ * Security:
+ * {@code @IsOwner} applies to all methods by default, allowing only owners;
+ * {@code @IsAdmin} grants administrative access on specific endpoints.
  */
 @RestController
 @CrossOrigin
 @IsOwner
 public class OwnerController {
+  private final CourseRegistrationDao courseRegistrationDao;
+  private final CourseDao courseDao;
 
   // TODO AJOUTER UN VIEW SPECIFIQUE
 
@@ -40,15 +46,19 @@ public class OwnerController {
   private final DogDao dogDao;
 
   /**
-   * Constructs a new OwnerController with the required DAOs.
+   * Constructs a new OwnerController with required DAOs.
    *
-   * @param userDao DAO for performing CRUD operations on User entities
-   * @param dogDao  DAO for performing CRUD operations on Dog entities
+   * @param userDao               DAO for user CRUD operations
+   * @param dogDao                DAO for dog CRUD operations
+   * @param courseRegistrationDao DAO for course registration CRUD operations
+   * @param courseDao             DAO for course CRUD operations
    */
   @Autowired
-  public OwnerController(UserDao userDao, DogDao dogDao) {
+  public OwnerController(UserDao userDao, DogDao dogDao, CourseRegistrationDao courseRegistrationDao, CourseDao courseDao) {
     this.userDao = userDao;
     this.dogDao = dogDao;
+    this.courseRegistrationDao = courseRegistrationDao;
+    this.courseDao = courseDao;
   }
 
   /**
@@ -67,11 +77,10 @@ public class OwnerController {
   /**
    * Retrieves a specific owner by their ID.
    * <p>
-   * Returns HTTP 404 if no owner exists with the given ID.
+   * Returns 404 if the owner does not exist.
    *
-   * @param id the ID of the owner to retrieve
-   * @return a {@link ResponseEntity} containing the owner and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
+   * @param id the owner’s user ID
+   * @return the owner user with HTTP 200 OK, or HTTP 404 Not Found
    */
   @GetMapping("/owner/{id}")
   public ResponseEntity<User> getOwnerById(@PathVariable Long id) {
@@ -87,12 +96,12 @@ public class OwnerController {
   /**
    * Retrieves all dogs belonging to the authenticated owner.
    * <p>
-   * The current user is obtained via {@code @AuthenticationPrincipal}.
-   * Returns HTTP 404 if the user record cannot be found.
+   * Uses {@code @AuthenticationPrincipal} to obtain the current user's ID.
+   * Returns HTTP 404 if the user record is not found.
    *
-   * @param appUserDetails the security principal containing the authenticated user
-   * @return a {@link ResponseEntity} containing the list of dogs and HTTP 200 OK,
-   * or HTTP 404 Not Found if the user record does not exist
+   * @param appUserDetails security principal of the authenticated user
+   * @return list of dogs owned by the user with HTTP 200 OK,
+   * or HTTP 404 Not Found if the user does not exist
    */
   @GetMapping("/owner/dogs")
   public ResponseEntity<List<Dog>> getOwnerDogs(@AuthenticationPrincipal AppUserDetails appUserDetails) {
@@ -108,14 +117,14 @@ public class OwnerController {
    * <p>
    * Returns:
    * <ul>
-   *   <li>404 Not Found if no dog exists with the given ID</li>
-   *   <li>403 Forbidden if the dog exists but is not owned by the authenticated user</li>
-   *   <li>200 OK with the {@link Dog} entity if the dog is found and owned by the user</li>
+   *   <li>404 Not Found if the dog does not exist</li>
+   *   <li>403 Forbidden if the dog is not owned by the user</li>
+   *   <li>200 OK with the dog details otherwise</li>
    * </ul>
    *
-   * @param appUserDetails the security principal containing the authenticated user
+   * @param appUserDetails security principal of the authenticated user
    * @param dogId          the ID of the dog to retrieve
-   * @return a {@link ResponseEntity} with the dog and appropriate HTTP status
+   * @return the dog with HTTP 200 OK, or appropriate error status
    */
   @GetMapping("/owner/dog/{dogId}")
   public ResponseEntity<Dog> getOwnerDogById(@AuthenticationPrincipal AppUserDetails appUserDetails,
@@ -138,9 +147,9 @@ public class OwnerController {
 
 
   /**
-   * Updates an existing owner's profile information.
+   * Updates the authenticated owner's profile information.
    * <p>
-   * Only the firstname, lastname, and email fields are modified.
+   * Allows changes to firstname, lastname, and email only.
    * Returns:
    * <ul>
    *   <li>404 Not Found if the user does not exist</li>
@@ -149,8 +158,8 @@ public class OwnerController {
    * </ul>
    *
    * @param id             the ID of the owner to update
-   * @param ownerUpdateDto the DTO containing new firstname, lastname, and email
-   * @return a {@link ResponseEntity} with the appropriate HTTP status
+   * @param ownerUpdateDto DTO containing new firstname, lastname, and email
+   * @return appropriate HTTP status with no body
    */
   @PutMapping("/owner/{id}")
   public ResponseEntity<Void> updateOwner(@PathVariable Long id, @RequestBody @Valid OwnerUpdateDto ownerUpdateDto) {
@@ -179,16 +188,10 @@ public class OwnerController {
    * Deletes an owner user by their ID.
    * <p>
    * Access restricted to Admin users.
-   * Returns:
-   * <ul>
-   *   <li>404 Not Found if the user does not exist</li>
-   *   <li>204 No Content on successful deletion</li>
-   * </ul>
-   * <p>
-   * Consider anonymizing data rather than performing a hard delete.
+   * Returns HTTP 404 if the user does not exist; otherwise deletes and returns HTTP 204 No Content.
    *
    * @param id the ID of the owner to delete
-   * @return a {@link ResponseEntity} with the appropriate HTTP status
+   * @return appropriate HTTP status with no body
    */
   @IsAdmin
   @DeleteMapping("/owner/{id}")
@@ -208,4 +211,24 @@ public class OwnerController {
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+  /**
+   * Retrieves all course registrations across all dogs owned by the authenticated owner.
+   * <p>
+   * Uses a custom DAO method to fetch registrations by dog owner ID.
+   *
+   * @param appUserDetails security principal of the authenticated user
+   * @return list of CourseRegistration entities with HTTP 200 OK
+   */
+  @GetMapping("/owner/dogs/registrations")
+  public ResponseEntity<List<CourseRegistration>> getDogsOwnerCourseRegistrations(@AuthenticationPrincipal AppUserDetails appUserDetails) {
+    Long ownerId = appUserDetails.getUser().getId();
+
+    List<CourseRegistration> registrations = courseRegistrationDao.findByDogOwnerId(ownerId);
+
+    return new ResponseEntity<>(registrations, HttpStatus.OK);
+  }
+
+  // TODO FAIRE UNE ROUTE COMME AU DESSUS MAIS EN NE RÉCUPÉRANT UNIQUEMENT LES COURS QUI SONT
+  // A PARTIR DE LA DATE DU JOUR ET A VENIR (startDate >= today)
 }
