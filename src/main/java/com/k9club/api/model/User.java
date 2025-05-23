@@ -2,6 +2,7 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.enums.UserRole;
 import jakarta.persistence.*;
@@ -30,14 +31,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Primary key identifier for the user.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   /**
@@ -46,7 +45,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.DogsInfo.class})
   protected String firstname;
 
   /**
@@ -55,7 +54,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.DogsInfo.class})
   protected String lastname;
 
   /**
@@ -64,7 +63,7 @@ public class User {
   @NotBlank
   @Email
   @Column(unique = true, nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.DogsInfo.class})
   protected String email;
 
   /**
@@ -85,7 +84,7 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
-  @JsonView(ViewsUser.Admin.class)
+  @JsonView({ViewsUser.Admin.class, ViewsAdmin.DogsInfo.class})
   protected UserRole userRole;
 
   /**

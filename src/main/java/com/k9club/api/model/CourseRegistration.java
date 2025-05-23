@@ -1,6 +1,7 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.enums.CourseRegistrationStatus;
 import jakarta.persistence.*;
@@ -25,18 +26,12 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public class CourseRegistration {
 
-  // -----------------------------------------------------
-
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
-  // -----------------------------------------------------
-
   /**
    * Primary key identifier for the registration.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   /**
@@ -47,7 +42,7 @@ public class CourseRegistration {
   @NotNull(message = "Le status de la réservation est obligatoire")
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED','CANCELLED', 'PENDING')")
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected CourseRegistrationStatus status;
 
   /**
@@ -91,6 +86,6 @@ public class CourseRegistration {
   @NotNull(message = "Un cours doit être choisi.")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Course course;
 }

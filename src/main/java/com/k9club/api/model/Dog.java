@@ -1,6 +1,7 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,14 +30,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Dog {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Primary key identifier for the dog.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   /**
@@ -49,7 +48,7 @@ public class Dog {
   @NotBlank(message = "Le nom du chien est obligatoire")
   @Length(min = 2, max = 100, message = "Le nom du chien doit être compris entre 2 et 100 caractères")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected String name;
 
   /**
@@ -59,7 +58,7 @@ public class Dog {
    */
   @NotNull(message = "La date de naissance du chien est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected LocalDate birthdate;
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
@@ -70,7 +69,7 @@ public class Dog {
    */
   @NotBlank(message = "Le genre du chien est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected String gender;
 
   /**
@@ -80,7 +79,7 @@ public class Dog {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Instant createdAt;
 
   /**
@@ -89,7 +88,7 @@ public class Dog {
    * Automatically updated on each save.
    */
   @LastModifiedDate
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Instant updatedAt;
 
   //  relation with User (possessed)
@@ -101,7 +100,7 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
-  // TODO FAIRE UN JSONVIEW DANS LE STYLE DOGS INFOS AVEC UNE ROUTE SPECIALE POUR RECUP LES INFOS
+  @JsonView({ViewsAdmin.DogsInfo.class})
   protected User owner;
 
   // relation with Breed (belongs_to)
@@ -113,7 +112,7 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Breed breed;
 
 
@@ -125,6 +124,6 @@ public class Dog {
    * One-to-many relationship to {@link CourseRegistration}; orphan removal enabled.
    */
   @OneToMany(mappedBy = "dog", orphanRemoval = true)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected List<CourseRegistration> registrations = new ArrayList<>();
 }

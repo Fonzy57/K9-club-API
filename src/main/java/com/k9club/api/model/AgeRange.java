@@ -1,6 +1,7 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -25,14 +26,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class AgeRange {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Primary key identifier for the age range.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   //
@@ -45,7 +44,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Integer minAge;
 
   /**
@@ -54,7 +53,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Integer maxAge;
 
   /**

@@ -1,6 +1,7 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -26,14 +27,12 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Breed {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Primary key identifier for the breed.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   /**
@@ -47,7 +46,7 @@ public class Breed {
   @NotBlank(message = "Le nom est obligatoire")
   @Size(min = 5, max = 100, message = "La nom doit contenir entre 5 et 100 caractères")
   @Column(nullable = false, length = 100, unique = true)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected String name;
 
   /**
