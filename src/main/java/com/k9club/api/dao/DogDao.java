@@ -4,13 +4,15 @@ import com.k9club.api.model.Dog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * Data Access Object for {@link Dog} entities.
  * <p>
  * Extends {@link JpaRepository} to provide standard CRUD operations,
- * and declares a custom query method to ensure a dog belongs to a specific owner.
+ * and declares custom query methods to ensure dogs are accessed
+ * in the context of their owning user.
  */
 @Repository
 public interface DogDao extends JpaRepository<Dog, Long> {
@@ -26,4 +28,15 @@ public interface DogDao extends JpaRepository<Dog, Long> {
    * or empty if no such dog exists
    */
   Optional<Dog> findByIdAndOwnerId(Long dogId, Long ownerId);
+
+  /**
+   * Retrieves all dogs belonging to a specific owner.
+   * <p>
+   * Allows enumeration of a user's dogs without loading all dogs in the system.
+   *
+   * @param ownerId the unique ID of the owner
+   * @return a {@link List} of {@link Dog} entities owned by the specified user,
+   * or an empty list if the user has no dogs
+   */
+  List<Dog> findByOwnerId(Long ownerId);
 }

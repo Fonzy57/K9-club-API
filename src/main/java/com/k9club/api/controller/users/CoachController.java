@@ -1,12 +1,10 @@
 package com.k9club.api.controller.users;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.user.CoachUpdateDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
-import com.k9club.api.views.ViewUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +47,6 @@ public class CoachController {
    *
    * @return a ResponseEntity containing the list of coach users and HTTP 200 OK
    */
-  @JsonView(ViewUser.Admin.class)
   @GetMapping("/coaches")
   public ResponseEntity<List<User>> getCoaches() {
     return new ResponseEntity<>(userDao.findByUserRole(UserRole.COACH), HttpStatus.OK);
@@ -62,7 +59,6 @@ public class CoachController {
    * @param id the ID of the coach to retrieve
    * @return a ResponseEntity containing the coach user and HTTP 200 OK, or HTTP 404 Not Found
    */
-  @JsonView(ViewUser.Admin.class)
   @GetMapping("/coach/{id}")
   public ResponseEntity<User> getCoachById(@PathVariable Long id) {
     Optional<User> optionalUser = userDao.findById(id);
@@ -81,7 +77,6 @@ public class CoachController {
    * @param user the user object containing coach information
    * @return a ResponseEntity with the created coach (without password) and HTTP 201 Created
    */
-  @JsonView(ViewUser.Admin.class)
   @PostMapping("/coach")
   public ResponseEntity<User> addCoach(@RequestBody User user) {
     user.setId(null);
