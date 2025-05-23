@@ -1,10 +1,12 @@
 package com.k9club.api.controller.users;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.CourseDao;
 import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.user.OwnerUpdateDto;
+import com.k9club.api.jsonview.Views;
 import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
 import com.k9club.api.model.User;
@@ -69,6 +71,7 @@ public class OwnerController {
    * @return a {@link ResponseEntity} containing the list of owners and HTTP 200 OK
    */
   @IsAdmin
+  @JsonView(Views.Admin.class)
   @GetMapping("/owners")
   public ResponseEntity<List<User>> getOwners() {
     return new ResponseEntity<>(userDao.findByUserRole(UserRole.OWNER), HttpStatus.OK);
@@ -82,6 +85,7 @@ public class OwnerController {
    * @param id the owner’s user ID
    * @return the owner user with HTTP 200 OK, or HTTP 404 Not Found
    */
+  @JsonView(Views.Public.class)
   @GetMapping("/owner/{id}")
   public ResponseEntity<User> getOwnerById(@PathVariable Long id) {
     Optional<User> optionalUser = userDao.findById(id);
@@ -103,6 +107,7 @@ public class OwnerController {
    * @return list of dogs owned by the user with HTTP 200 OK,
    * or HTTP 404 Not Found if the user does not exist
    */
+  @JsonView(Views.Public.class)
   @GetMapping("/owner/dogs")
   public ResponseEntity<List<Dog>> getOwnerDogs(@AuthenticationPrincipal AppUserDetails appUserDetails) {
     Long ownerId = appUserDetails.getUser().getId();
@@ -126,6 +131,7 @@ public class OwnerController {
    * @param dogId          the ID of the dog to retrieve
    * @return the dog with HTTP 200 OK, or appropriate error status
    */
+  @JsonView(Views.Public.class)
   @GetMapping("/owner/dog/{dogId}")
   public ResponseEntity<Dog> getOwnerDogById(@AuthenticationPrincipal AppUserDetails appUserDetails,
       @PathVariable Long dogId) {
@@ -220,6 +226,7 @@ public class OwnerController {
    * @param appUserDetails security principal of the authenticated user
    * @return list of CourseRegistration entities with HTTP 200 OK
    */
+  @JsonView(Views.Public.class)
   @GetMapping("/owner/dogs/registrations")
   public ResponseEntity<List<CourseRegistration>> getDogsOwnerCourseRegistrations(@AuthenticationPrincipal AppUserDetails appUserDetails) {
     Long ownerId = appUserDetails.getUser().getId();

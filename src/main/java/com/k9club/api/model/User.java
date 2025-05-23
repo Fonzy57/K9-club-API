@@ -1,6 +1,8 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.Views;
 import com.k9club.api.model.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -35,6 +37,7 @@ public class User {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.Public.class)
   protected Long id;
 
   /**
@@ -43,6 +46,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
+  @JsonView(Views.Public.class)
   protected String firstname;
 
   /**
@@ -51,6 +55,7 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
+  @JsonView(Views.Public.class)
   protected String lastname;
 
   /**
@@ -59,6 +64,7 @@ public class User {
   @NotBlank
   @Email
   @Column(unique = true, nullable = false)
+  @JsonView(Views.Public.class)
   protected String email;
 
   /**
@@ -69,7 +75,6 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  // TODO VOIR CETTE ANNOTATION JsonProperty doc : https://fasterxml.github.io/jackson-annotations/javadoc/2.6/com/fasterxml/jackson/annotation/JsonProperty.Access.html
   protected String password;
 
 
@@ -80,6 +85,7 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
+  @JsonView(Views.Admin.class)
   protected UserRole userRole;
 
   /**
@@ -89,6 +95,7 @@ public class User {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
+  @JsonView(Views.Public.class)
   protected Instant createdAt;
 
   /**
@@ -97,6 +104,7 @@ public class User {
    * Automatically updated on each save.
    */
   @LastModifiedDate
+  @JsonView(Views.Public.class)
   protected Instant updatedAt;
 
 
@@ -108,6 +116,7 @@ public class User {
    */
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
   @JsonManagedReference("user-dogs")
+  @JsonView(Views.Public.class)
   protected List<Dog> dogs = new ArrayList<>();
 
   //  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE
