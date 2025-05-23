@@ -1,11 +1,14 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.BreedDao;
 import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.dog.DogCreateDto;
 import com.k9club.api.dto.dog.DogUpdateDto;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.Breed;
 import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
@@ -39,9 +42,8 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @IsOwner
+// @RequestMapping("/api") TODO L'AJOUTER SUR TOUS LES CONTROLLEURS
 public class DogController {
-
-  // TODO AJOUTER LES JSON VIEWS
 
   private final DogDao dogDao;
   private final UserDao userDao;
@@ -71,7 +73,8 @@ public class DogController {
    *
    * @return a {@link ResponseEntity} containing the list of all dogs and HTTP 200 OK
    */
-  @IsAdmin // TODO Ici je récupère tous les chiens, peut importe l'utilisateur à qui le chien est lié
+  @IsAdmin
+  @JsonView(ViewsAdmin.DogsInfo.class)
   @GetMapping("/dogs")
   public ResponseEntity<List<Dog>> getAllDogs() {
     return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
@@ -87,6 +90,7 @@ public class DogController {
    * or HTTP 404 Not Found if the dog is not found
    */
   @IsAdmin
+  @JsonView(ViewsAdmin.DogsInfo.class)
   @GetMapping("/dog/{id}")
   public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
     Optional<Dog> optionalDog = dogDao.findById(id);
@@ -109,6 +113,7 @@ public class DogController {
    * @return a {@link ResponseEntity} containing the created {@link Dog} and HTTP 201 Created,
    * or HTTP 400 Bad Request if the owner or breed cannot be found or is invalid
    */
+  @JsonView(ViewsUser.Owner.class)
   @PostMapping("/dog")
   public ResponseEntity<Dog> addDog(@RequestBody @Valid DogCreateDto dogCreateDto) {
     Optional<User> optionalUser = userDao.findByIdAndUserRole(dogCreateDto.getOwnerId(), UserRole.OWNER);
@@ -239,6 +244,7 @@ public class DogController {
    * @return a {@link ResponseEntity} with the list of registrations and HTTP 200 OK,
    * or the appropriate HTTP error status
    */
+  @JsonView(ViewsUser.Owner.class)
   @GetMapping("/dog/{id}/course-registrations")
   public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrationsForOneDog(
       @AuthenticationPrincipal AppUserDetails appUserDetails,
@@ -277,6 +283,7 @@ public class DogController {
    * @return a {@link ResponseEntity} with the registration and HTTP 200 OK,
    * or the appropriate HTTP error status
    */
+  @JsonView(ViewsUser.Owner.class)
   @GetMapping("/dog/{dogId}/course-registration/{registrationId}")
   public ResponseEntity<CourseRegistration> getDogCourseRegistration(
       @AuthenticationPrincipal AppUserDetails appUserDetails,
