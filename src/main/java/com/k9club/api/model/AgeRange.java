@@ -1,5 +1,7 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -30,6 +32,7 @@ public class AgeRange {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView({ViewsUser.Owner.class})
   protected Long id;
 
   //
@@ -42,6 +45,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected Integer minAge;
 
   /**
@@ -50,6 +54,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected Integer maxAge;
 
   /**

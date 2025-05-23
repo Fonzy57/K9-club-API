@@ -1,6 +1,8 @@
 package com.k9club.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +36,7 @@ public class Course {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView({ViewsUser.Owner.class})
   protected Long id;
 
   /**
@@ -43,6 +46,7 @@ public class Course {
    */
   @NotBlank(message = "Le nom est obligatoire")
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected String name;
 
   /**
@@ -52,6 +56,7 @@ public class Course {
    */
   @NotBlank(message = "La description est obligatoire")
   @Column(nullable = false, columnDefinition = "TEXT")
+  @JsonView({ViewsUser.Owner.class})
   protected String description;
 
   /**
@@ -61,6 +66,7 @@ public class Course {
    */
   @NotNull(message = "Le nombre de participants maximum est obligatoire")
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected Integer maxParticipants;
 
   //
@@ -75,6 +81,7 @@ public class Course {
    */
   @NotNull(message = "La date de début est obligatoire")
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected LocalDateTime startDate;
 
   /**
@@ -84,6 +91,7 @@ public class Course {
    */
   @NotNull(message = "La date de fin est obligatoire")
   @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected LocalDateTime endDate;
 
   /**
@@ -115,6 +123,7 @@ public class Course {
   @NotNull(message = "Le coach est obligatoire")
   @ManyToOne()
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected User coach;
 
   // LIAISON AVEC L'ENTITE COURSETYPE
@@ -127,6 +136,7 @@ public class Course {
   @NotNull(message = "Le type de cours est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_type_id", nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected CourseType courseType;
 
   // LIAISON AVEC L'ENTITE AGE RANGE
@@ -139,6 +149,7 @@ public class Course {
   @NotNull(message = "La tranche d'âge est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "age_range_id", nullable = false)
+  @JsonView({ViewsUser.Owner.class})
   protected AgeRange ageRange;
 
   /**
