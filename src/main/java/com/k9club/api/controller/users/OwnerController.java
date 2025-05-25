@@ -111,7 +111,6 @@ public class OwnerController {
     Long ownerId = appUserDetails.getUser().getId();
 
     List<Dog> dogs = dogDao.findByOwnerId(ownerId);
-    System.out.println("DOGS : " + dogs);
     return new ResponseEntity<>(dogs, HttpStatus.OK);
   }
 
