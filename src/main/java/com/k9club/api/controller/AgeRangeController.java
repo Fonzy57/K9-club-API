@@ -69,7 +69,7 @@ public class AgeRangeController {
 
 
   @IsCoach
-  @JsonView(ViewsAdmin.Basic.class)
+  @JsonView(ViewsCoach.Basic.class)
   @GetMapping("/coach/age-range/{id}")
   public ResponseEntity<AgeRange> getAgeRangeById(@PathVariable Long id) {
     Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);

@@ -1,10 +1,15 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.BreedDao;
 import com.k9club.api.dto.breed.BreedCreateDto;
 import com.k9club.api.dto.breed.BreedUpdateDto;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.model.Breed;
 import com.k9club.api.security.annotations.IsAdmin;
+import com.k9club.api.security.annotations.IsCoach;
 import com.k9club.api.security.annotations.IsOwner;
 import com.k9club.api.security.annotations.IsSuperAdmin;
 import jakarta.validation.Valid;
@@ -41,25 +46,57 @@ public class BreedController {
     this.breedDao = breedDao;
   }
 
-  /**
-   * Retrieves a list of all breeds.
-   *
-   * @return a ResponseEntity containing the list of Breed entities and HTTP 200 OK
-   */
+  @IsAdmin
+  @JsonView(ViewsAdmin.Basic.class)
+  @GetMapping("/admin/breeds")
+  public ResponseEntity<List<Breed>> getAllBreedsForAdmin() {
+    List<Breed> breeds = breedDao.findAll();
+    return new ResponseEntity<>(breeds, HttpStatus.OK);
+  }
+
+  @IsAdmin
+  @JsonView(ViewsAdmin.Basic.class)
+  @GetMapping("/admin/breed/{id}")
+  public ResponseEntity<Breed> getBreedByIdForAdmin(@PathVariable Long id) {
+    Optional<Breed> optionalBreed = breedDao.findById(id);
+
+    if (optionalBreed.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalBreed.get(), HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.Basic.class)
+  @GetMapping("/coach/breeds")
+  public ResponseEntity<List<Breed>> getAllBreedsForCoach() {
+    List<Breed> breeds = breedDao.findAll();
+    return new ResponseEntity<>(breeds, HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.Basic.class)
+  @GetMapping("/coach/breed/{id}")
+  public ResponseEntity<Breed> getBreedByIdForCoach(@PathVariable Long id) {
+    Optional<Breed> optionalBreed = breedDao.findById(id);
+
+    if (optionalBreed.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalBreed.get(), HttpStatus.OK);
+  }
+
+  @JsonView(ViewsOwner.Basic.class)
   @GetMapping("/breeds")
   public ResponseEntity<List<Breed>> getAllBreeds() {
     List<Breed> breeds = breedDao.findAll();
     return new ResponseEntity<>(breeds, HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a specific breed by its ID.
-   * Returns HTTP 404 if no breed exists with the given ID.
-   *
-   * @param id the ID of the breed to retrieve
-   * @return a ResponseEntity containing the Breed and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
-   */
+
+  @JsonView(ViewsOwner.Basic.class)
   @GetMapping("/breed/{id}")
   public ResponseEntity<Breed> getBreedById(@PathVariable Long id) {
     Optional<Breed> optionalBreed = breedDao.findById(id);
