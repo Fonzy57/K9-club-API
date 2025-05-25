@@ -1,6 +1,11 @@
 package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
+import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -28,13 +33,15 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Primary key identifier for the user.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected Long id;
 
   /**
@@ -43,6 +50,10 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String firstname;
 
   /**
@@ -51,6 +62,10 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String lastname;
 
   /**
@@ -59,6 +74,10 @@ public class User {
   @NotBlank
   @Email
   @Column(unique = true, nullable = false)
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String email;
 
   /**
@@ -69,7 +88,6 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-  // TODO VOIR CETTE ANNOTATION JsonProperty doc : https://fasterxml.github.io/jackson-annotations/javadoc/2.6/com/fasterxml/jackson/annotation/JsonProperty.Access.html
   protected String password;
 
 
@@ -80,6 +98,8 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
+  @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class})
   protected UserRole userRole;
 
   /**
@@ -89,6 +109,7 @@ public class User {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class,})
   protected Instant createdAt;
 
   /**
@@ -97,6 +118,7 @@ public class User {
    * Automatically updated on each save.
    */
   @LastModifiedDate
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class,})
   protected Instant updatedAt;
 
 
@@ -108,6 +130,7 @@ public class User {
    */
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
   @JsonManagedReference("user-dogs")
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseTypeInfo.class})
   protected List<Dog> dogs = new ArrayList<>();
 
   //  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE

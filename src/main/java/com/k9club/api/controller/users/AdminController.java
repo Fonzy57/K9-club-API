@@ -1,7 +1,9 @@
 package com.k9club.api.controller.users;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.user.AdminUpdateDto;
+import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
@@ -42,6 +44,7 @@ public class AdminController {
    *
    * @return a ResponseEntity containing the list of admin users and HTTP 200 OK
    */
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/admins")
   public ResponseEntity<List<User>> getAdmins() {
     return new ResponseEntity<>(userDao.findByUserRole(UserRole.ADMIN), HttpStatus.OK);
@@ -55,6 +58,7 @@ public class AdminController {
    * @return a ResponseEntity containing the admin user and HTTP 200 OK,
    * or HTTP 404 Not Found if not found
    */
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/admin/{id}")
   public ResponseEntity<User> getAdmin(@PathVariable Long id) {
     Optional<User> optionalUser = userDao.findByIdAndUserRole(id, UserRole.ADMIN);

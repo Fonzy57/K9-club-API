@@ -1,17 +1,22 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.AgeRangeDao;
 import com.k9club.api.dao.CourseDao;
 import com.k9club.api.dao.CourseTypeDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.course.CourseCreateDto;
 import com.k9club.api.dto.course.CourseUpdateDto;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.model.AgeRange;
 import com.k9club.api.model.Course;
 import com.k9club.api.model.CourseType;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
+import com.k9club.api.security.annotations.IsCoach;
 import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +38,6 @@ import java.util.Optional;
 @IsOwner
 public class CourseController {
 
-  // TODO AJOUTER LES JSON VIEWS
-
   private final CourseDao courseDao;
   private final CourseTypeDao courseTypeDao;
   private final AgeRangeDao ageRangeDao;
@@ -55,24 +58,53 @@ public class CourseController {
     this.userDao = userDao;
   }
 
-  /**
-   * Retrieves a list of all courses.
-   *
-   * @return a ResponseEntity containing the list of courses and HTTP 200 OK
-   */
+  @IsAdmin
+  @JsonView(ViewsAdmin.CourseInfo.class)
+  @GetMapping("/admin/courses")
+  public ResponseEntity<List<Course>> getAllCoursesForAdmin() {
+    return new ResponseEntity<>(courseDao.findAll(), HttpStatus.OK);
+  }
+
+
+  @IsAdmin
+  @JsonView(ViewsAdmin.CourseInfo.class)
+  @GetMapping("/admin/course/{id}")
+  public ResponseEntity<Course> getCourseByIdForAdmin(@PathVariable Long id) {
+    Optional<Course> optionalCourse = courseDao.findById(id);
+    if (optionalCourse.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalCourse.get(), HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseInfo.class)
+  @GetMapping("/coach/courses")
+  public ResponseEntity<List<Course>> getAllCoursesForCoach() {
+    return new ResponseEntity<>(courseDao.findAll(), HttpStatus.OK);
+  }
+
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseInfo.class)
+  @GetMapping("/coach/course/{id}")
+  public ResponseEntity<Course> getCourseByIdForCoach(@PathVariable Long id) {
+    Optional<Course> optionalCourse = courseDao.findById(id);
+    if (optionalCourse.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalCourse.get(), HttpStatus.OK);
+  }
+
+  @JsonView(ViewsOwner.CourseInfo.class)
   @GetMapping("/courses")
   public ResponseEntity<List<Course>> getAllCourses() {
     return new ResponseEntity<>(courseDao.findAll(), HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a specific course by its ID.
-   * Returns HTTP 404 if no course exists with the given ID.
-   *
-   * @param id the ID of the course to retrieve
-   * @return a ResponseEntity containing the Course and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
-   */
+  @JsonView(ViewsOwner.CourseInfo.class)
   @GetMapping("/course/{id}")
   public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
     Optional<Course> optionalCourse = courseDao.findById(id);
@@ -138,6 +170,9 @@ public class CourseController {
 
     return new ResponseEntity<>(course, HttpStatus.CREATED);
   }
+
+
+  // TODO FAIRE UNE METHODE /course/{id}/cancel POUR ANNULER UN COURS
 
   /**
    * Updates an existing course using the provided data transfer object.

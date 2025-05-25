@@ -1,5 +1,10 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
+import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -26,13 +31,15 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class CourseType {
 
-  // TODO FAIRE LES JSON VIEWS ET AJOUTER AU CONTROLLER
-
   /**
    * Unique identifier for the course type.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsOwner.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected Long id;
 
   /**
@@ -43,6 +50,10 @@ public class CourseType {
   @NotBlank(message = "Le nom du type est obligatoire")
   @Column(unique = true, nullable = false)
   @Length(min = 3, max = 25)
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsOwner.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String name;
 
   /**
@@ -54,6 +65,10 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
+  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String textColor;
 
   /**
@@ -65,6 +80,10 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
+  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String backgroundColor;
 
   /**
@@ -93,6 +112,7 @@ public class CourseType {
    * This association allows retrieval of all courses that share the same category,
    * such as "Agility", "Puppy training", or "Obedience".
    */
+  @JsonView({ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   @OneToMany(mappedBy = "courseType")
   private List<Course> courses = new ArrayList<>();
 

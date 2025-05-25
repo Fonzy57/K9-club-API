@@ -1,11 +1,14 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.BreedDao;
 import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.dog.DogCreateDto;
 import com.k9club.api.dto.dog.DogUpdateDto;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.Breed;
 import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
@@ -39,9 +42,8 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @IsOwner
+// @RequestMapping("/api") TODO L'AJOUTER SUR TOUS LES CONTROLLEURS
 public class DogController {
-
-  // TODO AJOUTER LES JSON VIEWS
 
   private final DogDao dogDao;
   private final UserDao userDao;
@@ -64,31 +66,19 @@ public class DogController {
     this.courseRegistrationDao = courseRegistrationDao;
   }
 
-  /**
-   * Retrieves all dogs in the system, regardless of owner.
-   * <p>
-   * Access restricted to Admin users.
-   *
-   * @return a {@link ResponseEntity} containing the list of all dogs and HTTP 200 OK
-   */
-  @IsAdmin // TODO Ici je récupère tous les chiens, peut importe l'utilisateur à qui le chien est lié
-  @GetMapping("/dogs")
-  public ResponseEntity<List<Dog>> getAllDogs() {
+
+  @IsAdmin
+  @JsonView(ViewsAdmin.DogsInfo.class)
+  @GetMapping("/admin/dogs")
+  public ResponseEntity<List<Dog>> getAllDogsForAdmin() {
     return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a single dog by its ID.
-   * <p>
-   * Access restricted to Admin users. Returns HTTP 404 if no dog exists with the given ID.
-   *
-   * @param id the ID of the dog to retrieve
-   * @return a {@link ResponseEntity} containing the Dog and HTTP 200 OK,
-   * or HTTP 404 Not Found if the dog is not found
-   */
+
   @IsAdmin
-  @GetMapping("/dog/{id}")
-  public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
+  @JsonView(ViewsAdmin.DogsInfo.class)
+  @GetMapping("/admin/dog/{id}")
+  public ResponseEntity<Dog> getDogByIdForAdmin(@PathVariable Long id) {
     Optional<Dog> optionalDog = dogDao.findById(id);
 
     if (optionalDog.isEmpty()) {
@@ -97,6 +87,48 @@ public class DogController {
 
     return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
   }
+
+  // TODO VOIR SI CETTE ROUTE EST UTILE ?
+//  @IsCoach
+//  @JsonView(ViewsCoach.DogsInfo.class)
+//  @GetMapping("/coach/dogs")
+//  public ResponseEntity<List<Dog>> getAllDogsForCoach() {
+//    return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
+//  }
+//
+//
+//  @IsCoach
+//  @JsonView(ViewsCoach.DogsInfo.class)
+//  @GetMapping("/coach/dog/{id}")
+//  public ResponseEntity<Dog> getDogByIdForCoach(@PathVariable Long id) {
+//    Optional<Dog> optionalDog = dogDao.findById(id);
+//
+//    if (optionalDog.isEmpty()) {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//
+//    return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+//  }
+
+// TODO JE RECUPERE LES CHIENS D'UN OWNER DANS LE OWNERCONTROLLER
+//  @JsonView(ViewsOwner.DogsInfo.class)
+//  @GetMapping("/dogs")
+//  public ResponseEntity<List<Dog>> getAllDogs() {
+//    return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
+//  }
+//
+//
+//  @JsonView(ViewsOwner.DogsInfo.class)
+//  @GetMapping("/dog/{id}")
+//  public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
+//    Optional<Dog> optionalDog = dogDao.findById(id);
+//
+//    if (optionalDog.isEmpty()) {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//
+//    return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+//  }
 
   /**
    * Creates a new dog for the specified owner using the provided DTO.
@@ -109,6 +141,7 @@ public class DogController {
    * @return a {@link ResponseEntity} containing the created {@link Dog} and HTTP 201 Created,
    * or HTTP 400 Bad Request if the owner or breed cannot be found or is invalid
    */
+  @JsonView(ViewsUser.Owner.class)
   @PostMapping("/dog")
   public ResponseEntity<Dog> addDog(@RequestBody @Valid DogCreateDto dogCreateDto) {
     Optional<User> optionalUser = userDao.findByIdAndUserRole(dogCreateDto.getOwnerId(), UserRole.OWNER);
@@ -239,6 +272,7 @@ public class DogController {
    * @return a {@link ResponseEntity} with the list of registrations and HTTP 200 OK,
    * or the appropriate HTTP error status
    */
+  @JsonView(ViewsUser.Owner.class)
   @GetMapping("/dog/{id}/course-registrations")
   public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrationsForOneDog(
       @AuthenticationPrincipal AppUserDetails appUserDetails,
@@ -277,6 +311,7 @@ public class DogController {
    * @return a {@link ResponseEntity} with the registration and HTTP 200 OK,
    * or the appropriate HTTP error status
    */
+  @JsonView(ViewsUser.Owner.class)
   @GetMapping("/dog/{dogId}/course-registration/{registrationId}")
   public ResponseEntity<CourseRegistration> getDogCourseRegistration(
       @AuthenticationPrincipal AppUserDetails appUserDetails,

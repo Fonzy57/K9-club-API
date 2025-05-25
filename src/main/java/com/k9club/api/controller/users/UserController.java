@@ -1,6 +1,8 @@
 package com.k9club.api.controller.users;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
+import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.User;
 import com.k9club.api.security.AppUserDetails;
 import com.k9club.api.security.annotations.IsAdmin;
@@ -14,13 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-// -------------------------------------------------------------------------------- //
-
-// TODO FAIRE UN CONTROLLER POUR LES OWNERS ET TESTER LES ANCIENNES API, SURTOUT /user/me //
-
-// -------------------------------------------------------------------------------- //
-
 
 /**
  * Controller responsible for managing user-related operations.
@@ -62,6 +57,7 @@ public class UserController {
 
   //
   @IsOwner
+  @JsonView(ViewsUser.Owner.class)
   @GetMapping("/user/me")
   public ResponseEntity<User> getUserInformation(@AuthenticationPrincipal AppUserDetails userDetails) {
     Long id = userDetails.getUser().getId();
@@ -81,6 +77,7 @@ public class UserController {
    *
    * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
    */
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/users")
   public ResponseEntity<List<User>> getUsers() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
@@ -93,6 +90,7 @@ public class UserController {
    * @return a ResponseEntity containing the user if found with HTTP 200 OK,
    * or HTTP 404 Not Found if the user does not exist
    */
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/user/{id}")
   public ResponseEntity<User> getUser(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
@@ -112,6 +110,7 @@ public class UserController {
    * @return a ResponseEntity containing the list of users and an HTTP 200 OK status
    */
   @IsSuperAdmin
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/super-admin/users")
   public ResponseEntity<List<User>> getUsersForSuperAdmin() {
     return new ResponseEntity<>(userDao.findAll(), HttpStatus.OK);
@@ -125,6 +124,7 @@ public class UserController {
    * or HTTP 404 Not Found if the user does not exist
    */
   @IsSuperAdmin
+  @JsonView(ViewsUser.Admin.class)
   @GetMapping("/super-admin/user/{id}") // TODO VOIR PAGE 507 POUR PROTEGER LES ROUTES /super-admin POUR LE ROLE
   public ResponseEntity<User> getUserForSuperAdmin(@PathVariable Long id) {
     Optional<User> user = userDao.findById(id);
