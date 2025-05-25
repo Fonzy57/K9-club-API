@@ -2,6 +2,7 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
 import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.enums.CourseRegistrationStatus;
 import jakarta.persistence.*;
@@ -31,7 +32,7 @@ public class CourseRegistration {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   protected Long id;
 
   /**
@@ -42,7 +43,7 @@ public class CourseRegistration {
   @NotNull(message = "Le status de la réservation est obligatoire")
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED','CANCELLED', 'PENDING')")
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   protected CourseRegistrationStatus status;
 
   /**
@@ -52,7 +53,7 @@ public class CourseRegistration {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   protected Instant createdAt;
 
   /**
@@ -61,7 +62,7 @@ public class CourseRegistration {
    * Automatically updated on each save.
    */
   @LastModifiedDate
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   protected Instant updatedAt;
 
   // TODO LIAISON AVEC L'ENTITE DOG
@@ -74,6 +75,7 @@ public class CourseRegistration {
   @NotNull(message = "Le chien doit être renseigné.")
   @ManyToOne(optional = false)
   @JoinColumn(name = "dog_id", nullable = false)
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   protected Dog dog;
 
   // TODO LIAISON AVEC L'ENTITE COURSE
@@ -86,6 +88,6 @@ public class CourseRegistration {
   @NotNull(message = "Un cours doit être choisi.")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class,})
   protected Course course;
 }

@@ -2,6 +2,8 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +36,7 @@ public class CourseType {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected Long id;
 
   /**
@@ -45,7 +47,7 @@ public class CourseType {
   @NotBlank(message = "Le nom du type est obligatoire")
   @Column(unique = true, nullable = false)
   @Length(min = 3, max = 25)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected String name;
 
   /**
@@ -57,7 +59,7 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class})
   protected String textColor;
 
   /**
@@ -69,7 +71,7 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class})
   protected String backgroundColor;
 
   /**

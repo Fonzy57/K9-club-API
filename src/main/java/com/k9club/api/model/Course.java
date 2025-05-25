@@ -3,6 +3,8 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -35,7 +37,7 @@ public class Course {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected Long id;
 
   /**
@@ -45,7 +47,7 @@ public class Course {
    */
   @NotBlank(message = "Le nom est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected String name;
 
   /**
@@ -55,7 +57,7 @@ public class Course {
    */
   @NotBlank(message = "La description est obligatoire")
   @Column(nullable = false, columnDefinition = "TEXT")
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected String description;
 
   /**
@@ -65,7 +67,7 @@ public class Course {
    */
   @NotNull(message = "Le nombre de participants maximum est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected Integer maxParticipants;
 
   //
@@ -80,7 +82,7 @@ public class Course {
    */
   @NotNull(message = "La date de début est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected LocalDateTime startDate;
 
   /**
@@ -90,8 +92,15 @@ public class Course {
    */
   @NotNull(message = "La date de fin est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected LocalDateTime endDate;
+
+  // -----------------------------------------------------
+
+  // TODO FAIRE UN BOOLEAN POUR LE STATUT SI ANNULE OU PAS
+
+  // -----------------------------------------------------
+
 
   /**
    * Timestamp when the course record was created.
@@ -122,7 +131,7 @@ public class Course {
   @NotNull(message = "Le coach est obligatoire")
   @ManyToOne()
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected User coach;
 
   // LIAISON AVEC L'ENTITE COURSETYPE
@@ -135,7 +144,7 @@ public class Course {
   @NotNull(message = "Le type de cours est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_type_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected CourseType courseType;
 
   // LIAISON AVEC L'ENTITE AGE RANGE
@@ -148,7 +157,7 @@ public class Course {
   @NotNull(message = "La tranche d'âge est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "age_range_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
   protected AgeRange ageRange;
 
   /**
@@ -157,6 +166,7 @@ public class Course {
    * One-to-many relationship to Registration; orphan removal is enabled to delete
    * registrations when a course is removed.
    */
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
   @OneToMany(
       mappedBy = "course",
       //cascade = CascadeType.ALL,
