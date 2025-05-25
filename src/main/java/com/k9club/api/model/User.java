@@ -38,7 +38,8 @@ public class User {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected Long id;
 
   /**
@@ -47,7 +48,8 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String firstname;
 
   /**
@@ -56,7 +58,8 @@ public class User {
   @NotBlank
   @Column(nullable = false)
   @Length(min = 3, max = 100)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String lastname;
 
   /**
@@ -65,7 +68,8 @@ public class User {
   @NotBlank
   @Email
   @Column(unique = true, nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String email;
 
   /**
@@ -86,7 +90,7 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
-  @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class})
+  @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class})
   protected UserRole userRole;
 
   /**

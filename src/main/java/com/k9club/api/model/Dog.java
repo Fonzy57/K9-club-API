@@ -3,6 +3,7 @@ package com.k9club.api.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,7 +37,8 @@ public class Dog {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected Long id;
 
   /**
@@ -49,7 +51,8 @@ public class Dog {
   @NotBlank(message = "Le nom du chien est obligatoire")
   @Length(min = 2, max = 100, message = "Le nom du chien doit être compris entre 2 et 100 caractères")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String name;
 
   /**
@@ -59,7 +62,8 @@ public class Dog {
    */
   @NotNull(message = "La date de naissance du chien est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected LocalDate birthdate;
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
@@ -70,7 +74,8 @@ public class Dog {
    */
   @NotBlank(message = "Le genre du chien est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String gender;
 
   /**
@@ -101,7 +106,7 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class})
   protected User owner;
 
   // relation with Breed (belongs_to)
@@ -113,7 +118,8 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected Breed breed;
 
 
@@ -125,6 +131,6 @@ public class Dog {
    * One-to-many relationship to {@link CourseRegistration}; orphan removal enabled.
    */
   @OneToMany(mappedBy = "dog", orphanRemoval = true)
-  @JsonView({ViewsUser.Owner.class,})
+  @JsonView({ViewsUser.Owner.class})
   protected List<CourseRegistration> registrations = new ArrayList<>();
 }

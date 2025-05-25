@@ -1,16 +1,21 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.CourseDao;
 import com.k9club.api.dao.CourseRegistrationDao;
 import com.k9club.api.dao.DogDao;
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.courseRegistration.CourseRegistrationCreateDto;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.model.Course;
 import com.k9club.api.model.CourseRegistration;
 import com.k9club.api.model.Dog;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.CourseRegistrationStatus;
 import com.k9club.api.security.annotations.IsAdmin;
+import com.k9club.api.security.annotations.IsCoach;
 import com.k9club.api.security.annotations.IsOwner;
 import com.k9club.api.security.annotations.IsSuperAdmin;
 import jakarta.validation.Valid;
@@ -63,30 +68,54 @@ public class CourseRegistrationController {
     this.userDao = userDao;
   }
 
-  /**
-   * Retrieves all course registrations.
-   * <p>
-   * Access restricted to Admin users.
-   *
-   * @return a ResponseEntity containing the list of all CourseRegistration entities and HTTP 200 OK
-   */
+
   @IsAdmin
+  @JsonView(ViewsAdmin.CourseRegistrationInfo.class)
+  @GetMapping("/admin/course-registrations")
+  public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrationsForAdmin() {
+    return new ResponseEntity<>(courseRegistrationDao.findAll(), HttpStatus.OK);
+  }
+
+
+  @IsAdmin
+  @JsonView(ViewsAdmin.CourseRegistrationInfo.class)
+  @GetMapping("/admin/course-registration/{id}")
+  public ResponseEntity<CourseRegistration> getCourseRegistrationByIdForAdmin(@PathVariable Long id) {
+    Optional<CourseRegistration> optionalRegistration = courseRegistrationDao.findById(id);
+    if (optionalRegistration.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalRegistration.get(), HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseRegistrationInfo.class)
+  @GetMapping("/coach/course-registrations")
+  public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrationsForCoach() {
+    return new ResponseEntity<>(courseRegistrationDao.findAll(), HttpStatus.OK);
+  }
+
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseRegistrationInfo.class)
+  @GetMapping("/coach/course-registration/{id}")
+  public ResponseEntity<CourseRegistration> getCourseRegistrationByIdForCoach(@PathVariable Long id) {
+    Optional<CourseRegistration> optionalRegistration = courseRegistrationDao.findById(id);
+    if (optionalRegistration.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalRegistration.get(), HttpStatus.OK);
+  }
+
+  @JsonView(ViewsOwner.CourseRegistrationInfo.class)
   @GetMapping("/course-registrations")
   public ResponseEntity<List<CourseRegistration>> getAllCourseRegistrations() {
     return new ResponseEntity<>(courseRegistrationDao.findAll(), HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a specific course registration by its ID.
-   * <p>
-   * Access restricted to Admin users.
-   * Returns HTTP 404 if no registration exists with the given ID.
-   *
-   * @param id the ID of the registration to retrieve
-   * @return a ResponseEntity containing the CourseRegistration and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
-   */
-  @IsAdmin
+  @JsonView(ViewsOwner.CourseRegistrationInfo.class)
   @GetMapping("/course-registration/{id}")
   public ResponseEntity<CourseRegistration> getCourseRegistrationById(@PathVariable Long id) {
     Optional<CourseRegistration> optionalRegistration = courseRegistrationDao.findById(id);

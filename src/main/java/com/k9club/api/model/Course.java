@@ -37,7 +37,8 @@ public class Course {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected Long id;
 
   /**
@@ -47,7 +48,8 @@ public class Course {
    */
   @NotBlank(message = "Le nom est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String name;
 
   /**
@@ -57,7 +59,8 @@ public class Course {
    */
   @NotBlank(message = "La description est obligatoire")
   @Column(nullable = false, columnDefinition = "TEXT")
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected String description;
 
   /**
@@ -67,7 +70,8 @@ public class Course {
    */
   @NotNull(message = "Le nombre de participants maximum est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected Integer maxParticipants;
 
   //
@@ -82,7 +86,8 @@ public class Course {
    */
   @NotNull(message = "La date de début est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected LocalDateTime startDate;
 
   /**
@@ -92,7 +97,8 @@ public class Course {
    */
   @NotNull(message = "La date de fin est obligatoire")
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected LocalDateTime endDate;
 
   // -----------------------------------------------------
@@ -131,7 +137,8 @@ public class Course {
   @NotNull(message = "Le coach est obligatoire")
   @ManyToOne()
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected User coach;
 
   // LIAISON AVEC L'ENTITE COURSETYPE
@@ -144,7 +151,8 @@ public class Course {
   @NotNull(message = "Le type de cours est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "course_type_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected CourseType courseType;
 
   // LIAISON AVEC L'ENTITE AGE RANGE
@@ -157,7 +165,8 @@ public class Course {
   @NotNull(message = "La tranche d'âge est obligatoire")
   @ManyToOne(optional = false)
   @JoinColumn(name = "age_range_id", nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
   protected AgeRange ageRange;
 
   /**
