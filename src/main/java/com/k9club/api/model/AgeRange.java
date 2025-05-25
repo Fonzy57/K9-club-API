@@ -2,6 +2,7 @@ package com.k9club.api.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
 import com.k9club.api.jsonview.ViewsUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,7 +32,7 @@ public class AgeRange {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.Basic.class, ViewsCoach.Basic.class})
   protected Long id;
 
   //
@@ -44,7 +45,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.Basic.class, ViewsCoach.Basic.class})
   protected Integer minAge;
 
   /**
@@ -53,7 +54,7 @@ public class AgeRange {
    */
   @NotNull
   @Column(nullable = false)
-  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.Basic.class, ViewsCoach.Basic.class})
   protected Integer maxAge;
 
   /**
@@ -63,6 +64,7 @@ public class AgeRange {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
+  @JsonView({})
   protected Instant createdAt;
 
   /**
@@ -71,6 +73,7 @@ public class AgeRange {
    * Automatically updated on each save.
    */
   @LastModifiedDate
+  @JsonView({})
   protected Instant updatedAt;
 
 
@@ -81,5 +84,6 @@ public class AgeRange {
    * One-to-many relationship mapped by the "ageRange" field in Course.
    */
   @OneToMany(mappedBy = "ageRange")
+  @JsonView({})
   protected List<Course> courses;
 }

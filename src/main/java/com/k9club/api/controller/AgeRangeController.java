@@ -1,10 +1,12 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.AgeRangeDao;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
 import com.k9club.api.model.AgeRange;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsCoach;
-import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +27,6 @@ import java.util.Optional;
 @IsAdmin
 public class AgeRangeController {
 
-  // TODO FAIRE LES JSON VIEW
-
   private final AgeRangeDao ageRangeDao;
 
   /**
@@ -39,31 +39,37 @@ public class AgeRangeController {
     this.ageRangeDao = ageRangeDao;
   }
 
-  /**
-   * Retrieves all defined age ranges.
-   * <p>
-   * Accessible only to COACH users.
-   *
-   * @return a ResponseEntity containing the list of AgeRange entities and HTTP 200 OK
-   */
+
+  @JsonView(ViewsAdmin.Basic.class)
+  @GetMapping("/admin/age-ranges")
+  public ResponseEntity<List<AgeRange>> getAllAgeRangesForAdmin() {
+    List<AgeRange> list = ageRangeDao.findAll();
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
   @IsCoach
+  @JsonView(ViewsCoach.Basic.class)
   @GetMapping("/age-ranges")
   public ResponseEntity<List<AgeRange>> getAllAgeRanges() {
     List<AgeRange> list = ageRangeDao.findAll();
     return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a specific age range by its ID.
-   * <p>
-   * Accessible to OWNER users (@IsOwner) or COACH, or ADMIN users.
-   * Returns HTTP 404 if no age range exists with the given ID.
-   *
-   * @param id the ID of the AgeRange to retrieve
-   * @return a ResponseEntity containing the AgeRange and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
-   */
-  @IsOwner
+  
+  @JsonView(ViewsAdmin.Basic.class)
+  @GetMapping("/admin/age-range/{id}")
+  public ResponseEntity<AgeRange> getAgeRangeByIdForAdmin(@PathVariable Long id) {
+    Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
+    if (optionalAgeRange.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalAgeRange.get(), HttpStatus.OK);
+  }
+
+
+  @IsCoach
+  @JsonView(ViewsAdmin.Basic.class)
   @GetMapping("/age-range/{id}")
   public ResponseEntity<AgeRange> getAgeRangeById(@PathVariable Long id) {
     Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
