@@ -49,13 +49,13 @@ public class AgeRangeController {
 
   @IsCoach
   @JsonView(ViewsCoach.Basic.class)
-  @GetMapping("/age-ranges")
+  @GetMapping("/coach/age-ranges")
   public ResponseEntity<List<AgeRange>> getAllAgeRanges() {
     List<AgeRange> list = ageRangeDao.findAll();
     return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
-  
+
   @JsonView(ViewsAdmin.Basic.class)
   @GetMapping("/admin/age-range/{id}")
   public ResponseEntity<AgeRange> getAgeRangeByIdForAdmin(@PathVariable Long id) {
@@ -70,7 +70,7 @@ public class AgeRangeController {
 
   @IsCoach
   @JsonView(ViewsAdmin.Basic.class)
-  @GetMapping("/age-range/{id}")
+  @GetMapping("/coach/age-range/{id}")
   public ResponseEntity<AgeRange> getAgeRangeById(@PathVariable Long id) {
     Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
     if (optionalAgeRange.isEmpty()) {
