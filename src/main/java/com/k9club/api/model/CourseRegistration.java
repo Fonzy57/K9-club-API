@@ -34,7 +34,8 @@ public class CourseRegistration {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Long id;
 
   /**
@@ -46,7 +47,8 @@ public class CourseRegistration {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED','CANCELLED', 'PENDING')")
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected CourseRegistrationStatus status;
 
   /**
@@ -57,7 +59,8 @@ public class CourseRegistration {
   @CreatedDate
   @Column(updatable = false, nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Instant createdAt;
 
   /**
@@ -67,7 +70,8 @@ public class CourseRegistration {
    */
   @LastModifiedDate
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Instant updatedAt;
 
   // TODO LIAISON AVEC L'ENTITE DOG
@@ -81,7 +85,8 @@ public class CourseRegistration {
   @ManyToOne(optional = false)
   @JoinColumn(name = "dog_id", nullable = false)
   @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
-      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Dog dog;
 
   // TODO LIAISON AVEC L'ENTITE COURSE

@@ -38,7 +38,8 @@ public class Dog {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Long id;
 
   /**
@@ -52,7 +53,8 @@ public class Dog {
   @Length(min = 2, max = 100, message = "Le nom du chien doit être compris entre 2 et 100 caractères")
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected String name;
 
   /**
@@ -63,7 +65,8 @@ public class Dog {
   @NotNull(message = "La date de naissance du chien est obligatoire")
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected LocalDate birthdate;
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
@@ -75,7 +78,8 @@ public class Dog {
   @NotBlank(message = "Le genre du chien est obligatoire")
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected String gender;
 
   /**
@@ -106,7 +110,8 @@ public class Dog {
    */
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class})
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+      ViewsCoach.CourseRegistrationInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected User owner;
 
   // relation with Breed (belongs_to)
@@ -119,7 +124,8 @@ public class Dog {
   @ManyToOne(optional = false)
   @JoinColumn(name = "breed_id", nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Breed breed;
 
 

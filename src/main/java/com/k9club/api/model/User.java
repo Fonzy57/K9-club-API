@@ -39,7 +39,8 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected Long id;
 
   /**
@@ -49,7 +50,8 @@ public class User {
   @Column(nullable = false)
   @Length(min = 3, max = 100)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected String firstname;
 
   /**
@@ -59,7 +61,8 @@ public class User {
   @Column(nullable = false)
   @Length(min = 3, max = 100)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected String lastname;
 
   /**
@@ -69,7 +72,8 @@ public class User {
   @Email
   @Column(unique = true, nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class,
-      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   protected String email;
 
   /**
@@ -90,7 +94,7 @@ public class User {
    */
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
-  @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class})
+  @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class})
   protected UserRole userRole;
 
   /**
@@ -121,7 +125,7 @@ public class User {
    */
   @OneToMany(mappedBy = "owner", orphanRemoval = true)
   @JsonManagedReference("user-dogs")
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseTypeInfo.class})
   protected List<Dog> dogs = new ArrayList<>();
 
   //  TODO VOIR POUR AJOUTER LE NUMERO DE TEL => PEUT ETRE NULL SI JE L'AJOUTE

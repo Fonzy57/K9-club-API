@@ -1,8 +1,13 @@
 package com.k9club.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.CourseTypeDao;
+import com.k9club.api.jsonview.ViewsAdmin;
+import com.k9club.api.jsonview.ViewsCoach;
+import com.k9club.api.jsonview.ViewsOwner;
 import com.k9club.api.model.CourseType;
 import com.k9club.api.security.annotations.IsAdmin;
+import com.k9club.api.security.annotations.IsCoach;
 import com.k9club.api.security.annotations.IsOwner;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +30,6 @@ import java.util.Optional;
 @IsOwner
 public class CourseTypeController {
 
-  // TODO AJOUTER LES JSON VIEWS
-
   private final CourseTypeDao courseTypeDao;
 
   /**
@@ -39,24 +42,56 @@ public class CourseTypeController {
     this.courseTypeDao = courseTypeDao;
   }
 
-  /**
-   * Retrieves all available course types.
-   *
-   * @return a ResponseEntity containing the list of all CourseType entities and HTTP 200 OK
-   */
+  @IsAdmin
+  @JsonView(ViewsAdmin.CourseTypeInfo.class)
+  @GetMapping("/admin/course-types")
+  public ResponseEntity<List<CourseType>> getAllTypesForAdmin() {
+    return new ResponseEntity<>(courseTypeDao.findAll(), HttpStatus.OK);
+  }
+
+  @IsAdmin
+  @JsonView(ViewsAdmin.CourseTypeInfo.class)
+  @GetMapping("/admin/course-type/{id}")
+  public ResponseEntity<CourseType> getTypeByIdForAdmin(@PathVariable Long id) {
+    Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
+    if (optionalCourseType.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalCourseType.get(), HttpStatus.OK);
+  }
+
+  // TODO POUR LES COACHS TRIER POUR AVOIR LES COURS QUI LUI SONT CONCERNES AVEC AUTHENTICATION PROVIDER
+  // TODO CAR DANS LA REPONSE JSON JE NE RENVOIS PAS LE COACH QUI EST ASSOCIE A UN COUS
+  // TODO C'EST LES SIENS FORCEMENT
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseTypeInfo.class)
+  @GetMapping("/coach/course-types")
+  public ResponseEntity<List<CourseType>> getAllTypesForCoach() {
+    return new ResponseEntity<>(courseTypeDao.findAll(), HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.CourseTypeInfo.class)
+  @GetMapping("/coach/course-type/{id}")
+  public ResponseEntity<CourseType> getTypeByIdForCoach(@PathVariable Long id) {
+    Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);
+    if (optionalCourseType.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalCourseType.get(), HttpStatus.OK);
+  }
+
+
+  @JsonView(ViewsOwner.CourseTypeInfo.class)
   @GetMapping("/course-types")
   public ResponseEntity<List<CourseType>> getAllTypes() {
     return new ResponseEntity<>(courseTypeDao.findAll(), HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a course type by its unique identifier.
-   * Returns HTTP 404 if no type exists with the given ID.
-   *
-   * @param id the ID of the CourseType to retrieve
-   * @return a ResponseEntity containing the CourseType and HTTP 200 OK,
-   * or HTTP 404 Not Found if not found
-   */
+  @JsonView(ViewsOwner.CourseTypeInfo.class)
   @GetMapping("/course-type/{id}")
   public ResponseEntity<CourseType> getTypeById(@PathVariable Long id) {
     Optional<CourseType> optionalCourseType = courseTypeDao.findById(id);

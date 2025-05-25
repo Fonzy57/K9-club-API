@@ -37,7 +37,8 @@ public class CourseType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class})
   protected Long id;
 
   /**
@@ -49,7 +50,8 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 3, max = 25)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
-      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class})
   protected String name;
 
   /**
@@ -62,7 +64,8 @@ public class CourseType {
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
   @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
-      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class})
   protected String textColor;
 
   /**
@@ -75,7 +78,8 @@ public class CourseType {
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
   @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
-      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class})
+      ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class})
   protected String backgroundColor;
 
   /**
@@ -104,6 +108,7 @@ public class CourseType {
    * This association allows retrieval of all courses that share the same category,
    * such as "Agility", "Puppy training", or "Obedience".
    */
+  @JsonView({ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
   @OneToMany(mappedBy = "courseType")
   private List<Course> courses = new ArrayList<>();
 
