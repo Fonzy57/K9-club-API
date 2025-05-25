@@ -355,3 +355,124 @@ VALUES
      5,
      6);
 
+-- Mettre à jour les dates des cours existants
+-- 1. Cours passés (avant aujourd'hui)
+UPDATE course
+SET start_date = DATE_SUB(CURDATE(), INTERVAL 30 DAY),
+    end_date   = DATE_SUB(CURDATE(), INTERVAL 30 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE
+WHERE name = 'Pouponnière Canine';
+
+UPDATE course
+SET start_date = DATE_SUB(CURDATE(), INTERVAL 20 DAY),
+    end_date   = DATE_SUB(CURDATE(), INTERVAL 20 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE
+WHERE name = 'Agilité Débutant';
+
+UPDATE course
+SET start_date = DATE_SUB(CURDATE(), INTERVAL 15 DAY),
+    end_date   = DATE_SUB(CURDATE(), INTERVAL 15 DAY) + INTERVAL 2 HOUR
+WHERE name = 'Détection Avancée';
+
+-- 2. Cours à venir (après aujourd'hui)
+UPDATE course
+SET start_date = DATE_ADD(CURDATE(), INTERVAL 10 DAY),
+    end_date   = DATE_ADD(CURDATE(), INTERVAL 10 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE
+WHERE name = 'Canicross Découverte';
+
+-- 3. Ajout de nouveaux cours avec dates variées
+INSERT INTO course (name,
+                    description,
+                    max_participants,
+                    start_date,
+                    end_date,
+                    created_at,
+                    updated_at,
+                    user_id,
+                    course_type_id,
+                    age_range_id)
+VALUES
+    -- Nouveau cours passé
+    ('Socialisation Avancée',
+     'Apprendre à votre chien à bien se comporter avec ses congénères',
+     8,
+     DATE_SUB(CURDATE(), INTERVAL 5 DAY),
+     DATE_SUB(CURDATE(), INTERVAL 5 DAY) + INTERVAL 1 HOUR + INTERVAL 30 MINUTE,
+     UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     (SELECT id FROM user WHERE email = 'dolores@k9club.fr'),
+     (SELECT id FROM course_type WHERE name = 'base'),
+     (SELECT id FROM age_range WHERE min_age = 0 AND max_age = 2)),
+
+    -- Nouveau cours passé
+    ('Maîtrise du Rappel',
+     'Techniques avancées pour un rappel fiable en toutes circonstances',
+     6,
+     DATE_SUB(CURDATE(), INTERVAL 8 DAY),
+     DATE_SUB(CURDATE(), INTERVAL 8 DAY) + INTERVAL 1 HOUR + INTERVAL 15 MINUTE,
+     UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     (SELECT id FROM user WHERE email = 'zimmel@k9club.fr'),
+     (SELECT id FROM course_type WHERE name = 'base'),
+     (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+
+    -- Nouveau cours à venir
+    ('Préparation Compétition',
+     'Entraînement intensif pour chiens de compétition',
+     5,
+     DATE_ADD(CURDATE(), INTERVAL 5 DAY),
+     DATE_ADD(CURDATE(), INTERVAL 5 DAY) + INTERVAL 2 HOUR,
+     UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     (SELECT id FROM user WHERE email = 'jack@k9club.fr'),
+     (SELECT id FROM course_type WHERE name = 'ring'),
+     (SELECT id FROM age_range WHERE min_age = 3 AND max_age = 5)),
+
+    -- Nouveau cours à venir
+    ('Olfaction et Recherche',
+     'Développer les capacités olfactives de votre chien',
+     7,
+     DATE_ADD(CURDATE(), INTERVAL 15 DAY),
+     DATE_ADD(CURDATE(), INTERVAL 15 DAY) + INTERVAL 1 HOUR + INTERVAL 45 MINUTE,
+     UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     (SELECT id FROM user WHERE email = 'larmina@k9club.fr'),
+     (SELECT id FROM course_type WHERE name = 'détection'),
+     (SELECT id FROM age_range WHERE min_age = 6 AND max_age = 15));
+
+-- 4. Ajout de nouvelles inscriptions pour les chiens existants
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES
+    -- Rex - Nouvelles inscriptions
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     1, -- Rex
+     (SELECT id FROM course WHERE name = 'Socialisation Avancée')),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     1, -- Rex
+     (SELECT id FROM course WHERE name = 'Préparation Compétition')),
+
+    -- Mia - Nouvelles inscriptions
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     2, -- Mia
+     (SELECT id FROM course WHERE name = 'Maîtrise du Rappel')),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     2, -- Mia
+     (SELECT id FROM course WHERE name = 'Olfaction et Recherche')),
+
+    -- Charlie - Nouvelles inscriptions
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     3, -- Charlie
+     (SELECT id FROM course WHERE name = 'Socialisation Avancée')),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     3, -- Charlie
+     (SELECT id FROM course WHERE name = 'Olfaction et Recherche')),
+
+    -- Daisy - Nouvelles inscriptions
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     4, -- Daisy
+     (SELECT id FROM course WHERE name = 'Maîtrise du Rappel')),
+    ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     4, -- Daisy
+     (SELECT id FROM course WHERE name = 'Préparation Compétition')),
+
+    -- Max - Nouvelles inscriptions
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     5, -- Max
+     (SELECT id FROM course WHERE name = 'Socialisation Avancée')),
+    ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+     5, -- Max
+     (SELECT id FROM course WHERE name = 'Maîtrise du Rappel'));
