@@ -39,7 +39,7 @@ public class Dog {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected Long id;
 
   /**
@@ -54,7 +54,7 @@ public class Dog {
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected String name;
 
   /**
@@ -66,7 +66,7 @@ public class Dog {
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected LocalDate birthdate;
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
@@ -79,7 +79,7 @@ public class Dog {
   @Column(nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected String gender;
 
   /**
@@ -89,7 +89,7 @@ public class Dog {
    */
   @CreatedDate
   @Column(updatable = false, nullable = false)
-  @JsonView({ViewsUser.Owner.class,})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Instant createdAt;
 
   /**
@@ -98,7 +98,7 @@ public class Dog {
    * Automatically updated on each save.
    */
   @LastModifiedDate
-  @JsonView({ViewsUser.Owner.class,})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected Instant updatedAt;
 
   //  relation with User (possessed)
@@ -111,7 +111,7 @@ public class Dog {
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
   @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
-      ViewsCoach.CourseRegistrationInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsCoach.CourseRegistrationInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected User owner;
 
   // relation with Breed (belongs_to)
@@ -125,7 +125,7 @@ public class Dog {
   @JoinColumn(name = "breed_id", nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
   protected Breed breed;
 
 
@@ -137,6 +137,6 @@ public class Dog {
    * One-to-many relationship to {@link CourseRegistration}; orphan removal enabled.
    */
   @OneToMany(mappedBy = "dog", orphanRemoval = true)
-  @JsonView({ViewsUser.Owner.class})
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.DogsInfo.class})
   protected List<CourseRegistration> registrations = new ArrayList<>();
 }

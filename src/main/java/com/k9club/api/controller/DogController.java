@@ -66,33 +66,19 @@ public class DogController {
     this.courseRegistrationDao = courseRegistrationDao;
   }
 
-  /**
-   * Retrieves all dogs in the system, regardless of owner.
-   * <p>
-   * Access restricted to Admin users.
-   *
-   * @return a {@link ResponseEntity} containing the list of all dogs and HTTP 200 OK
-   */
+
   @IsAdmin
   @JsonView(ViewsAdmin.DogsInfo.class)
-  @GetMapping("/dogs")
-  public ResponseEntity<List<Dog>> getAllDogs() {
+  @GetMapping("/admin/dogs")
+  public ResponseEntity<List<Dog>> getAllDogsForAdmin() {
     return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
   }
 
-  /**
-   * Retrieves a single dog by its ID.
-   * <p>
-   * Access restricted to Admin users. Returns HTTP 404 if no dog exists with the given ID.
-   *
-   * @param id the ID of the dog to retrieve
-   * @return a {@link ResponseEntity} containing the Dog and HTTP 200 OK,
-   * or HTTP 404 Not Found if the dog is not found
-   */
+
   @IsAdmin
   @JsonView(ViewsAdmin.DogsInfo.class)
-  @GetMapping("/dog/{id}")
-  public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
+  @GetMapping("/admin/dog/{id}")
+  public ResponseEntity<Dog> getDogByIdForAdmin(@PathVariable Long id) {
     Optional<Dog> optionalDog = dogDao.findById(id);
 
     if (optionalDog.isEmpty()) {
@@ -101,6 +87,48 @@ public class DogController {
 
     return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
   }
+
+  // TODO VOIR SI CETTE ROUTE EST UTILE ?
+//  @IsCoach
+//  @JsonView(ViewsCoach.DogsInfo.class)
+//  @GetMapping("/coach/dogs")
+//  public ResponseEntity<List<Dog>> getAllDogsForCoach() {
+//    return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
+//  }
+//
+//
+//  @IsCoach
+//  @JsonView(ViewsCoach.DogsInfo.class)
+//  @GetMapping("/coach/dog/{id}")
+//  public ResponseEntity<Dog> getDogByIdForCoach(@PathVariable Long id) {
+//    Optional<Dog> optionalDog = dogDao.findById(id);
+//
+//    if (optionalDog.isEmpty()) {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//
+//    return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+//  }
+
+// TODO JE RECUPERE LES CHIENS D'UN OWNER DANS LE OWNERCONTROLLER
+//  @JsonView(ViewsOwner.DogsInfo.class)
+//  @GetMapping("/dogs")
+//  public ResponseEntity<List<Dog>> getAllDogs() {
+//    return new ResponseEntity<>(dogDao.findAll(), HttpStatus.OK);
+//  }
+//
+//
+//  @JsonView(ViewsOwner.DogsInfo.class)
+//  @GetMapping("/dog/{id}")
+//  public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
+//    Optional<Dog> optionalDog = dogDao.findById(id);
+//
+//    if (optionalDog.isEmpty()) {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//
+//    return new ResponseEntity<>(optionalDog.get(), HttpStatus.OK);
+//  }
 
   /**
    * Creates a new dog for the specified owner using the provided DTO.
