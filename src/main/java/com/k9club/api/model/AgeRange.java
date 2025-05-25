@@ -84,6 +84,6 @@ public class AgeRange {
    * One-to-many relationship mapped by the "ageRange" field in Course.
    */
   @OneToMany(mappedBy = "ageRange")
-  @JsonView({})
+  @JsonView({ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected List<Course> courses;
 }

@@ -47,15 +47,6 @@ public class AgeRangeController {
     return new ResponseEntity<>(list, HttpStatus.OK);
   }
 
-  @IsCoach
-  @JsonView(ViewsCoach.Basic.class)
-  @GetMapping("/coach/age-ranges")
-  public ResponseEntity<List<AgeRange>> getAllAgeRanges() {
-    List<AgeRange> list = ageRangeDao.findAll();
-    return new ResponseEntity<>(list, HttpStatus.OK);
-  }
-
-
   @JsonView(ViewsAdmin.Basic.class)
   @GetMapping("/admin/age-range/{id}")
   public ResponseEntity<AgeRange> getAgeRangeByIdForAdmin(@PathVariable Long id) {
@@ -67,11 +58,61 @@ public class AgeRangeController {
     return new ResponseEntity<>(optionalAgeRange.get(), HttpStatus.OK);
   }
 
+  @JsonView(ViewsAdmin.AgeRangeInfo.class)
+  @GetMapping("/admin/age-ranges/full")
+  public ResponseEntity<List<AgeRange>> getAllAgeRangesForAdminFull() {
+    List<AgeRange> list = ageRangeDao.findAll();
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
+  @JsonView(ViewsAdmin.AgeRangeInfo.class)
+  @GetMapping("/admin/age-range/{id}/full")
+  public ResponseEntity<AgeRange> getAgeRangeByIdForAdminFull(@PathVariable Long id) {
+    Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
+    if (optionalAgeRange.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalAgeRange.get(), HttpStatus.OK);
+  }
+
+  @IsCoach
+  @JsonView(ViewsCoach.Basic.class)
+  @GetMapping("/coach/age-ranges")
+  public ResponseEntity<List<AgeRange>> getAllAgeRangesForCoach() {
+    List<AgeRange> list = ageRangeDao.findAll();
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
 
   @IsCoach
   @JsonView(ViewsCoach.Basic.class)
   @GetMapping("/coach/age-range/{id}")
-  public ResponseEntity<AgeRange> getAgeRangeById(@PathVariable Long id) {
+  public ResponseEntity<AgeRange> getAgeRangeByIdForCoach(@PathVariable Long id) {
+    Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
+    if (optionalAgeRange.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(optionalAgeRange.get(), HttpStatus.OK);
+  }
+
+  // TODO POUR LES COACHS TRIER POUR AVOIR LES COURS QUI LUI SONT CONCERNES AVEC AUTHENTICATION PROVIDER
+  // TODO CAR DANS LA REPONSE JSON JE NE RENVOIS PAS LE COACH QUI EST ASSOCIE A UN COUS
+  // TODO C'EST LES SIENS FORCEMENT
+  @IsCoach
+  @JsonView(ViewsCoach.AgeRangeInfo.class)
+  @GetMapping("/coach/age-ranges/full")
+  public ResponseEntity<List<AgeRange>> getAllAgeRangesForCoachFull() {
+    List<AgeRange> list = ageRangeDao.findAll();
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
+
+  @IsCoach
+  @JsonView(ViewsCoach.AgeRangeInfo.class)
+  @GetMapping("/coach/age-range/{id}/full")
+  public ResponseEntity<AgeRange> getAgeRangeByIdForCoachFull(@PathVariable Long id) {
     Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(id);
     if (optionalAgeRange.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -40,7 +40,8 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected Long id;
 
   /**
@@ -51,7 +52,8 @@ public class User {
   @Length(min = 3, max = 100)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String firstname;
 
   /**
@@ -62,7 +64,8 @@ public class User {
   @Length(min = 3, max = 100)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String lastname;
 
   /**
@@ -73,7 +76,8 @@ public class User {
   @Column(unique = true, nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsUser.Admin.class, ViewsCoach.CourseInfo.class, ViewsOwner.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
-      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String email;
 
   /**
@@ -95,7 +99,7 @@ public class User {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('SUPER_ADMIN','ADMIN','COACH', 'OWNER')")
   @JsonView({ViewsUser.Admin.class, ViewsAdmin.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
-      ViewsAdmin.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class})
+      ViewsAdmin.CourseTypeInfo.class, ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class})
   protected UserRole userRole;
 
   /**
