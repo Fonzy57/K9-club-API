@@ -10,4 +10,7 @@ public class ViewsUser {
 
   public static class Admin {
   }
+
+  public static class Info {
+  }
 }

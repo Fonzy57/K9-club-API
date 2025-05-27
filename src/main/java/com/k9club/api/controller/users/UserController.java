@@ -57,7 +57,7 @@ public class UserController {
 
   //
   @IsOwner
-  @JsonView(ViewsUser.Owner.class)
+  @JsonView(ViewsUser.Info.class)
   @GetMapping("/user/me")
   public ResponseEntity<User> getUserInformation(@AuthenticationPrincipal AppUserDetails userDetails) {
     Long id = userDetails.getUser().getId();
