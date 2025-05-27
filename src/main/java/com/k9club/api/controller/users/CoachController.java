@@ -2,6 +2,7 @@ package com.k9club.api.controller.users;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.dao.UserDao;
+import com.k9club.api.dto.user.CoachRegistrationDto;
 import com.k9club.api.dto.user.CoachUpdateDto;
 import com.k9club.api.jsonview.ViewsUser;
 import com.k9club.api.model.User;
@@ -78,22 +79,27 @@ public class CoachController {
    * The role is forcibly set to COACH to ensure data consistency and the password is encoded for security.
    * The password is removed from the returned object for security reasons.
    *
-   * @param user the user object containing coach information
+   * @param coachRegistrationDto the user object containing coach information
    * @return a ResponseEntity with the created coach (without password) and HTTP 201 Created
    */
   @JsonView(ViewsUser.Admin.class)
   @PostMapping("/coach")
-  public ResponseEntity<User> addCoach(@RequestBody User user) {
-    user.setId(null);
-    user.setUserRole(UserRole.COACH);
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+  public ResponseEntity<User> addCoach(@RequestBody CoachRegistrationDto coachRegistrationDto) {
+    User newCoach = new User();
 
-    userDao.save(user);
+    newCoach.setId(null);
+    newCoach.setFirstname(coachRegistrationDto.getFirstname());
+    newCoach.setLastname(coachRegistrationDto.getLastname());
+    newCoach.setEmail(coachRegistrationDto.getEmail());
+    newCoach.setPassword(passwordEncoder.encode(coachRegistrationDto.getPassword()));
+    newCoach.setUserRole(UserRole.COACH);
+
+    userDao.save(newCoach);
 
     // Hiding the password before sending the response
-    user.setPassword(null);
+    newCoach.setPassword(null);
 
-    return new ResponseEntity<>(user, HttpStatus.CREATED);
+    return new ResponseEntity<>(newCoach, HttpStatus.CREATED);
   }
 
   /**
