@@ -2,6 +2,7 @@ package com.k9club.api.controller;
 
 import com.k9club.api.dao.UserDao;
 import com.k9club.api.dto.LoginRequestDto;
+import com.k9club.api.dto.user.OwnerRegistrationDto;
 import com.k9club.api.model.User;
 import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.AppUserDetails;
@@ -53,26 +54,30 @@ public class AuthController {
   }
 
   /**
-   * Registers a new user into the system.
+   * Registers a new owner user in the system.
    * <p>
-   * The user's role is automatically set to OWNER by default.
-   * The password is securely encoded before saving the user into the database.
+   * Constructs a {@link User} from the provided DTO, encodes the password,
+   * and assigns the OWNER role. Persists the new user to the database.
    * <p>
-   * After saving, the password is set to null to avoid exposing it in the response.
+   * Does not return any content in the response (HTTP 204 No Content).
    *
-   * @param user the user object to be registered (validated from request body)
-   * @return a ResponseEntity containing the created user (without password) and HTTP 201 status
+   * @param ownerRegistrationDto the DTO containing firstname, lastname, email, and raw password
+   * @return a {@link ResponseEntity} with HTTP 204 No Content on successful registration
    */
   @PostMapping("/registration")
-  public ResponseEntity<Void> inscription(@RequestBody @Valid User user) {
-    user.setUserRole(UserRole.OWNER);
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+  public ResponseEntity<Void> inscription(@RequestBody @Valid OwnerRegistrationDto ownerRegistrationDto) {
+    User newUser = new User();
+    newUser.setFirstname(ownerRegistrationDto.getFirstname());
+    newUser.setLastname(ownerRegistrationDto.getLastname());
+    newUser.setEmail(ownerRegistrationDto.getEmail());
+    newUser.setPassword(passwordEncoder.encode(ownerRegistrationDto.getPassword()));
+    newUser.setUserRole(UserRole.OWNER);
 
     // Saving the user in the database
-    userDao.save(user);
+    userDao.save(newUser);
 
     // Hiding the password before sending the response
-    user.setPassword(null);
+    // newUser.setPassword(null);
 
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
