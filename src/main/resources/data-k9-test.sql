@@ -144,8 +144,8 @@ VALUES ('Stéphane', 'Scheeres', 'super-admin@k9club.fr',
 
 -- 3. Insertion des chiens (dog_id = 1 pour Rex, 2 pour Mia)
 INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Rex', '2019-06-01', 'Male', UTC_TIMESTAMP(), 2, 1),
-       ('Mia', '2021-02-14', 'Female', UTC_TIMESTAMP(), 2, 2);
+VALUES ('Rex', '2020-06-01', 'Male', UTC_TIMESTAMP(), 2, 1),
+       ('Mia', '2023-02-14', 'Female', UTC_TIMESTAMP(), 2, 2);
 
 -- 4. Types de cours (course_type_id = ordre d’insertion)
 INSERT INTO course_type (name, text_color, background_color, created_at, updated_at)
@@ -159,9 +159,9 @@ VALUES ('artistique', '#831F00', '#FAD7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
 
 -- 5. Tranches d'âge (age_range_id = 1, 2, 3)
 INSERT INTO age_range (min_age, max_age, created_at, updated_at)
-VALUES (0, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       (3, 5, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       (6, 15, UTC_TIMESTAMP(), UTC_TIMESTAMP());
+VALUES (0, 6, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       (6, 10, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       (10, 20, UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
 -- 6. Création des cours (id = ordre d’insertion, donc Rex : 1-10, Mia : 11-20)
 -- Les cours de Rex
@@ -185,7 +185,7 @@ VALUES ('Pouponnière Canine', 'Ordres de base pour chiots.', 8, DATE_SUB(CURDAT
         DATE_ADD(CURDATE(), INTERVAL 5 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 6, 3),
        ('Agility Master', 'Agility niveau expert.', 7, DATE_ADD(CURDATE(), INTERVAL 8 DAY),
         DATE_ADD(CURDATE(), INTERVAL 8 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 2, 2),
-       ('Socialisation Parc', 'Rencontres et socialisation.', 12, DATE_ADD(CURDATE(), INTERVAL 12 DAY),
+       ('Socialisation Parc', 'Rencontres et socialisation.', 12, DATE_ADD(CURDATE(), INTERVAL 1 DAY),
         DATE_ADD(CURDATE(), INTERVAL 12 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1);
 
 -- Les cours de Mia (tous différents de Rex sauf Journée Chien Zen)
