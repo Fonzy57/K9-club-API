@@ -86,7 +86,11 @@ public class Course {
   // TODO FAIRE UN VALIDATEUR POUR QUE END DATE SOIT SUPERIEUR A START DATE
   //
 
+  // -----------------------------------------
 
+  // TODO CHANGER LES LocalDatetime en Instant PARTOUT
+
+  // -----------------------------------------
   /**
    * Start date and time of the course session.
    * <p>
@@ -194,7 +198,7 @@ public class Course {
    * registrations when a course is removed.
    */
   @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseTypeInfo.class,
-      ViewsCoach.CourseTypeInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+      ViewsCoach.CourseTypeInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class, ViewsOwner.CourseInfo.class})
   @OneToMany(
       mappedBy = "course",
       //cascade = CascadeType.ALL,

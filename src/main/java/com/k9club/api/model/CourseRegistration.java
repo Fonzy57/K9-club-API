@@ -36,7 +36,7 @@ public class CourseRegistration {
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
-      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class, ViewsOwner.CourseInfo.class})
   protected Long id;
 
   /**
@@ -50,7 +50,7 @@ public class CourseRegistration {
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
-      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class, ViewsOwner.CourseInfo.class})
   protected CourseRegistrationStatus status;
 
   /**
@@ -90,7 +90,8 @@ public class CourseRegistration {
   @JoinColumn(name = "dog_id", nullable = false)
   @JsonView({ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
       ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
-      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+      ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsAdmin.AgeRangeInfo.class,
+      ViewsCoach.AgeRangeInfo.class, ViewsOwner.CourseInfo.class})
   protected Dog dog;
 
   // TODO LIAISON AVEC L'ENTITE COURSE
