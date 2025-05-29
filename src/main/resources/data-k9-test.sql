@@ -126,6 +126,9 @@ VALUES ('Stéphane', 'Scheeres', 'super-admin@k9club.fr',
        ('Tetiana', 'Lombardi', 'user@k9club.fr',
         '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
         'OWNER', UTC_TIMESTAMP() - INTERVAL 8 DAY, UTC_TIMESTAMP() - INTERVAL 5 DAY),
+       ('Sébastien', 'Scheeres', 'user2@k9club.fr',
+        '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
+        'OWNER', UTC_TIMESTAMP() - INTERVAL 8 DAY, UTC_TIMESTAMP() - INTERVAL 5 DAY),
        ('Victor', 'Monteragioni', 'admin@k9club.fr',
         '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
         'ADMIN', UTC_TIMESTAMP() - INTERVAL 9 DAY, UTC_TIMESTAMP() - INTERVAL 6 DAY),
@@ -289,7 +292,8 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 16),
        ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 17),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 18),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 19),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 20);
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 20),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 21);
 
 -- Fidji s’inscrit sur "Agilité adulte dispo 1" (id 6) et "Détection adulte dispo 1" (id 8)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
