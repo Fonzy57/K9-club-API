@@ -142,12 +142,42 @@ VALUES ('Stéphane', 'Scheeres', 'super-admin@k9club.fr',
         '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
         'COACH', UTC_TIMESTAMP() - INTERVAL 4 DAY, UTC_TIMESTAMP() - INTERVAL 1 DAY);
 
--- 3. Insertion des chiens (dog_id = 1 pour Rex, 2 pour Mia)
-INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Rex', '2020-06-01', 'Male', UTC_TIMESTAMP(), 2, 1),
-       ('Mia', '2023-02-14', 'Female', UTC_TIMESTAMP(), 2, 2);
+-- Nouveau owner pour augmenter les places dans les cours
+INSERT INTO user (firstname, lastname, email, password, user_role, created_at, updated_at)
+VALUES ('Paul', 'Durand', 'paul.durand@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
+        'OWNER', UTC_TIMESTAMP() - INTERVAL 7 DAY, UTC_TIMESTAMP() - INTERVAL 1 DAY),
+       ('Julie', 'Martin', 'julie.martin@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
+        'OWNER', UTC_TIMESTAMP() - INTERVAL 5 DAY, UTC_TIMESTAMP()),
+       ('Louis', 'Petit', 'louis.petit@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
+        'OWNER', UTC_TIMESTAMP() - INTERVAL 3 DAY, UTC_TIMESTAMP());
 
--- 4. Types de cours (course_type_id = ordre d’insertion)
+
+-- 4. Chiens (Rex = adulte ~6 ans, Mia = chiot 1 an)
+INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
+VALUES ('Rex', '2018-06-01', 'Male', UTC_TIMESTAMP(), 2, 1),
+       ('Mia', '2023-06-01', 'Female', UTC_TIMESTAMP(), 2, 2);
+
+-- Paul
+INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
+VALUES ('Fidji', '2019-03-14', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 2),
+       ('Bella', '2021-09-21', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'),
+        10);
+
+-- Julie
+INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
+VALUES ('Tango', '2020-11-11', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'),
+        8),
+       ('Nina', '2023-01-08', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'),
+        3);
+
+-- Louis
+INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
+VALUES ('Rocky', '2018-07-02', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 5),
+       ('Moka', '2022-04-22', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'),
+        12);
+
+
+-- 5. Types de cours (course_type_id = ordre d’insertion)
 INSERT INTO course_type (name, text_color, background_color, created_at, updated_at)
 VALUES ('artistique', '#831F00', '#FAD7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('agilité', '#724300', '#FAE7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
@@ -157,83 +187,199 @@ VALUES ('artistique', '#831F00', '#FAD7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('détection', '#420075', '#E6CCFA', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('chiot', '#000000', '#F4F4F4', UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
--- 5. Tranches d'âge (age_range_id = 1, 2, 3)
+-- 6. Tranches d'âge (age_range_id = 1, 2, 3)
 INSERT INTO age_range (min_age, max_age, created_at, updated_at)
-VALUES (0, 6, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       (6, 10, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       (10, 20, UTC_TIMESTAMP(), UTC_TIMESTAMP());
+VALUES (0, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP()), -- 1: chiots (Mia)
+       -- 2: juniors (Rex commence à être éligible dès 3 ans)
+       (3, 5, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       -- 3: adultes (Rex)
+       (6, 20, UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
--- 6. Création des cours (id = ordre d’insertion, donc Rex : 1-10, Mia : 11-20)
--- Les cours de Rex
+
+-- 7. Création de cours
+-- Génère 15 cours pour Rex (10 sans résa, 5 déjà réservés)
+-- Génère 15 cours pour Mia (idem)
+
+-- Cours pour Rex (tranche d’âge adulte : age_range_id=3, commence à 6 ans, donc tous cours de 6 à 20 ans)
+-- Pour couvrir le cas, on va réserver les 5 premiers et laisser les autres libres
 INSERT INTO course (name, description, max_participants, start_date, end_date, created_at, updated_at, user_id,
                     course_type_id, age_range_id)
-VALUES ('Pouponnière Canine', 'Ordres de base pour chiots.', 8, DATE_SUB(CURDATE(), INTERVAL 30 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 30 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 7, 1),
-       ('Agility Pro', 'Parcours d’agility avancé.', 10, DATE_SUB(CURDATE(), INTERVAL 25 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 25 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 2),
-       ('Détection Avancée', 'Entraînement à la détection.', 6, DATE_SUB(CURDATE(), INTERVAL 20 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 20 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
-       ('Base Loisirs', 'Jeux et obéissance.', 9, DATE_SUB(CURDATE(), INTERVAL 15 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 15 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 2),
-       ('Canicross Fun', 'Initiation au canicross.', 10, DATE_SUB(CURDATE(), INTERVAL 10 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 10 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 5, 2),
-       ('Journée Chien Zen', 'Cours d’éducation et de relaxation.', 8, CURDATE(), CURDATE() + INTERVAL 2 HOUR,
-        UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1),
-       ('Ring Découverte', 'Exercices de ring niveau débutant.', 8, DATE_ADD(CURDATE(), INTERVAL 3 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 3 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 5, 2),
-       ('Olfaction & Recherche', 'Jeux olfactifs avancés.', 8, DATE_ADD(CURDATE(), INTERVAL 5 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 5 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 6, 3),
-       ('Agility Master', 'Agility niveau expert.', 7, DATE_ADD(CURDATE(), INTERVAL 8 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 8 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 2, 2),
-       ('Socialisation Parc', 'Rencontres et socialisation.', 12, DATE_ADD(CURDATE(), INTERVAL 1 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 12 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1);
+VALUES
+-- 5 cours réservés (passé, aujourd'hui, futur proche)
+('Agilité adulte passé', 'Cours adulte pour Rex passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 09:00:00'), INTERVAL 10 DAY),
+ DATE_SUB(CONCAT(CURDATE(), ' 10:00:00'), INTERVAL 10 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
+('Base adulte passé', 'Cours base adulte Rex passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 15:30:00'), INTERVAL 7 DAY),
+ DATE_SUB(CONCAT(CURDATE(), ' 16:30:00'), INTERVAL 7 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3),
+('Détection adulte aujourd\'hui', 'Cours adulte pour Rex today', 8, CONCAT(CURDATE(), ' 13:00:00'),
+ CONCAT(CURDATE(), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
+('Ring adulte futur proche', 'Cours ring adulte Rex', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 17:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
+('Artistique adulte futur', 'Cours artistique adulte Rex', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 08:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 09:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
+-- 10 cours disponibles (futurs, pas de réservation Rex)
+('Agilité adulte dispo 1', 'Cours dispo', 5, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 10:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 11:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
+('Agilité adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 15:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 16:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
+('Détection adulte dispo 1', 'Cours dispo', 2, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 18:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 19:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
+('Détection adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:15:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 12:15:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
+('Ring adulte dispo 1', 'Cours dispo', 4, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 14:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 15:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
+('Ring adulte dispo 2', 'Cours dispo', 7, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 16:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 17:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
+('Artistique adulte dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 08:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 09:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
+('Artistique adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 19:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 20:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
+('Base adulte dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 17:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3),
+('Base adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3);
 
--- Les cours de Mia (tous différents de Rex sauf Journée Chien Zen)
+-- Cours pour Mia (tranche d’âge chiot : age_range_id=1, 0 à 2 ans)
 INSERT INTO course (name, description, max_participants, start_date, end_date, created_at, updated_at, user_id,
                     course_type_id, age_range_id)
-VALUES ('Obéissance Puppy', 'Obéissance de base chiot.', 8, DATE_SUB(CURDATE(), INTERVAL 28 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 28 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
-       ('Agility Initiation', 'Découverte de l’agility.', 10, DATE_SUB(CURDATE(), INTERVAL 22 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 22 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 2, 2),
-       ('Détection Fun', 'Détection ludique.', 6, DATE_SUB(CURDATE(), INTERVAL 18 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 18 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
-       ('Education Citadine', 'Eduquer son chien en ville.', 9, DATE_SUB(CURDATE(), INTERVAL 13 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 13 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 3, 2),
-       ('Canicross Découverte', 'Canicross niveau débutant.', 10, DATE_SUB(CURDATE(), INTERVAL 8 DAY),
-        DATE_SUB(CURDATE(), INTERVAL 8 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 5, 2),
-       ('Journée Chien Zen', 'Cours d’éducation et de relaxation.', 8, CURDATE(), CURDATE() + INTERVAL 2 HOUR,
-        UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1),
-       ('Ring Initiation', 'Exercices de ring débutants.', 8, DATE_ADD(CURDATE(), INTERVAL 4 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 4 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 2),
-       ('Pistage Nature', 'Jeux de piste en extérieur.', 8, DATE_ADD(CURDATE(), INTERVAL 7 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 7 DAY) + INTERVAL 2 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 6, 3),
-       ('Agility Amusant', 'Agility pour tous.', 7, DATE_ADD(CURDATE(), INTERVAL 10 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 10 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 3, 2, 2),
-       ('Dog Dancing', 'Danse et tricks.', 12, DATE_ADD(CURDATE(), INTERVAL 15 DAY),
-        DATE_ADD(CURDATE(), INTERVAL 15 DAY) + INTERVAL 1 HOUR, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1);
+VALUES
+-- 5 cours réservés
+('Chiot passé 1', 'Cours chiot Mia passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 11:00:00'), INTERVAL 8 DAY),
+ DATE_SUB(CONCAT(CURDATE(), ' 12:00:00'), INTERVAL 8 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
+('Chiot passé 2', 'Cours chiot Mia passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 14:30:00'), INTERVAL 5 DAY),
+ DATE_SUB(CONCAT(CURDATE(), ' 15:30:00'), INTERVAL 5 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 7, 1),
+('Chiot today', 'Cours chiot aujourd\'hui', 8, CONCAT(CURDATE(), ' 10:00:00'), CONCAT(CURDATE(), ' 11:30:00'),
+ UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 7, 1),
+('Agilité chiot futur', 'Cours agilité chiot', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 17:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 18:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
+('Base chiot futur', 'Cours base chiot', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 08:15:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 09:15:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
+-- 10 cours disponibles (futurs, pas de réservation Mia)
+('Chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 13:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 14:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
+('Chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 15:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 16:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
+('Agilité chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 12:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
+('Agilité chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 16:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 17:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
+('Base chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 17:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
+('Base chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 18:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 19:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
+('Détection chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 10:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 11:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 1),
+('Détection chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 09:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 10:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 1),
+('Artistique chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1),
+('Artistique chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 14 DAY), ' 08:00:00'),
+ CONCAT(DATE_ADD(CURDATE(), INTERVAL 14 DAY), ' 09:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1);
 
--- 7. Inscriptions de Rex (dog_id = 1, cours 1 à 10)
+-- Réservations Rex (id cours = id d'insertion, donc 1 à 5 pour Rex)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 1),
-       ('CANCELLED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 2),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 2),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 3),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 4),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 5),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 6),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 7),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 8),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 9),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 10);
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 5);
 
--- 8. Inscriptions de Mia (dog_id = 2, cours 11 à 20 sauf le 16 qui est aussi le 6)
+-- Réservations Mia (cours_id = id d'insertion: après ceux de Rex)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
-VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 11),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 12),
-       ('CANCELLED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 13),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 14),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 15),
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 10), -- Journée Chien Zen, même cours commun, id 6
-       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 17),
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 16),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 17),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 18),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 19),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 19),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 20);
+
+-- Fidji s’inscrit sur "Agilité adulte dispo 1" (id 6) et "Détection adulte dispo 1" (id 8)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Fidji'), 6),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Fidji'), 8);
+
+-- Bella sur "Agilité adulte dispo 2" (id 7)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Bella'), 7);
+
+-- Tango sur "Détection adulte dispo 2" (id 9)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Tango'), 9);
+
+-- Nina sur "Ring adulte dispo 1" (id 10)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Nina'), 10);
+
+-- Rocky sur "Ring adulte dispo 2" (id 11) et "Artistique adulte dispo 1" (id 12)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Rocky'), 11),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Rocky'), 12);
+
+-- Moka sur "Base adulte dispo 1" (id 13) et "Base adulte dispo 2" (id 14)
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Moka'), 13),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Moka'), 14);
+-- Fidji (Paul) sur Agilité adulte dispo 1, Détection adulte dispo 1, Artistique adulte dispo 1
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 6),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 8),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 12);
+
+-- Bella (Paul) sur Agilité adulte dispo 1 et Ring adulte dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Bella'), 6),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Bella'), 11);
+
+-- Tango (Julie) sur Agilité adulte dispo 2 et Détection adulte dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 7),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 9);
+
+-- Nina (Julie) sur Ring adulte dispo 1 et Artistique adulte dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Nina'), 10),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Nina'), 13);
+
+-- Rocky (Louis) sur Base adulte dispo 1 et 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 14),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 15);
+
+-- Moka (Louis) sur Artistique adulte dispo 2, Base adulte dispo 1
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Moka'), 13),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Moka'), 14);
+
+-- Fidji (Paul) sur Chiot dispo 1, Agilité chiot dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 21),
+       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 24);
+
+-- Bella (Paul) sur Chiot dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Bella'), 22);
+
+-- Tango (Julie) sur Agilité chiot dispo 1 et Détection chiot dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 23),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 27);
+
+-- Nina (Julie) sur Base chiot dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Nina'), 26);
+
+-- Rocky (Louis) sur Détection chiot dispo 1
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 27);
+
+-- Moka (Louis) sur Artistique chiot dispo 1 et Chiot dispo 2
+INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
+VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Moka'), 29),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Moka'), 22);
