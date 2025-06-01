@@ -160,6 +160,7 @@ public class DogController {
     dog.setName(dogCreateDto.getName());
     dog.setBirthdate(dogCreateDto.getBirthdate());
     dog.setGender(dogCreateDto.getGender());
+    dog.setAvatarUrl(dogCreateDto.getAvatarUrl());
     dog.setOwner(optionalUser.get());
     dog.setBreed(optionalBreed.get());
 
