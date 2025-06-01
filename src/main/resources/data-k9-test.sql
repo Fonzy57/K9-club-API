@@ -156,28 +156,30 @@ VALUES ('Paul', 'Durand', 'paul.durand@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijO
 
 
 -- 4. Chiens (Rex = adulte ~6 ans, Mia = chiot 1 an)
-INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Rex', '2018-06-01', 'Male', UTC_TIMESTAMP(), 2, 1),
-       ('Mia', '2023-06-01', 'Female', UTC_TIMESTAMP(), 2, 2);
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
+VALUES ('Rex', '2018-06-01', 'male', 'golden.png', UTC_TIMESTAMP(), 2, 1),
+       ('Mia', '2023-06-01', 'female', 'bouledogue.png', UTC_TIMESTAMP(), 2, 2);
 
 -- Paul
-INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Fidji', '2019-03-14', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 2),
-       ('Bella', '2021-09-21', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'),
-        10);
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
+VALUES ('Fidji', '2019-03-14', 'male', 'berger-allemand.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 2),
+       ('Bella', '2021-09-21', 'female', 'caniche.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 10);
 
 -- Julie
-INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Tango', '2020-11-11', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'),
-        8),
-       ('Nina', '2023-01-08', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'),
-        3);
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
+VALUES ('Tango', '2020-11-11', 'male', 'doberman.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'), 8),
+       ('Nina', '2023-01-08', 'female', 'carlin.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'), 3);
 
 -- Louis
-INSERT INTO dog (name, birthdate, gender, created_at, user_id, breed_id)
-VALUES ('Rocky', '2018-07-02', 'Male', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 5),
-       ('Moka', '2022-04-22', 'Female', UTC_TIMESTAMP(), (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'),
-        12);
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
+VALUES ('Rocky', '2018-07-02', 'male', 'rottweiler.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 5),
+       ('Moka', '2022-04-22', 'female', 'shiba.png', UTC_TIMESTAMP(),
+        (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 12);
 
 
 -- 5. Types de cours (course_type_id = ordre d’insertion)
@@ -220,25 +222,45 @@ VALUES
 ('Artistique adulte futur', 'Cours artistique adulte Rex', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 08:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 09:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
 -- 10 cours disponibles (futurs, pas de réservation Rex)
-('Agilité adulte dispo 1', 'Cours dispo', 5, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 10:00:00'),
+('Agilité adulte dispo 1',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 5, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 10:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 11:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
-('Agilité adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 15:00:00'),
+('Agilité adulte dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 15:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 16:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
-('Détection adulte dispo 1', 'Cours dispo', 2, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 18:00:00'),
+('Détection adulte dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 2, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 18:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 19:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
-('Détection adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:15:00'),
+('Détection adulte dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:15:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 12:15:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
-('Ring adulte dispo 1', 'Cours dispo', 4, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 14:00:00'),
+('Ring adulte dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 4, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 14:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 15:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
-('Ring adulte dispo 2', 'Cours dispo', 7, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 16:30:00'),
+('Ring adulte dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 7, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 16:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 17:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
-('Artistique adulte dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 08:00:00'),
+('Artistique adulte dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 08:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 09:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
-('Artistique adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 19:00:00'),
+('Artistique adulte dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 19:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 20:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
-('Base adulte dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 17:00:00'),
+('Base adulte dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 17:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3),
-('Base adulte dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
+('Base adulte dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3);
 
 -- Cours pour Mia (tranche d’âge chiot : age_range_id=1, 0 à 2 ans)
