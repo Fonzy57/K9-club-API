@@ -86,6 +86,12 @@ public class Dog {
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String gender;
 
+  // TODO REVOIR JSONVIEW SI J'AI BIEN L'ADRESSE DANS LE JSON
+  @NotBlank(message = "L'avatar du chien est obligatoire")
+  @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
+  protected String avatarUrl;
+
   /**
    * Timestamp marking when the dog record was created.
    * <p>
