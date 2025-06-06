@@ -30,7 +30,7 @@ VALUES ('Labrador Retriever', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Bouledogue Anglais', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Epagneul Breton', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Bichon Maltais', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       ('Staffordshire Bull Terrier', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       ('Staffordshire Bull Terrier', UTC_TIMESTAMP(), UTC_TIMESTAMP()), -- Refaire image car GPT a fait de la merde
        ('Bichon Frisé', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Shetland', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Border Collie', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
@@ -57,10 +57,9 @@ VALUES ('Labrador Retriever', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Fox Terrier', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Berger Belge Tervueren', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Léonberger', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       ('Pug', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('American Staffordshire Terrier', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Berger Blanc Suisse', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       ('Caniche Toy', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       ('Caniche Toy', UTC_TIMESTAMP(), UTC_TIMESTAMP()),-- ICI POUR LES IMAGES FAITES PAR ChatGPT
        ('Chien Chinois à Crête', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Scottish Terrier', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('Bouledogue Boston', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
@@ -156,29 +155,29 @@ VALUES ('Paul', 'Durand', 'paul.durand@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijO
 
 
 -- 4. Chiens (Rex = adulte ~6 ans, Mia = chiot 1 an)
-INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
-VALUES ('Rex', '2018-06-01', 'male', 'golden.png', UTC_TIMESTAMP(), 2, 1),
-       ('Mia', '2023-06-01', 'female', 'bouledogue.png', UTC_TIMESTAMP(), 2, 2);
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, updated_at, user_id, breed_id)
+VALUES ('Rex', '2018-06-01', 'male', 'golden.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 3),
+       ('Mia', '2025-01-01', 'female', 'berger-allemand.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 2);
 
 -- Paul
-INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
-VALUES ('Fidji', '2019-03-14', 'male', 'berger-allemand.png', UTC_TIMESTAMP(),
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, updated_at, user_id, breed_id)
+VALUES ('Fidji', '2019-03-14', 'male', 'bouledogue.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 2),
-       ('Bella', '2021-09-21', 'female', 'caniche.png', UTC_TIMESTAMP(),
+       ('Bella', '2021-09-21', 'female', 'caniche.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'paul.durand@k9club.fr'), 10);
 
 -- Julie
-INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
-VALUES ('Tango', '2020-11-11', 'male', 'doberman.png', UTC_TIMESTAMP(),
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, updated_at, user_id, breed_id)
+VALUES ('Tango', '2020-11-11', 'male', 'doberman.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'), 8),
-       ('Nina', '2023-01-08', 'female', 'carlin.png', UTC_TIMESTAMP(),
+       ('Nina', '2023-01-08', 'female', 'carlin.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'julie.martin@k9club.fr'), 3);
 
 -- Louis
-INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, user_id, breed_id)
-VALUES ('Rocky', '2018-07-02', 'male', 'rottweiler.png', UTC_TIMESTAMP(),
+INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, updated_at, user_id, breed_id)
+VALUES ('Rocky', '2018-07-02', 'male', 'rottweiler.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 5),
-       ('Moka', '2022-04-22', 'female', 'shiba.png', UTC_TIMESTAMP(),
+       ('Moka', '2022-04-22', 'female', 'shiba.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM user WHERE email = 'louis.petit@k9club.fr'), 12);
 
 
