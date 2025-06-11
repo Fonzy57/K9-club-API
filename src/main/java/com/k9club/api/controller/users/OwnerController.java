@@ -145,6 +145,9 @@ public class OwnerController {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
+    // TODO DEMANDER FRANCK
+    // System.out.println(">> server birthdate: " + existingDog.getBirthdate());
+
     return new ResponseEntity<>(existingDog, HttpStatus.OK);
   }
 
