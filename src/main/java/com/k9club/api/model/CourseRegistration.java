@@ -46,7 +46,7 @@ public class CourseRegistration {
    */
   @NotNull(message = "Le status de la réservation est obligatoire")
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED','CANCELLED', 'PENDING')")
+  @Column(nullable = false, columnDefinition = "ENUM('CONFIRMED', 'CANCELLED_BY_OWNER', 'CANCELLED_BY_ADMIN')")
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,

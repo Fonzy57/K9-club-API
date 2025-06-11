@@ -2,6 +2,6 @@ package com.k9club.api.model.enums;
 
 public enum CourseRegistrationStatus {
   CONFIRMED,
-  CANCELLED,
-  PENDING,
+  CANCELLED_BY_OWNER,
+  CANCELLED_BY_ADMIN,
 }
