@@ -153,7 +153,6 @@ VALUES ('Paul', 'Durand', 'paul.durand@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijO
        ('Louis', 'Petit', 'louis.petit@k9club.fr', '$2a$10$UT44bkoGz/wOFFXrAKijOe/xu3W1uPTAEjv6dZx6cj0NEN2o7JCDO',
         'OWNER', UTC_TIMESTAMP() - INTERVAL 3 DAY, UTC_TIMESTAMP());
 
-
 -- 4. Chiens (Rex = adulte ~6 ans, Mia = chiot 1 an)
 INSERT INTO dog (name, birthdate, gender, avatar_url, created_at, updated_at, user_id, breed_id)
 VALUES ('Rex', '2018-06-01', 'male', 'golden.png', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 3),
@@ -210,15 +209,25 @@ INSERT INTO course (name, description, max_participants, start_date, end_date, c
                     course_type_id, age_range_id)
 VALUES
 -- 5 cours réservés (passé, aujourd'hui, futur proche)
-('Agilité adulte passé', 'Cours adulte pour Rex passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 09:00:00'), INTERVAL 10 DAY),
+('Agilité adulte passé',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, DATE_SUB(CONCAT(CURDATE(), ' 09:00:00'), INTERVAL 10 DAY),
  DATE_SUB(CONCAT(CURDATE(), ' 10:00:00'), INTERVAL 10 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 3),
-('Base adulte passé', 'Cours base adulte Rex passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 15:30:00'), INTERVAL 7 DAY),
+('Base adulte passé',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, DATE_SUB(CONCAT(CURDATE(), ' 15:30:00'), INTERVAL 7 DAY),
  DATE_SUB(CONCAT(CURDATE(), ' 16:30:00'), INTERVAL 7 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 3),
-('Détection adulte aujourd\'hui', 'Cours adulte pour Rex today', 8, CONCAT(CURDATE(), ' 13:00:00'),
+('Détection adulte aujourd\'hui',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(CURDATE(), ' 13:00:00'),
  CONCAT(CURDATE(), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 3),
-('Ring adulte futur proche', 'Cours ring adulte Rex', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 17:00:00'),
+('Ring adulte futur proche',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 17:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 4, 3),
-('Artistique adulte futur', 'Cours artistique adulte Rex', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 08:30:00'),
+('Artistique adulte futur',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 08:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), ' 09:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 3),
 -- 10 cours disponibles (futurs, pas de réservation Rex)
 ('Agilité adulte dispo 1',
@@ -267,50 +276,80 @@ INSERT INTO course (name, description, max_participants, start_date, end_date, c
                     course_type_id, age_range_id)
 VALUES
 -- 5 cours réservés
-('Chiot passé 1', 'Cours chiot Mia passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 11:00:00'), INTERVAL 8 DAY),
+('Chiot passé 1',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, DATE_SUB(CONCAT(CURDATE(), ' 11:00:00'), INTERVAL 8 DAY),
  DATE_SUB(CONCAT(CURDATE(), ' 12:00:00'), INTERVAL 8 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
-('Chiot passé 2', 'Cours chiot Mia passé', 8, DATE_SUB(CONCAT(CURDATE(), ' 14:30:00'), INTERVAL 5 DAY),
+('Chiot passé 2',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, DATE_SUB(CONCAT(CURDATE(), ' 14:30:00'), INTERVAL 5 DAY),
  DATE_SUB(CONCAT(CURDATE(), ' 15:30:00'), INTERVAL 5 DAY), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 7, 1),
-('Chiot today', 'Cours chiot aujourd\'hui', 8, CONCAT(CURDATE(), ' 10:00:00'), CONCAT(CURDATE(), ' 11:30:00'),
+('Chiot today',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(CURDATE(), ' 10:00:00'), CONCAT(CURDATE(), ' 11:30:00'),
  UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 7, 1),
-('Agilité chiot futur', 'Cours agilité chiot', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 17:30:00'),
+('Agilité chiot futur',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 17:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 18:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
-('Base chiot futur', 'Cours base chiot', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 08:15:00'),
+('Base chiot futur',
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec arcu arcu. Etiam commodo egestas rutrum. Donec in suscipit risus, sed consectetur turpis. Donec et bibendum libero, ut viverra felis. Fusce eget vehicula lectus. Etiam sagittis magna sit amet ipsum fermentum tempus. In tempus enim consequat dapibus maximus. Nulla nunc leo, molestie et diam eget, vehicula placerat mauris.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 08:15:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 4 DAY), ' 09:15:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
 -- 10 cours disponibles (futurs, pas de réservation Mia)
-('Chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 13:00:00'),
+('Chiot dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 13:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 5 DAY), ' 14:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
-('Chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 15:00:00'),
+('Chiot dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 15:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 16:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 7, 1),
-('Agilité chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:00:00'),
+('Agilité chiot dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 11:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 7 DAY), ' 12:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
-('Agilité chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 16:00:00'),
+('Agilité chiot dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 16:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 17:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 4, 2, 1),
-('Base chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 17:00:00'),
+('Base chiot dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 17:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 9 DAY), ' 18:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
-('Base chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 18:00:00'),
+('Base chiot dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 18:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 10 DAY), ' 19:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 3, 1),
-('Détection chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 10:30:00'),
+('Détection chiot dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 10:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 11 DAY), ' 11:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 1),
-('Détection chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 09:00:00'),
+('Détection chiot dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 09:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 12 DAY), ' 10:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 5, 6, 1),
-('Artistique chiot dispo 1', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
+('Artistique chiot dispo 1',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 13:30:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 13 DAY), ' 14:30:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1),
-('Artistique chiot dispo 2', 'Cours dispo', 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 14 DAY), ' 08:00:00'),
+('Artistique chiot dispo 2',
+ 'Aliquam a velit nec sapien lobortis porta. Praesent vel velit elementum, tincidunt lorem sit amet, congue magna. Duis interdum orci quis elementum pulvinar. Morbi urna felis, ornare vel dapibus nec, rhoncus posuere est. Vestibulum dictum orci id odio scelerisque pellentesque. Nullam lobortis rutrum libero, vel mattis libero ornare vel. Morbi eget urna porta, euismod lacus consequat, vestibulum erat. Nulla iaculis lacus mi, vel convallis dui hendrerit vitae.',
+ 8, CONCAT(DATE_ADD(CURDATE(), INTERVAL 14 DAY), ' 08:00:00'),
  CONCAT(DATE_ADD(CURDATE(), INTERVAL 14 DAY), ' 09:00:00'), UTC_TIMESTAMP(), UTC_TIMESTAMP(), 6, 1, 1);
 
 -- Réservations Rex (id cours = id d'insertion, donc 1 à 5 pour Rex)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 1),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 2),
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 2),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 3),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 4),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 5);
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 1, 5);
 
 -- Réservations Mia (cours_id = id d'insertion: après ceux de Rex)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 16),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 17),
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 17),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 18),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 19),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 20),
@@ -320,12 +359,14 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 2, 16),
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM dog WHERE name = 'Fidji'), 6),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM dog WHERE name = 'Fidji'), 8);
 
 -- Bella sur "Agilité adulte dispo 2" (id 7)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Bella'), 6),
+       ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM dog WHERE name = 'Bella'), 7);
 
 -- Tango sur "Détection adulte dispo 2" (id 9)
@@ -335,7 +376,7 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
 
 -- Nina sur "Ring adulte dispo 1" (id 10)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
-VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+VALUES ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM dog WHERE name = 'Nina'), 10);
 
 -- Rocky sur "Ring adulte dispo 2" (id 11) et "Artistique adulte dispo 1" (id 12)
@@ -348,14 +389,14 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
 -- Moka sur "Base adulte dispo 1" (id 13) et "Base adulte dispo 2" (id 14)
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
-        (SELECT id FROM dog WHERE name = 'Moka'), 13),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
+        (SELECT id FROM dog WHERE name = 'Moka'), 6),
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(),
         (SELECT id FROM dog WHERE name = 'Moka'), 14);
 -- Fidji (Paul) sur Agilité adulte dispo 1, Détection adulte dispo 1, Artistique adulte dispo 1
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 6),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 8),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 12);
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 12);
 
 -- Bella (Paul) sur Agilité adulte dispo 1 et Ring adulte dispo 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
@@ -364,7 +405,7 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE
 
 -- Tango (Julie) sur Agilité adulte dispo 2 et Détection adulte dispo 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
-VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 7),
+VALUES ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 7),
        ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Tango'), 9);
 
 -- Nina (Julie) sur Ring adulte dispo 1 et Artistique adulte dispo 2
@@ -375,7 +416,7 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE
 -- Rocky (Louis) sur Base adulte dispo 1 et 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 14),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 15);
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Rocky'), 15);
 
 -- Moka (Louis) sur Artistique adulte dispo 2, Base adulte dispo 1
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
@@ -385,7 +426,7 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE
 -- Fidji (Paul) sur Chiot dispo 1, Agilité chiot dispo 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
 VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 21),
-       ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 24);
+       ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Fidji'), 24);
 
 -- Bella (Paul) sur Chiot dispo 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
@@ -398,7 +439,7 @@ VALUES ('CONFIRMED', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE
 
 -- Nina (Julie) sur Base chiot dispo 2
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
-VALUES ('PENDING', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Nina'), 26);
+VALUES ('CANCELLED_BY_ADMIN', UTC_TIMESTAMP(), UTC_TIMESTAMP(), (SELECT id FROM dog WHERE name = 'Nina'), 26);
 
 -- Rocky (Louis) sur Détection chiot dispo 1
 INSERT INTO course_registration (status, created_at, updated_at, dog_id, course_id)
