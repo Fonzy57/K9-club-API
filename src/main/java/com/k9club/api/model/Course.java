@@ -116,11 +116,13 @@ public class Course {
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected Instant endDate;
 
-  // -----------------------------------------------------
 
-  // TODO FAIRE UN BOOLEAN POUR LE STATUT SI ANNULE OU PAS
-
-  // -----------------------------------------------------
+  @Column(nullable = false, name = "cancelled")
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+  protected boolean cancelled;
 
 
   /**

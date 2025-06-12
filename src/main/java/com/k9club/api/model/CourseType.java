@@ -65,7 +65,8 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
-  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsUser.Owner.class, ViewsOwner.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class,
       ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
       ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class,
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
@@ -80,7 +81,8 @@ public class CourseType {
   @Column(unique = true, nullable = false)
   @Length(min = 7, max = 7, message = "La couleur doit être au format #RRGGBB, 7 caractères en comptant le '#'")
   @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "La couleur doit être au format #RRGGBB")
-  @JsonView({ViewsUser.Owner.class, ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class,
+  @JsonView({ViewsAdmin.CourseInfo.class, ViewsUser.Owner.class, ViewsOwner.CourseInfo.class,
+      ViewsAdmin.CourseRegistrationInfo.class,
       ViewsCoach.CourseRegistrationInfo.class, ViewsOwner.CourseRegistrationInfo.class,
       ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class, ViewsOwner.CourseTypeInfo.class,
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
