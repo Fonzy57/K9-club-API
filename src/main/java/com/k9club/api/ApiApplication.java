@@ -24,7 +24,11 @@ public class ApiApplication {
    * Initializes application-wide settings after dependency injection is done.
    * In this case, it sets the default time zone to UTC.
    */
+
+  //    TODO
+
   // TODO ICI COMMENTER CAR ERREUR, DEMANDER FRANCK
+  
 //  @PostConstruct
 //  public void init() {
 //    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
