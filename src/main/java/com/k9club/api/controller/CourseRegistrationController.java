@@ -159,6 +159,7 @@ public class CourseRegistrationController {
 
     courseRegistrationDao.save(courseRegistration);
 
+//    TODO REVOIR SI JE RETOURNE BIEN QUELQUE CHOSE ICI OU PAS FORCEMENT NECESSAIRE
     return new ResponseEntity<>(courseRegistration, HttpStatus.CREATED);
   }
 
@@ -207,7 +208,7 @@ public class CourseRegistrationController {
     }
 
     // 4. Annuler la réservation
-    registration.setStatus(CourseRegistrationStatus.CANCELLED);
+    registration.setStatus(CourseRegistrationStatus.CANCELLED_BY_OWNER);
 
     courseRegistrationDao.save(registration);
 

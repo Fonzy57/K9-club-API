@@ -43,6 +43,9 @@ public class DogCreateDto {
   @NotBlank(message = "Le genre du chien est obligatoire")
   private String gender;
 
+  @NotBlank(message = "L'avatar' du chien est obligatoire")
+  private String avatarUrl;
+
   /**
    * Identifier of the owner for this dog.
    * <p>

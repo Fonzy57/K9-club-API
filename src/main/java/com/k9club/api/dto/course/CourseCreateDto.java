@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Data Transfer Object used to create a new Course.
@@ -51,7 +51,7 @@ public class CourseCreateDto {
    * Must not be null.
    */
   @NotNull(message = "La date de début est obligatoire")
-  private LocalDateTime startDate;
+  private Instant startDate;
 
   /**
    * Scheduled end date and time for the course.
@@ -59,7 +59,7 @@ public class CourseCreateDto {
    * Must not be null.
    */
   @NotNull(message = "La date de fin est obligatoire")
-  private LocalDateTime endDate;
+  private Instant endDate;
 
   /**
    * Identifier of the coach assigned to this course.

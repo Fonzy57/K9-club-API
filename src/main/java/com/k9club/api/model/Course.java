@@ -16,7 +16,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class Course {
 
   // -----------------------------------------
 
-  // TODO CHANGER LES LocalDatetime en Instant PARTOUT
+  // TODO CHANGER LES Instanttime en Instant PARTOUT
 
   // -----------------------------------------
   /**
@@ -102,7 +101,7 @@ public class Course {
       ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
-  protected LocalDateTime startDate;
+  protected Instant startDate;
 
   /**
    * End date and time of the course session.
@@ -115,13 +114,15 @@ public class Course {
       ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
-  protected LocalDateTime endDate;
+  protected Instant endDate;
 
-  // -----------------------------------------------------
 
-  // TODO FAIRE UN BOOLEAN POUR LE STATUT SI ANNULE OU PAS
-
-  // -----------------------------------------------------
+  @Column(nullable = false, name = "cancelled")
+  @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
+      ViewsOwner.CourseInfo.class, ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
+      ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
+      ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
+  protected boolean cancelled;
 
 
   /**

@@ -1,14 +1,11 @@
 package com.k9club.api;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -27,10 +24,15 @@ public class ApiApplication {
    * Initializes application-wide settings after dependency injection is done.
    * In this case, it sets the default time zone to UTC.
    */
-  @PostConstruct
-  public void init() {
-    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-  }
+
+  //    TODO
+
+  // TODO ICI COMMENTER CAR ERREUR, DEMANDER FRANCK
+  
+//  @PostConstruct
+//  public void init() {
+//    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//  }
 
   /**
    * Defines a PasswordEncoder bean using BCrypt hashing algorithm.

@@ -1,5 +1,6 @@
 package com.k9club.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.k9club.api.jsonview.ViewsAdmin;
 import com.k9club.api.jsonview.ViewsCoach;
@@ -65,7 +66,8 @@ public class Dog {
    * Must not be null.
    */
   @NotNull(message = "La date de naissance du chien est obligatoire")
-  @Column(nullable = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @Column(columnDefinition = "DATE", nullable = false)
   @JsonView({ViewsUser.Owner.class, ViewsAdmin.CourseInfo.class, ViewsCoach.CourseInfo.class,
       ViewsAdmin.CourseRegistrationInfo.class, ViewsCoach.CourseRegistrationInfo.class,
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
@@ -74,7 +76,7 @@ public class Dog {
 
   // TODO VOIR POUR LE GENRE, PEUT ETRE FAIRE UN ENUM
   /**
-   * Gender of the dog (e.g., "Male" or "Female").
+   * Gender of the dog (e.g., "male" or "female").
    * <p>
    * Must not be blank.
    */
@@ -85,6 +87,12 @@ public class Dog {
       ViewsOwner.CourseRegistrationInfo.class, ViewsAdmin.CourseTypeInfo.class, ViewsCoach.CourseTypeInfo.class,
       ViewsAdmin.DogsInfo.class, ViewsAdmin.AgeRangeInfo.class, ViewsCoach.AgeRangeInfo.class})
   protected String gender;
+
+  // TODO REVOIR JSONVIEW SI J'AI BIEN L'ADRESSE DANS LE JSON
+  @NotBlank(message = "L'avatar du chien est obligatoire")
+  @Column(nullable = false)
+  @JsonView({ViewsUser.Owner.class})
+  protected String avatarUrl;
 
   /**
    * Timestamp marking when the dog record was created.
