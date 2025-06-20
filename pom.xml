@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.k9-club</groupId>
     <artifactId>api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>api</name>
     <description>api</description>
     <url/>
@@ -28,27 +28,126 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <final.jar.name>app</final.jar.name>
     </properties>
     <dependencies>
+        <!-- Spring Boot Web Starter :
+             Fournit Spring MVC et embarque un serveur (Tomcat par défaut)
+             pour créer et déployer des applications web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Lombok (compilé uniquement) :
+             Réduit le code boilerplate en générant automatiquement getters, setters,
+             constructeurs, equals/hashCode, etc. -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- Spring Boot Test Starter (test uniquement) :
+             Inclut JUnit, Mockito, Spring Test, et autres outils
+             pour écrire et exécuter des tests unitaires et d’intégration -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Spring Data JPA Starter :
+             Fournit Spring Data JPA et Hibernate pour interagir
+             avec la base de données via l’ORM -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- MySQL Connector/J (exécution uniquement) :
+             Pilote JDBC pour se connecter à une base de données MySQL -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Spring Security Starter :
+             Ajoute les fonctionnalités de sécurité (authentification et autorisation)
+             pour protéger les endpoints -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Validation Starter :
+             Fournit Hibernate Validator et les annotations JSR-380
+             (@Valid, @NotNull, @Size, etc.) pour valider les données -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Spring Security Test (test uniquement) :
+             Outils et utilitaires pour écrire des tests
+             spécifiques à Spring Security (mock d’authentification, etc.) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JJWT (Java JWT) :
+             Bibliothèque pour générer, signer et valider des JSON Web Tokens (JWT) -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <!-- JAXB API :
+             Java Architecture for XML Binding pour la sérialisation/
+             désérialisation XML (nécessaire dans certains cas) -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <!-- Jackson Datatype JSR310 :
+             Prise en charge des types date/heure Java 8 (java.time)
+             lors de la (dé)serialisation JSON avec Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
     </dependencies>
 
+
     <build>
+        <finalName>${final.jar.name}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.3</version>
+                <configuration>
+                    <!-- Inclure les tests unitaires -->
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <!-- Exclure les tests d'intégration -->
+                    <excludes>
+                        <exclude>**/*ApplicationTests.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
