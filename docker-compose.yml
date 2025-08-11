@@ -1,10 +1,27 @@
 ﻿services:
-  back:
-    build: .
+  proxy:
+    image: nginx:latest
     ports:
-      - "8080:8080"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - back
+      - static
+    networks:
+      - proxy-network
+
+  back:
+    image: herful/k9_club_api:1.0.0
+    expose:
+      - "8080"
     depends_on:
       - db
+    networks:
+      - proxy-network
+      - backend-network
 
   db:
     image: mysql:5.7
@@ -15,5 +32,21 @@
       - "3306"
     volumes:
       - data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  static:
+    image: nginx:latest
+    expose:
+      - "80"
+    volumes:
+      - ./nginx-static.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - proxy-network
+
 volumes:
   data:
+
+networks:
+  proxy-network:
+  backend -network:

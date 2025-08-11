@@ -140,6 +140,9 @@ public class CourseRegistrationController {
   @PostMapping("/course-registration")
   public ResponseEntity<CourseRegistration> addCourseRegistration(@RequestBody @Valid CourseRegistrationCreateDto courseRegistrationCreateDto) {
 
+
+    // TODO FAIRE LA VERIFICATION SI LE CHIEN EST BIEN CELUI DU PROPRIETAIRE PAS JUSTE S'IL EXISTE
+    // TODO FAIRE AUSSI LA VERIFICATION DE L'AGE
     // Check if dog exists
     Optional<Dog> optionalDog = dogDao.findById(courseRegistrationCreateDto.getDogId());
     if (optionalDog.isEmpty()) {
