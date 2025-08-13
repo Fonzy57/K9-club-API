@@ -18,6 +18,7 @@ import com.k9club.api.model.enums.UserRole;
 import com.k9club.api.security.annotations.IsAdmin;
 import com.k9club.api.security.annotations.IsCoach;
 import com.k9club.api.security.annotations.IsOwner;
+import com.k9club.api.service.CourseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,7 @@ public class CourseController {
   private final CourseTypeDao courseTypeDao;
   private final AgeRangeDao ageRangeDao;
   private final UserDao userDao;
+  private final CourseService courseService;
 
   /**
    * Constructs a new CourseController with required data access dependencies.
@@ -51,11 +53,12 @@ public class CourseController {
    * @param ageRangeDao   the DAO used to perform CRUD operations on AgeRange entities
    */
   @Autowired
-  public CourseController(CourseDao courseDao, CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao, UserDao userDao) {
+  public CourseController(CourseDao courseDao, CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao, UserDao userDao, CourseService courseService) {
     this.courseDao = courseDao;
     this.courseTypeDao = courseTypeDao;
     this.ageRangeDao = ageRangeDao;
     this.userDao = userDao;
+    this.courseService = courseService;
   }
 
   @IsAdmin
@@ -116,59 +119,23 @@ public class CourseController {
   }
 
   /**
-   * Creates a new course using the provided data transfer object.
+   * Creates a new {@link Course} from the given {@link CourseCreateDto}.
    * <p>
-   * Validates that the referenced coach, course type, and age range all exist;
-   * if any is missing, responds with HTTP 404 Not Found. Otherwise constructs
-   * a new {@link Course} entity, populates its fields and associations, saves it,
-   * and returns the persisted entity with HTTP 201 Created.
+   * The request body is validated ({@code @Valid}). Business validation and lookups
+   * are delegated to {@link com.k9club.api.service.CourseService#addCourse(CourseCreateDto)}.
+   * On success, returns HTTP 201 with the created entity serialized with
+   * <p>Access: ADMIN only.</p>
    *
-   * @param courseCreateDto the DTO containing all required information to create a course
-   * @return a {@link ResponseEntity} containing the created {@link Course} and HTTP 201,
-   * or HTTP 404 if the coach, course type, or age range cannot be found
+   * @param courseCreateDto DTO with the data to create a course
+   * @return 201 (Created) with the persisted {@link Course}
+   * @throws org.springframework.web.server.ResponseStatusException if a validation fails (e.g. 400/404)
    */
-  // TODO VOIR POUR FAIRE UN MESSAGE D'ERREUR CLAIR SI L'ID NE CORRESPOND PAS A UN COACH
   @IsAdmin
+  @JsonView(ViewsAdmin.CourseInfo.class)
   @PostMapping("/course")
   public ResponseEntity<Course> addCourse(@RequestBody @Valid CourseCreateDto courseCreateDto) {
-    // TODO REFACTORISER CETTE PARTIE CAR IDENTIQUE DANS PUT
-    // Check if the coach exists
-    Optional<User> optionalCoach = userDao.findByIdAndUserRole(courseCreateDto.getCoachId(), UserRole.COACH);
-
-    if (optionalCoach.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Check if the course type exists
-    Optional<CourseType> optionalCourseType = courseTypeDao.findById(courseCreateDto.getCourseTypeId());
-    if (optionalCourseType.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Check if the age range exists
-    Optional<AgeRange> optionalAgeRange = ageRangeDao.findById(courseCreateDto.getAgeRangeId());
-    if (optionalAgeRange.isEmpty()) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Create and populate the Course entity
-    Course course = new Course();
-
-    course.setName(courseCreateDto.getName());
-    course.setDescription(courseCreateDto.getDescription());
-    course.setMaxParticipants(courseCreateDto.getMaxParticipants());
-    course.setStartDate(courseCreateDto.getStartDate());
-    course.setEndDate(courseCreateDto.getEndDate());
-
-    // Set related entities
-    course.setCoach(optionalCoach.get());
-    course.setCourseType(optionalCourseType.get());
-    course.setAgeRange(optionalAgeRange.get());
-
-    // Save the course
-    courseDao.save(course);
-
-    return new ResponseEntity<>(course, HttpStatus.CREATED);
+    Course createdCourse = courseService.addCourse(courseCreateDto);
+    return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
   }
 
 
