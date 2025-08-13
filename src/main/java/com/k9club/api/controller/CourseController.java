@@ -46,12 +46,15 @@ public class CourseController {
   private final CourseService courseService;
 
   /**
-   * Constructs a new CourseController with required data access dependencies.
+   * Constructs a new {@code CourseController} and wires required dependencies.
    *
-   * @param courseDao     the DAO used to perform CRUD operations on Course entities
-   * @param courseTypeDao the DAO used to perform CRUD operations on CourseType entities
-   * @param ageRangeDao   the DAO used to perform CRUD operations on AgeRange entities
+   * @param courseDao     DAO for {@link Course} entities
+   * @param courseTypeDao DAO for {@link CourseType} entities
+   * @param ageRangeDao   DAO for {@link AgeRange} entities
+   * @param userDao       DAO for {@link User} entities (e.g., coach lookups)
+   * @param courseService service handling business logic for courses (creation, validations, etc.)
    */
+
   @Autowired
   public CourseController(CourseDao courseDao, CourseTypeDao courseTypeDao, AgeRangeDao ageRangeDao, UserDao userDao, CourseService courseService) {
     this.courseDao = courseDao;
