@@ -193,11 +193,11 @@ VALUES ('artistique', '#831F00', '#FAD7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
 
 -- 6. Tranches d'âge (age_range_id = 1, 2, 3)
 INSERT INTO age_range (min_age, max_age, created_at, updated_at)
-VALUES (0, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP()), -- 1: chiots (Mia)
+VALUES (0, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP()), -- 1: chiots (Mia)
        -- 2: juniors (Rex commence à être éligible dès 3 ans)
-       (3, 5, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
+       (2, 4, UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        -- 3: adultes (Rex)
-       (6, 20, UTC_TIMESTAMP(), UTC_TIMESTAMP());
+       (5, 50, UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
 
 -- 7. Création de cours
