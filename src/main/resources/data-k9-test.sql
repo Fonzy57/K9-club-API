@@ -189,7 +189,7 @@ VALUES ('artistique', '#831F00', '#FAD7CC', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('ring', '#006E11', '#CCF2D2', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('canicross', '#005671', '#CCEFFA', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
        ('détection', '#420075', '#E6CCFA', UTC_TIMESTAMP(), UTC_TIMESTAMP()),
-       ('chiot', '#000000', '#F4F4F4', UTC_TIMESTAMP(), UTC_TIMESTAMP());
+       ('débutant', '#000000', '#F4F4F4', UTC_TIMESTAMP(), UTC_TIMESTAMP());
 
 -- 6. Tranches d'âge (age_range_id = 1, 2, 3)
 INSERT INTO age_range (min_age, max_age, created_at, updated_at)

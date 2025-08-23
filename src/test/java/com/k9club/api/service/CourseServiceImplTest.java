@@ -79,7 +79,7 @@ class CourseControllerTest {
 
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
     assertNotNull(ex.getReason());
-    assertTrue(ex.getReason().contains("date de début"));
+    assertTrue(ex.getReason().contains("date de début après date de fin"));
     verifyNoInteractions(courseDao);
   }
 
